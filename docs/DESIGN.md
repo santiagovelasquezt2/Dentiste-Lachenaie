@@ -1,11 +1,65 @@
+# GEMINI HANDOFF PROMPT
+
+You are building a dental clinic website for Centre Dentaire Vaillancourt St-Onge in Lachenaie/Terrebonne, Quebec.
+
+## YOUR SOURCE OF TRUTH
+Read this design specification first and follow it exactly — everything below this section is the plan.
+
+## VISUAL REFERENCE (live HTML mockups)
+These are approved visual mockups generated during a design-shotgun session. Open each HTML file in a browser to see the actual layout, spacing, colors, and typography. Read the CSS in those files alongside this spec.
+
+Primary approved direction (R1, final):
+~/.gstack/projects/DentalSite-v2/designs/homepage-directions-20260401/variant-R1.html
+
+All variants for reference (A/B/C + remix R1):
+~/.gstack/projects/DentalSite-v2/designs/homepage-directions-20260401/design-board.html
+
+## WHAT WAS DECIDED DURING DESIGN (context for ambiguity)
+The spec is complete, but here is what shaped it — a new AI should know this to avoid re-litigating settled decisions:
+
+1. Three initial variants (A/B/C) were generated and reviewed. A was strong on structure, B on warmth and bottom CTA, C on editorial typography.
+2. The final direction (R1) is a deliberate blend: A's clinic name treatment, B's bottom CTA block, C's nav typography style.
+3. The nav bar uses a gradient from nearly opaque at the top fading into lime green at the bottom (not a flat color). Iterated — earlier versions were too transparent.
+4. The Meet the Dentists section went through two iterations: light premium cards first, then dark premium (charcoal gradient, lime border, lime-tinted names) after the light version felt too generic.
+5. The hero uses the clinic exterior photo near the top of the page immediately — a deliberate choice to build trust before the user scrolls. The image uses object-fit: contain (not cover/crop) because the original is a wide horizontal photo.
+6. The clinic logo appears in the nav bar to the left of the clinic name wordmark.
+7. Both CTAs in the hero are kept: "Request Appointment" (primary lime pill) and the phone number as a secondary action.
+8. Services section uses dark background (not light gray) per approved direction.
+9. All images on disk were renamed from generic French filenames to descriptive kebab-case names. The plan reflects the renamed paths — use those paths exactly.
+10. Language: fr-CA is the default locale. en-CA is the toggle. Quebec French phrasing (not France French). All UI strings must exist in both with full parity.
+11. The horizontal-scroll storytelling section (clinic interior photos as the user scrolls) is a required feature — explicitly requested and locked during design review.
+12. The 3D molar tooth section uses Three.js with idle spin + inverse cursor parallax. No extra JS animation libraries.
+
+## CONTENT SOURCE FILES (real clinic content)
+All real content lives under:
+/Users/santiagovelasquez/Desktop/SWE/Personal/DentalSite-v2/
+
+Key subfolders:
+- DentalContent/Images/ — all photos (renamed per plan media inventory)
+- DentalContent/Video/ — the scroll-scrubbed .mp4 hero video
+- DentalContent/3D models/molar_tooth.glb — the Three.js asset (copy to public/models/)
+- DentalContent/WebINFO/Branding of the website of my client/Colors/ — brand color palette XML
+
+## WHAT TO DO
+1. Read this spec in full
+2. Open variant-R1.html in a browser and take a screenshot to see the approved visual direction
+3. Initialize the Next.js 14 project with TypeScript
+4. Implement every section, component, animation, i18n dictionary, and asset as specified
+5. Copy assets to public/ using the renamed paths from the plan
+6. Run a Quebec French copy review and English parity QA pass before declaring done
+
+Do not simplify, skip, or reinterpret the design. If something in the spec is ambiguous, look at the HTML mockups to resolve it.
+
+---
+
+# DENTAL SITE V2 — DESIGN SPECIFICATION
+
 ---
 name: DentalSite-v2 Plan
 overview: Single-page dental clinic website inspired by lavadental.lv — light adaptation with lime green branding, geometric typography, and CSS scroll-driven animations throughout.
 todos: []
 isProject: false
 ---
-
-# DentalSite-v2 Plan
 
 ## Context
 
@@ -36,14 +90,12 @@ A dental clinic in Lachenaie/Terrebonne, Quebec (established 2000) needs a moder
 
 Google Fonts substitutes for LAVA's custom fonts:
 
-
 | Role                | Font             | Weights       | Notes                                                            |
 | ------------------- | ---------------- | ------------- | ---------------------------------------------------------------- |
 | Headings            | **Syne**         | 500, 700      | Geometric, distinctive — closest Google Font to PP Neue Montreal |
 | Nav / labels / caps | **Josefin Sans** | 300, 400, 500 | Narrow, elegant — same as LAVA's nav font                        |
 | Body                | **DM Sans**      | 400, 500      | Clean, readable — similar to Jost                                |
 | Accent / numbers    | **Syne Mono**    | 400           | For hours, phone numbers                                         |
-
 
 **Type scale (fluid, using clamp):**
 
@@ -61,8 +113,8 @@ Google Fonts substitutes for LAVA's custom fonts:
 - **Language**: TypeScript
 - **Styling**: CSS Modules + CSS custom properties for design tokens
 - **Animations**: Pure CSS scroll-driven (`animation-timeline: scroll()`, `view-timeline`) + CSS `@keyframes`. No JS animation libraries.
-- **3D**: **Three.js** via `@react-three/fiber` + `@react-three/drei` (GLTF/GLB). Client-only dynamic import (`ssr: false`) for the tooth showcase — not a "motion library," but a WebGL runtime.
-- **Text measurement**: `@chenglou/pretext` — Canvas-based glyph measurement for zero-DOM-read layout (services equal-height cards, procedure step alignment, optional accordion bios)
+- **3D**: **Three.js** via `@react-three/fiber` + `@react-three/drei` (GLTF/GLB). Client-only dynamic import (`ssr: false`) for the tooth showcase.
+- **Text measurement**: `@chenglou/pretext` — Canvas-based glyph measurement for zero-DOM-read layout
 - **Deployment**: Static export
 
 ## Localization & Copy Requirements
@@ -70,11 +122,10 @@ Google Fonts substitutes for LAVA's custom fonts:
 - Primary audience is **Quebec French** speakers; use `fr-CA` vocabulary and phrasing, not France-only idioms.
 - Every user-visible string must have `fr-CA` and `en-CA` entries: nav, headings, body copy, CTA text, form labels/placeholders, validation errors, aria-labels, alt text, metadata.
 - Default render is French (`fr-CA`), with an explicit EN toggle.
-- Keep semantic parity across locales (same meaning and section hierarchy), while allowing natural phrasing (not literal word-for-word translations).
-- Add a content QA pass in plan: native-level Quebec French review before launch.
+- Keep semantic parity across locales (same meaning and section hierarchy), while allowing natural phrasing.
+- Add a content QA pass: native-level Quebec French review before launch.
 
 ## Existing Client Site Structure (multi-page)
-
 
 | Client page       | URL slug                                      | Maps to single-page section                   |
 | ----------------- | --------------------------------------------- | --------------------------------------------- |
@@ -97,14 +148,14 @@ All content collapses into one long-scrolling page. 7 section anchors in the nav
 
 ## LAVA Dental reference screenshots → UI patterns
 
-Source folder: [DentalContent/Images/Elements I want to recreate/](DentalContent/Images/Elements%20I%20want%20to%20recreate/) (PNG references; `team.avif` is a supplementary asset — convert to WebP/PNG for implementation if used).
+Source folder: `DentalContent/Images/Elements I want to recreate/`
 
 | Reference file | What it shows | How we mirror it (client brand) |
 | --- | --- | --- |
-| `lava-reference-header-nav.png` | Full-width dark bar: geometric mark left, **centered** text nav (About us, Portfolio, Services, Team, Price list, FAQ, Contacts), thin **horizontal rule** under the whole menu row, **EN** + chevron right, subtle blurred imagery on the right edge | **Nav.tsx**: same layout (logo + wordmark left is fine for clinic branding); replicate **centered anchor row** + **1px hairline** under links + generous horizontal padding. Map labels to our 7 anchors (no Portfolio/Price/FAQ unless you add sections later). Include a clear FR/EN language switcher in nav; FR is default. **Scroll-responsive bar** (see §1 below): **vertical gradient** on the nav chrome — **more opaque at the top**, **softer / more transparent toward the bottom edge** of the nav strip + `backdrop-filter`; **on scroll**, blend toward a **more solid, uniform** bar over light content. Lime accent for active/hover (`#B0D64E`) instead of LAVA's pale sage logo color |
-| `lava-reference-about-band-1.png` | **Pale mint/sage** full-bleed section; **large left headline** ("There's a team behind every smile"); **two columns** — tall **portrait image** left (artistic hands / human touch), **right column** copy with a **vertical rule** beside text; **lead paragraph bold**, body smaller | **AboutSection** first band: background `#E8EDE3` or similar (still "light" site — alternate with white). Headline + client story. **Image**: prefer **real team or clinic** photo; if no suitable crop, use **gloved hands + patient** stock only with license. Typography: Syne headline + DM Sans body; `border-left` on text column in accent or dark gray |
-| `lava-reference-about-band-2.png` | **Light gray textured** (stone/plaster) background; **square image** left with **carousel** UI (pause + dot track); **mission copy** right with **vertical rule**; bold intro + two paragraphs | **AboutSection** second band (stack below first): CSS **noise or subtle texture** on `#F4F4F4`. **Image strip**: start with **static hero image** + optional **manual carousel** (accessibility: pause, keyboard) — swap slides with **interior / chair / instruments** photos when assets decode reliably. Copy = clinic values + "comfort / atmosphere" from scraped content |
-| `lava-reference-about-band-3.png` | **Dark olive-gray** full-width band; **large fabric/curtain** texture **left third**; **centered white headline**; **three photos** in **asymmetric collage** (treatment, hands/prep, patient comfort with headphones) | **AboutSection** third band **or** a dedicated **ExperienceCollage** block **without** a new nav item (still under `#about` anchor): background `#2a2f2c` or reuse `--color-bg-dark`; optional **CSS mask or background image** for drape texture; **absolute-positioned** editorial grid of **3 photos** with scroll-driven fade/slide (same CSS timeline system). Use **client** treatment room / team / patient comfort shots when available; avoid anonymous stock for this collage if possible |
+| `lava-reference-header-nav.png` | Full-width dark bar: geometric mark left, **centered** text nav, thin **horizontal rule**, **EN** + chevron right | **Nav.tsx**: logo + wordmark left; **centered anchor row** + **1px hairline**; clear FR/EN pill switcher; FR is default. **Gradient bar**: solid top → transparent bottom (not flat). Lime accent for active/hover (`#B0D64E`). |
+| `lava-reference-about-band-1.png` | **Pale mint/sage** full-bleed; **large left headline**; tall **portrait image** left, **right column** copy with **vertical rule**; bold lead + body | **AboutSection** first band: `#E8EDE3` background; Syne headline + DM Sans body; `border-left` in accent or dark gray |
+| `lava-reference-about-band-2.png` | **Light gray textured** band; **square image** left with **carousel** UI (pause + dots); **mission copy** right with **vertical rule** | **AboutSection** second band: CSS noise/texture on `#F4F4F4`; static hero image + optional manual carousel |
+| `lava-reference-about-band-3.png` | **Dark olive-gray** full-width; **centered white headline**; **three photos** in **asymmetric collage** | **AboutSection** third band: `--color-bg-dark` background; editorial 3-photo grid with scroll-driven fade/slide |
 
 **Implementation notes:** Recreating LAVA's **exact** carousel and collage timing is optional; priority is **layout, hierarchy, texture, and scroll feel** on **client colors**. Reference PNGs are **design targets**, not assets to ship in `public/`.
 
@@ -117,7 +168,7 @@ Source folder: [DentalContent/Images/Elements I want to recreate/](DentalContent
      ├── #logo-video   — Scroll-scrubbed hero video (teeth animation + magic wand)
      ├── #about        — Clinic story + values (2-column layout)
      ├── #services     — 8 service cards (horizontal scroll within sticky container)
-     ├── #tooth-3d     — Three.js molar GLB: idle spin + cursor parallax tilt (optional text carousel beside model)
+     ├── #tooth-3d     — Three.js molar GLB: idle spin + cursor parallax tilt
      ├── #team         — Two dentist profiles + staff photos (scroll-reveal)
      ├── #gallery      — Clinic photo grid (interior/exterior images)
      ├── #hours        — Clinic hours table
@@ -131,14 +182,14 @@ Source folder: [DentalContent/Images/Elements I want to recreate/](DentalContent
 
 **Default:** CSS-native, scroll-driven. No JS animation libraries.
 
-**Exceptions:** (1) **Scroll-scrubbed video** in `#logo-video` — vanilla JS `currentTime` mapping (§8). (2) **3D tooth** — `useFrame` / pointer handlers in R3F (§9). Pretext is measurement-only, not animation.
+**Exceptions:** (1) **Scroll-scrubbed video** in `#logo-video` — vanilla JS `currentTime` mapping. (2) **3D tooth** — `useFrame` / pointer handlers in R3F. Pretext is measurement-only, not animation.
 
 ### 1. Sticky Header + Scroll Progress Bar + Gradient Chrome
 
 - Nav is `position: fixed`, **`backdrop-filter: blur()`** (with transparent fallback)
-- **Gradient bar (LAVA-inspired):** Nav background is **not** a flat rgba slab. Use a **`linear-gradient(to bottom, …)`** so the **top** of the nav is **more solid** and the **bottom edge** of the nav strip is **more transparent**, feathering into the hero/light content below. Combine with blur for a frosted-glass effect.
-- **Scroll-linked solidity:** As the user scrolls down (past hero / onto light sections), interpolate toward a **flatter, more opaque** background (e.g. higher min alpha or shorter gradient stop) so links stay readable over `#FFFFFF` / `#F4F4F4`. Implement with **CSS `animation-timeline: scroll(root)`** on custom properties **or** a tiny scroll listener toggling a `data-scrolled` / `--nav-solid` variable on `<html>` or the nav — whichever tracks design more faithfully in QA.
-- A 2px lime green progress bar at the bottom of the nav grows left-to-right as the user scrolls (CSS `@keyframes` with `animation-timeline: scroll()`)
+- **Gradient bar:** `linear-gradient(to bottom, rgba(255,255,255, 0.92) 0%, rgba(176,214,78, 0.35) 100%)` — solid top → transparent lime bottom
+- **Scroll-linked solidity:** as user scrolls, interpolate toward flatter/opaquer bar via `animation-timeline: scroll(root)` or `data-scrolled` toggle
+- 2px lime green progress bar at nav bottom grows left-to-right (CSS `@keyframes` with `animation-timeline: scroll()`)
 - Active section link highlighted via IntersectionObserver
 
 ### 2. Hero Text Reveal
@@ -148,120 +199,58 @@ Source folder: [DentalContent/Images/Elements I want to recreate/](DentalContent
 
 ### 3. Services: Horizontal Scroll via Vertical Scroll
 
-- A section with a **sticky container** — as user scrolls vertically, the services cards translate horizontally (CSS `transform` driven by scroll progress)
-- Cards scale from 0.9 → 1.0 as they enter the visible area
-- Same technique as LAVA's about-process carousel
+- Sticky container: services cards translate horizontally as user scrolls vertically
+- Cards scale from 0.9 → 1.0 as they enter visible area
 
 ### 4. Section Clip-Path Reveals
 
-- Sections use `clip-path: polygon()` that animates from a collapsed state to full size as the user scrolls
+- Sections use `clip-path: polygon()` animating from collapsed to full size on scroll
 - Applied to: about, services, team, gallery sections
 
 ### 5. Team / Gallery: Scroll-Reveal Entrance
 
-- Each card has `--start-transform: translateY(20vmin)` and `--end-transform: translateY(-20vmin)` CSS custom properties
-- Cards fade + slide into position as section scrolls into view
-- Uses `animation-timeline: view()` with `animation-range`
+- `--start-transform: translateY(20vmin)` → `--end-transform: translateY(-20vmin)`
+- Cards fade + slide as section scrolls into view
+- `animation-timeline: view()` with `animation-range`
 
 ### 6. Card Hover Animations
 
-- Cards: `scale(1.02)` on hover, smooth transition with `cubic-bezier(0.16, 1, 0.3, 1)`
-- Buttons: `scale(1.02)` on hover, `scale(0.98)` on active
-- All transitions: `var(--transition-default-duration: 0.5s)`
+- Cards: `scale(1.02)` on hover; `cubic-bezier(0.16, 1, 0.3, 1)` transition
+- Buttons: `scale(1.02)` hover, `scale(0.98)` active
 
 ### 7. Pretext Text Measurement (@chenglou/pretext)
 
-Install: `npm install @chenglou/pretext`
+`npm install @chenglou/pretext`
 
-Pretext measures text dimensions via Canvas `measureText()` and pure arithmetic — zero DOM reads, zero forced reflow. The core pattern: `prepare(text, font)` caches glyph widths once; `layout(prepared, width, lineHeight)` returns `{ height, lineCount }` instantly for any width.
-
-Three targeted uses in this site:
-
-**A. Services: Equal-Height Cards**
-The 8 service cards in the horizontal scroll all share the same container height. Pretext computes each card's text height via `layout()`, finds the tallest, and sets all cards to that height. Without Pretext, equal-height cards require either `display: flex` stretching (inconsistent with horizontal scroll layout) or DOM measurement (triggers reflow). Pretext solves this exactly with zero cost.
-
-**B. First Visit: Procedure Step Alignment**
-The 6 numbered procedure steps have varying text lengths. Pretext computes each step's line count and height. This lets us:
-
-- Ensure visual balance across steps even with unequal text
-- Optionally animate step numbers with line-count-dependent styling
-
-**C. Team: Expand/Collapse Bios (if implemented)**
-If dentist bios get a "read more" toggle, Pretext pre-computes the expanded height before the DOM exists. CSS transitions can then animate from collapsed to expanded with zero layout jump — the exact pattern from the [Pretext accordion demo](https://chenglou.me/pretext/accordion).
-
-**Usage pattern:**
+Three uses: (A) Services equal-height cards, (B) First Visit step alignment, (C) optional Team bio expand/collapse.
 
 ```ts
 import { prepare, layout } from '@chenglou/pretext'
-
-// Cache once per text+font pair
 const prepared = prepare(bioText, '16px Syne')
-
-// Query at any width — ~0.01ms, zero DOM reads
 const { height, lineCount } = layout(prepared, cardWidth, 24)
 ```
 
-**Files:** `src/utils/pretext.ts` — wrapper exporting ready-to-use `measureHeight(text, font, width, lineHeight)` helper. Consumed by `ServiceCard`, `FirstVisitSection`, and optionally `TeamSection`.
-
 ### 8. Logo Video: Scroll-Scrubbed Playback
 
-The `.mp4` video plays forward as the user scrolls down and rewinds as the user scrolls up. Implemented with vanilla JS — no libraries needed.
-
-**Behavior:**
-- On page load, the video is paused at `currentTime = 0`
-- As the `#logo-video` section scrolls into view, an `IntersectionObserver` starts tracking scroll position
-- A `scroll` event listener maps the section's scroll progress (0 → 1) to `video.currentTime` (0 → video.duration)
-- Scroll down: `currentTime` increases → video plays forward
-- Scroll up: `currentTime` decreases → video rewinds
-- Video is `muted`, `playsinline` for mobile compatibility
-
-**Key JS logic:**
-```ts
-const video = videoRef.current
-const section = sectionRef.current
-const observer = new IntersectionObserver(([entry]) => {
-  if (entry.isIntersecting) startTracking()
-  else stopTracking()
-}, { threshold: 0 })
-
-function onScroll() {
-  const rect = section.getBoundingClientRect()
-  const viewportH = window.innerHeight
-  // Progress: 0 when section top hits viewport bottom → 1 when section bottom hits viewport top
-  const progress = 1 - (rect.bottom / (viewportH + rect.height))
-  const clampedProgress = Math.max(0, Math.min(1, progress))
-  video.currentTime = clampedProgress * video.duration
-}
-```
-
-**Files:** `LogoVideoSection.tsx` — owns the video ref, IntersectionObserver, and scroll handler.
+- Video paused at `currentTime = 0` on load
+- IntersectionObserver starts tracking when section enters viewport
+- Scroll progress (0→1) maps to `video.currentTime` (0→duration)
+- Scroll down: plays forward. Scroll up: rewinds.
+- `muted`, `playsinline`
 
 ### 9. 3D Molar Tooth (Three.js / React Three Fiber)
 
-**Asset:** `DentalContent/3D models/molar_tooth.glb` — **binary glTF (GLB)**, standard for web + Three.js; sourced from **Sketchfab** (should load via `useGLTF` / `GLTFLoader` like any compliant export). Copy to `public/models/molar_tooth.glb` at build/setup. **Licensing:** confirm the Sketchfab model's license (often **CC** or editor-only); add **required attribution** (creator name + Sketchfab link) in the footer or adjacent to `#tooth-3d` if terms require it.
+**Asset:** `DentalContent/3D models/molar_tooth.glb` → `public/models/molar_tooth.glb`. Verify Sketchfab license; add attribution if required.
 
-**Placement:** Dedicated section **`#tooth-3d`** on the page flow **after `#services` and before `#team`** (visual break between "what we offer" and "who we are"). **Does not add an 8th nav label by default** — deep link only via `#tooth-3d` unless you later add e.g. "Technology" to the nav.
+**Stack:** `three`, `@react-three/fiber`, `@react-three/drei` with `ssr: false` via `next/dynamic`.
 
-**Stack:** `three`, `@react-three/fiber`, `@react-three/drei` (`useGLTF`, `Environment` or minimal lights). Wrap canvas in `next/dynamic` with **`ssr: false`** to avoid hydration / WebGL issues on static export.
-
-**Core interaction (recommended baseline):**
-
-- **Idle:** Slow continuous **Y-axis rotation** (`useFrame`: `mesh.rotation.y += delta * k` with small `k`).
-- **Pointer parallax:** While the cursor is over the canvas (or a padded hit region), map pointer **normalized device coordinates** (−1…1) to small **Euler tilts** on X/Y (e.g. ±0.12–0.2 rad), **opposite** to cursor approach so the tooth subtly "leans away" from the pointer. **Lerp** back to idle rotation when the pointer leaves.
-- **Reduce motion:** Respect `prefers-reduced-motion: reduce` — disable parallax and slow or stop spin.
-
-**Alternative layouts (pick one in implementation or A/B in content):**
-
-- **Split + carousel:** Tooth on one side; **text or service highlights** on the other with a **dot carousel** (same inspiration as LAVA About band 2) — copy advances, tooth keeps spinning.
-- **Scroll-modulated spin:** Slightly increase rotation speed or twist amount based on **section scroll progress** (optional; keep subtle to avoid nausea).
-
-**Performance & quality:**
-
-- **Mount lazily** when `#tooth-3d` intersects the viewport (`IntersectionObserver` → render canvas).
-- Cap **`dpr`** (e.g. `Math.min(devicePixelRatio, 2)`), optional **lower shadow quality** on mobile.
-- Materials: if GLB is untextured, use **drei** `MeshStandardMaterial` + studio `Environment` or neutral lights matching **lime + gray** brand.
-
-**Files:** `Tooth3DSection.tsx` + `Tooth3DSection.module.css` + `ToothCanvas.tsx` (R3F scene) — keep GLB path in one constant.
+**Core interaction:**
+- Idle Y-axis rotation (`useFrame`: `mesh.rotation.y += delta * k`)
+- Inverse cursor parallax tilt (±0.12–0.2 rad Euler, opposite to cursor)
+- Lerp back to idle on pointer leave
+- Respect `prefers-reduced-motion`
+- Lazy mount on `#tooth-3d` viewport intersection
+- Cap `dpr` at `Math.min(devicePixelRatio, 2)`
 
 ## Design Tokens (variables.css)
 
@@ -280,7 +269,7 @@ function onScroll() {
   /* Nav chrome (tune in QA) */
   --nav-gradient-top-alpha: 0.92;
   --nav-gradient-bottom-alpha: 0.35;
-  --nav-solid-alpha: 0.96; /* scrolled / flat state */
+  --nav-solid-alpha: 0.96;
 
   /* Spacing scale */
   --space-size-xs: 0.5rem;
@@ -326,89 +315,83 @@ src/
 ├── components/
 │   ├── Nav.tsx / Nav.module.css
 │   │   - Sticky, backdrop-blur
-│   │   - Background: vertical gradient (more solid top → more transparent bottom of bar) + scroll-linked increase in overall opacity / flatten gradient for readability over light sections (see Animation §1)
+│   │   - Background: vertical gradient (solid top → transparent bottom) + scroll-linked solidity
 │   │   - Left: clinic logo (clinic-logo-primary.png) + clinic name wordmark
 │   │   - Links: Home, About, Services, Gallery, First Visit, Appointment, Contact
-│   │   - Mobile: hamburger → full-screen overlay
 │   │   - FR/EN pill toggle in nav — fr-CA default, persisted in localStorage
+│   │   - Mobile: hamburger → full-screen overlay
 │   │   - Scroll progress bar (2px lime green, grows left-to-right)
 │   │
 │   ├── Hero.tsx / Hero.module.css
 │   │   - Full viewport height (100svh)
 │   │   - Dark background (#1a1a1a)
-│   │   - Clinic logo centered (clinic-logo-primary.png, large)
+│   │   - Large centered logo
 │   │   - Clinic name (Syne 700, large) + tagline (Josefin Sans caps)
 │   │   - Phone (click-to-call tel: link)
-│   │   - Lime green pill CTA button ("Request Appointment")
+│   │   - Lime green pill CTA ("Request Appointment")
 │   │   - Clinic exterior image near top (object-fit: contain, no crop)
 │   │   - Word-by-word staggered text reveal on scroll
 │   │
 │   ├── LogoVideoSection.tsx / LogoVideoSection.module.css
-│   │   - Positioned immediately after Hero, before About
+│   │   - Positioned after Hero, before About
 │   │   - Full-width video player (no controls, muted, loop)
-│   │   - Video source: `DentalContent/Video/Dentist Teeth Video centre dentaire vaillancourt st-onge logo (1).mp4`
-│   │   - Scroll-scrubbed: scroll down → video plays forward; scroll up → video rewinds
-│   │   - Implemented via: IntersectionObserver tracks how much of the section is visible,
-│   │     scroll event maps viewport position to `video.currentTime`
-│   │   - Video fills container responsively (object-fit: cover or contained)
-│   │   - Dark overlay on video for text legibility if overlaid text is added
+│   │   - Scroll-scrubbed: scroll down → plays; scroll up → rewinds
+│   │   - IntersectionObserver + scroll listener
 │   │
 │   ├── AboutSection.tsx / AboutSection.module.css
-│   │   - Single `#about` anchor with **stacked bands** inspired by LAVA reference screenshots:
-│   │     1) Mint/sage band — large Syne headline, 2-col (portrait image | text + vertical rule), bold lead + body
-│   │     2) Textured light-gray band — square feature image or small carousel (pause + dots), mission copy + vertical rule
-│   │     3) Dark "experience" band — optional curtain texture left, centered white headline, 3-photo editorial collage
-│   │   - Scroll-reveal / clip-path on each band (CSS view-timeline)
+│   │   - Stacked bands per LAVA references:
+│   │     1) Mint/sage band — large Syne headline, 2-col (portrait | text + vertical rule)
+│   │     2) Textured light-gray band — feature image or carousel + mission copy
+│   │     3) Dark "experience" band — 3-photo editorial collage
+│   │   - Scroll-reveal / clip-path on each band
 │   │
 │   ├── ServicesSection.tsx / ServicesSection.module.css
-│   │   - Dark background (per approved direction)
+│   │   - Dark background
 │   │   - Section title: "Our Services" / "Nos services"
 │   │   - Sticky horizontal scroll: 8 cards scroll left as user scrolls down
 │   │   - Clip-path reveal on section enter
 │   │
 │   ├── Tooth3DSection.tsx / Tooth3DSection.module.css
-│   │   - Anchor id: `#tooth-3d` (after Services, before Team)
-│   │   - Client-only `<Canvas>` (dynamic import, ssr: false) loading `public/models/molar_tooth.glb`
-│   │   - Idle Y rotation + inverse cursor parallax tilt; respects `prefers-reduced-motion`
-│   │   - Optional: split layout with text/service carousel beside the model
-│   │   - Lazy mount when section enters viewport
+│   │   - Anchor id: `#tooth-3d`
+│   │   - Client-only Canvas (dynamic import, ssr: false)
+│   │   - Idle Y rotation + inverse cursor parallax tilt
+│   │   - Respects prefers-reduced-motion
+│   │   - Lazy mount on viewport intersection
 │   │
-│   ├── ToothCanvas.tsx                   # R3F scene: lights, useGLTF, useFrame, pointer → tilt
+│   ├── ToothCanvas.tsx                   # R3F scene
 │   │
 │   ├── ServiceCard.tsx / ServiceCard.module.css
 │   │   - White card, border-radius: 16px
 │   │   - Icon (inline SVG lime dot — not emoji)
 │   │   - Name (Syne, bold) + description (DM Sans)
-│   │   - Pretext: `layout()` used to compute text height, all 8 cards set to equal tallest height
+│   │   - Pretext: equal-height layout
 │   │   - Hover: scale(1.02) + shadow lift
 │   │
 │   ├── TeamSection.tsx / TeamSection.module.css
-│   │   - Dark background (per approved direction)
+│   │   - Dark background
 │   │   - Section title: "Meet the Dentists" / "Rencontrez les dentistes"
-│   │   - 2 main dentist cards: large photo, name, credentials, bio
-│   │   - Dark premium card style: charcoal gradient, lime-accent border, lime-tinted names
+│   │   - 2 dentist cards: dark premium style (charcoal #1f1f1f→#2a2a2a gradient, rgba(176,214,78,.42) border, lime-tinted names)
 │   │   - 4 staff photo cards below: photo + name only
-│   │   - Scroll-reveal entrance per card (translateY + fade)
+│   │   - Scroll-reveal entrance per card
 │   │
 │   ├── GallerySection.tsx / GallerySection.module.css
 │   │   - Light gray background (#F4F4F4)
 │   │   - Section title: "Our Clinic"
-│   │   - Grid: exterior + interior practice photos; optional small "results" row from `Teeth before after/` with disclaimer if not clinic-specific
-│   │   - Scroll-reveal entrance per photo
+│   │   - Grid: exterior + interior practice photos
+│   │   - Scroll-reveal per photo
 │   │
 │   ├── HoursSection.tsx / HoursSection.module.css
 │   │   - White background
 │   │   - Section title: "Clinic Hours"
-│   │   - Clean table: Mon-Sat + Sunday (closed)
-│   │   - Hours in Syne Mono for alignment
-│   │   - Simple fade-in on scroll
+│   │   - Mon-Sat table in Syne Mono
+│   │   - Fade-in on scroll
 │   │
 │   ├── FirstVisitSection.tsx / FirstVisitSection.module.css
 │   │   - Light gray background (#F4F4F4)
 │   │   - Section title: "Your First Visit"
-│   │   - Split layout: left = intro text + PDF download CTA; right = 6-step procedure list
-│   │   - Pretext: `layout()` used to align step heights for visual balance
-│   │   - Cancellation policy note (alert box)
+│   │   - Split: intro + PDF CTA left; 6-step procedure list right
+│   │   - Pretext: step height alignment
+│   │   - Cancellation policy alert box
 │   │   - "Make an appointment" CTA at bottom
 │   │
 │   ├── AppointmentForm.tsx / AppointmentForm.module.css
@@ -416,32 +399,32 @@ src/
 │   │   - Section title: "Request an Appointment"
 │   │   - Fields: Full name, Email, Phone, Preferred date, Reason (textarea)
 │   │   - Lime green pill submit button
-│   │   - Submit → `mailto:` action (static site, no backend)
-│   │   - Inline validation styling (red border on error, green on valid)
+│   │   - mailto: submit (static site)
+│   │   - Inline validation (red border error, green valid)
 │   │
 │   ├── ContactSection.tsx / ContactSection.module.css
 │   │   - Dark background (#1a1a1a)
 │   │   - Lime green accent divider line
-│   │   - Address, email (mailto:), phone (tel:), map placeholder div
+│   │   - Address, email (mailto:), phone (tel:), map placeholder
 │   │   - Fade-in on scroll
 │   │
 │   ├── Footer.tsx / Footer.module.css
 │   │   - Dark background (#1a1a1a)
-│   │   - Logo, nav links (same 7 anchors), hours summary
-│   │   - Copyright with dynamic `new Date().getFullYear()`
+│   │   - Logo, nav links, hours summary
+│   │   - Dynamic copyright `new Date().getFullYear()`
 │   │   - "Designed and powered by Calytek" link
 │   │
 │   └── Button.tsx / Button.module.css
-│       - Variants: primary (lime green fill), secondary (outlined), ghost (text only)
+│       - Variants: primary (lime green fill), secondary (outlined), ghost (text)
 │       - Pill-shaped (border-radius: 9999px)
 │       - Hover: scale(1.02); Active: scale(0.98)
 │       - Transition: 0.3s cubic-bezier(0.16, 1, 0.3, 1)
 
 ├── utils/
-│   └── pretext.ts                  # Wrapper around @chenglou/pretext
-│       - `measureHeight(text, font, width, lineHeight): number`
-│       - `measureLineCount(text, font, width, lineHeight): number`
-│       - `prepareText(text, font): PreparedText` (cached handle)
+│   └── pretext.ts                  # @chenglou/pretext wrapper
+│       - measureHeight(text, font, width, lineHeight)
+│       - measureLineCount(text, font, width, lineHeight)
+│       - prepareText(text, font)
 
 ├── styles/
 │   ├── globals.css              # CSS reset, base typography, scroll-behavior: smooth
@@ -449,74 +432,70 @@ src/
 
 └── content/
     ├── i18n/
-    │   ├── fr-CA.ts             # All French (Quebec) strings — default locale
-    │   └── en-CA.ts             # All Canadian English strings — full parity
+    │   ├── fr-CA.ts             # French (Quebec) strings — default locale
+    │   └── en-CA.ts             # Canadian English strings — full parity
     └── clinic.ts                # Static content (hours, addresses, service list)
 ```
 
 ## Content Sources
 
-
 | Content                      | Source                                                                                                                   |
 | ---------------------------- | ------------------------------------------------------------------------------------------------------------------------ |
-| Clinic story / values        | `www.dentistelachenaie.com_en_index.html.2026-03-28...md` (scraped home page)                                            |
-| Service names + descriptions | Same scraped home page (8 services with icons)                                                                           |
-| Team bios                    | Same scraped home page + `Scrape/www_dentistelachenaie_com.html`                                                         |
-| Staff photos                 | `DentalContent/Images/Team/Team/` (staff-*.jpg)                                                                          |
-| Dentist photos               | `DentalContent/Images/Team/Dentists/` (dentist-dr-*.jpg)                                                                |
-| Clinic interior photos       | `DentalContent/Images/Inside of the practice/` (clinic-*.jpg)                                                            |
-| Clinic exterior photo        | `DentalContent/Images/Outside of the building/clinic-exterior-front-signage-01.jpg`                                      |
-| Clinic logo                  | `DentalContent/Images/Logo/clinic-logo-primary.png` — Nav, Hero, Footer                                                 |
-| Clinic video                 | `DentalContent/Video/Dentist Teeth Video centre dentaire vaillancourt st-onge logo (1).mp4`                               |
-| 3D molar (GLB)               | `DentalContent/3D models/molar_tooth.glb` (Sketchfab) → `public/models/molar_tooth.glb`; verify license + attribution    |
-| Hours                        | Scraped home page footer (Mon-Fri + Sat hours)                                                                           |
-| Address / contact            | Scraped home page footer                                                                                                 |
-| First visit steps            | `Scrape/www_dentistelachenaie_com.html` (first-visit form page)                                                          |
+| Clinic story / values        | `www_dentistelachenaie_com_en_index.html.2026-03-28...md` (scraped home page)                                    |
+| Service names + descriptions | Same scraped home page (8 services)                                                                              |
+| Team bios                    | Same scraped home page + `Scrape/www_dentistelachenaie_com.html`                                               |
+| Staff photos                 | `DentalContent/Images/Team/Team/staff-*.jpg`                                                                      |
+| Dentist photos               | `DentalContent/Images/Team/Dentists/dentist-dr-*.jpg`                                                             |
+| Clinic interior photos       | `DentalContent/Images/Inside of the practice/clinic-*.jpg`                                                         |
+| Clinic exterior photo        | `DentalContent/Images/Outside of the building/clinic-exterior-front-signage-01.jpg`                             |
+| Clinic logo                  | `DentalContent/Images/Logo/clinic-logo-primary.png`                                                               |
+| Clinic video                 | `DentalContent/Video/Dentist Teeth Video centre dentaire vaillancourt st-onge logo (1).mp4`                      |
+| 3D molar (GLB)               | `DentalContent/3D models/molar_tooth.glb` → `public/models/molar_tooth.glb`; verify license + attribution |
+| Hours                        | Scraped home page footer (Mon-Fri + Sat)                                                                         |
+| Address / contact            | Scraped home page footer                                                                                             |
+| First visit steps            | `Scrape/www_dentistelachenaie_com.html`                                                                          |
 
 ## Media inventory & fit (client + stock)
 
-All images have been renamed to descriptive kebab-case. Source root: `DentalContent/Images/`. Logo is horizontal PNG: tooth-and-stem motif + "CENTRE DENTAIRE / VAILLANCOURT / ST-ONGE" — use in Nav, Hero, Footer, favicon.
+All images renamed to descriptive kebab-case. Source root: `DentalContent/Images/`.
 
 | Asset (renamed) | Role on site | Fit |
 | --- | --- | --- |
-| `Logo/clinic-logo-primary.png` | Nav, Hero, Footer, OG image base | **Primary brand** — correct for all chrome |
-| `Outside of the building/clinic-exterior-front-signage-01.jpg` | Hero image, Gallery, Contact | **Strong** — real clinic exterior; signage shows **450-582-2219** and "Vaillancourt et Assoc." — align copy with hours/phone |
-| `Inside of the practice/clinic-reception-01.jpg` | Gallery, About bands | Valid JPEG confirmed |
-| `Inside of the practice/clinic-waiting-room-01.jpg` | Gallery, About, hero alternate | Valid JPEG |
+| `Logo/clinic-logo-primary.png` | Nav, Hero, Footer, OG image | **Primary brand** |
+| `Outside of the building/clinic-exterior-front-signage-01.jpg` | Hero, Gallery, Contact | **Strong** — real clinic exterior |
+| `Inside of the practice/clinic-reception-01.jpg` | Gallery, About | Valid JPEG |
+| `Inside of the practice/clinic-waiting-room-01.jpg` | Gallery, About, hero alt | Valid JPEG |
 | `Inside of the practice/clinic-waiting-room-02.jpg` | Gallery | — |
 | `Inside of the practice/clinic-waiting-room-03.jpg` | Gallery | — |
 | `Inside of the practice/clinic-treatment-room-01.jpg` | Gallery, About collage | Valid JPEG |
 | `Inside of the practice/clinic-sterilization-room-01.jpg` | Gallery, About collage | Valid JPEG |
-| `Team/Dentists/dentist-dr-nathalie-vaillancourt.jpg` | Team lead card | **Strong** — professional headshot, gray backdrop, smile |
-| `Team/Dentists/dentist-dr-marie-christine-st-onge.jpg` | Team lead card | **Strong** — white backdrop; works with circular or rounded crop |
-| `Team/Dr. Marie-Christine St-Onge's Team/team-dr-st-onge-group-photo.jpg` | Team group hero or wide card | **Strong** — full team, black wardrobe reads "clinical premium" |
+| `Team/Dentists/dentist-dr-nathalie-vaillancourt.jpg` | Team lead card | **Strong** |
+| `Team/Dentists/dentist-dr-marie-christine-st-onge.jpg` | Team lead card | **Strong** |
+| `Team/Dr. Marie-Christine St-Onge's Team/team-dr-st-onge-group-photo.jpg` | Team group hero | **Strong** |
 | `Team/Team/staff-audrey-roy.jpg` | Staff grid | — |
 | `Team/Team/staff-elizabeth-ciricillo.jpg` | Staff grid | — |
 | `Team/Team/staff-virginie-curadeau.jpg` | Staff grid | — |
 | `Team/Team/staff-yamina-bounessis.jpg` | Staff grid | — |
-| `Teeth before after/teeth-whitening-enlighten-before-after-01.jpg` | Optional Results strip | Treat as generic marketing; add disclaimer if used |
-| `Teeth before after/teeth-whitening-enlighten-before-after-02.jpg` | Optional Results strip | — |
-| `Teeth before after/teeth-whitening-philips-zoom-before-after-01.jpg` | Optional Results strip | — |
-| `Smiling Patient/smiling-patient-*.jpg` | Deduplicated stock, secondary | Confirm license before commercial use |
-| `Smiling People/smiling-people-*.jpg` | Deduplicated stock, secondary | Confirm license before commercial use |
+| `Teeth before after/teeth-whitening-*.jpg` | Optional Results strip | Add disclaimer if used |
+| `Smiling Patient/smiling-patient-*.jpg` | Stock, secondary | Confirm license |
+| `Smiling People/smiling-people-*.jpg` | Stock, secondary | Confirm license |
 | `Elements I want to recreate/lava-reference-*.png` | Design reference only | Do not ship to `public/` |
 
-**Summary:** Lead with **logo + dentists + staff + exterior + interiors**. Use **stock / before-after** sparingly with **licensing and disclosure** clarity. Interior JPEGs confirmed valid; re-export any that fail to decode in a browser during implementation.
+**Summary:** Lead with **logo + dentists + staff + exterior + interiors**. Use stock/before-after sparingly. Interior JPEGs confirmed valid.
 
 ## Not in Scope
 
 - Backend/database (static site only)
-- Actual appointment booking system (form emails clinic via `mailto:`)
-- Additional locales beyond `fr-CA` and `en-CA` (only these two in scope)
+- Actual appointment booking (form emails via `mailto:`)
+- Additional locales beyond `fr-CA` and `en-CA`
 - Payment/insurance features
-- Video editing/production (using the .mp4 as provided)
-- Staff full bios (photos + names only for support staff)
-- Third-party **JS motion libraries** (GSAP, Framer Motion, etc.) — keep motion **CSS scroll-driven**; **allowed:** scroll-scrubbed video + R3F `useFrame` / pointer logic for the 3D tooth only
-- Full dental CAD / procedural animation inside the GLB beyond spin + tilt unless scope expands
+- Video editing (use .mp4 as provided)
+- Staff full bios (photos + names only)
+- JS motion libs (GSAP, Framer Motion, etc.) — CSS scroll-driven only; exceptions: scroll-scrubbed video + R3F
 
 ## Estimated Files
 
-~32-38 files (adds R3F tooth + nav gradient tuning). Single developer: ~4-5 days.
+~32-38 files. Single developer: ~4-5 days.
 
 ## Todo List
 
@@ -525,94 +504,38 @@ All images have been renamed to descriptive kebab-case. Source root: `DentalCont
 - Set up design tokens in variables.css
 - Set up globals.css (reset, base typography, scroll-behavior: smooth)
 - Set up i18n dictionaries for `fr-CA` (default) and `en-CA` (full parity strings)
-- Build Nav component (sticky, backdrop-blur, **gradient + scroll-solidity**, progress bar, 7 anchors, FR/EN toggle, mobile hamburger)
+- Build Nav component (sticky, backdrop-blur, gradient + scroll-solidity, progress bar, 7 anchors, FR/EN toggle, mobile hamburger)
 - Build Button component (primary, secondary, ghost variants)
-- Build Hero section (dark bg, logo, text reveal, CTA)
-- Build LogoVideoSection component (scroll-scrubbed .mp4: scroll down plays, scroll up rewinds)
-- Build About section (multi-band layout per LAVA reference screenshots: mint 2-col, textured + feature image/carousel, dark experience collage)
-- Verify interior JPEGs load in browser; re-export any broken files; dedupe `Smiling People` vs `Smiling Patient` when copying to `public/`
-- Build ServiceCard component
-- Build Services section (sticky horizontal scroll + clip-path reveal)
-- Add `three`, `@react-three/fiber`, `@react-three/drei`; copy `molar_tooth.glb` to `public/models/`; add Sketchfab/creator **attribution** if license requires
-- Build Tooth3DSection + ToothCanvas (lazy R3F: idle spin, inverse cursor tilt, reduced-motion)
-- Build Team section (2 dentist cards + 4 staff photo cards, scroll-reveal, dark premium card style)
-- Build Gallery section (clinic photo grid, scroll-reveal per photo)
-- Build Hours section (table layout, Syne Mono)
-- Build First Visit section (split layout, PDF download, procedure steps)
-- Build Appointment form (validation, mailto submit)
-- Build Contact section (dark strip, lime accents, map placeholder)
+- Build Hero section (dark bg, logo, text reveal, both CTAs, exterior image)
+- Build LogoVideoSection component (scroll-scrubbed .mp4)
+- Build About section (3 stacked bands per LAVA references)
+- Verify interior JPEGs load in browser; re-export any broken files
+- Build ServiceCard component (inline SVG lime dot icon)
+- Build Services section (sticky horizontal scroll + clip-path reveal, dark bg)
+- Add Three.js + R3F; copy molar_tooth.glb to public/models/
+- Build Tooth3DSection + ToothCanvas (lazy R3F, idle spin, inverse cursor tilt, reduced-motion)
+- Build Team section (dark bg, dark premium dentist cards, 4 staff cards, scroll-reveal)
+- Build Gallery section (light gray, clinic photo grid, scroll-reveal)
+- Build Hours section (white, table in Syne Mono)
+- Build First Visit section (light gray, split layout, Pretext step alignment)
+- Build Appointment form (white, mailto submit, inline validation)
+- Build Contact section (dark, lime accents, map placeholder)
 - Build Footer component
-- Build `src/utils/pretext.ts` helper (`measureHeight` wrapper around `@chenglou/pretext`)
-- Apply Pretext to Services cards (equal-height layout), First Visit procedure steps (line-count-aware alignment)
-- Copy client images, video, and 3D asset to public/ (clinic-logo-primary.png → ideally convert to .svg, dentist photos, staff photos, clinic photos, clinic .mp4 video, **models/molar_tooth.glb**)
+- Build `src/utils/pretext.ts` helper
+- Apply Pretext to Services cards + First Visit steps
+- Copy all assets to public/ using renamed paths
 - Compose all sections in page.tsx
 - Add responsive styles (mobile-first breakpoints)
 - Add scroll-driven animations (CSS view-timeline + @keyframes)
-- Add favicon (from client logo) and meta tags (SEO, Open Graph)
+- Add favicon and meta tags (SEO, Open Graph)
 - Run Quebec French copy review pass + English parity QA
 
-## Implementation Prompt
+## Key Design Decisions (approved, do not change)
 
-```
-Build the Centre Dentaire Vaillancourt St-Onge single-page bilingual (fr-CA default, en-CA) dental clinic website.
-
-Stack: Next.js 14 App Router, TypeScript, CSS Modules + CSS custom properties, static export.
-Animations: Pure CSS scroll-driven (animation-timeline: scroll(), view-timeline). No JS motion libs.
-3D: @react-three/fiber + @react-three/drei (ssr: false), lazy mount via IntersectionObserver.
-Text measurement: @chenglou/pretext for equal-height service cards and step alignment.
-
-DESIGN TOKENS (variables.css):
---color-accent: #B0D64E; --color-accent-dark: #8fb335; --color-bg: #FFFFFF;
---color-bg-alt: #F4F4F4; --color-bg-dark: #1a1a1a; --color-text: #333333;
---color-text-light: #666666; --color-text-inverse: #FFFFFF;
-Fonts: Syne (headings), Josefin Sans (nav/labels), DM Sans (body), Syne Mono (numbers).
-Type scale uses clamp() for fluid sizing.
-
-I18N: fr-CA is default. All user-visible strings (nav, headings, CTAs, form labels, validation, aria-labels, alt text, metadata) must exist in both fr-CA and en-CA with full parity. Language toggle in nav persists to localStorage. Page lang attribute updates dynamically.
-
-PAGE SECTIONS (top → bottom):
-1. Sticky Nav — frosted glass gradient (solid top → transparent bottom), scroll progress bar, 7 anchor links, FR/EN pill toggle (fr-CA default), clinic logo + wordmark left, mobile hamburger → full-screen overlay.
-2. #hero — 100svh, dark bg (#1a1a1a), large centered logo, Syne headline, Josefin Sans tagline, phone tel: link, lime pill "Request Appointment" CTA, clinic exterior image near top (object-fit: contain, no crop).
-3. #logo-video — Full-width scroll-scrubbed .mp4 (scroll down → plays, scroll up → rewinds), muted, playsinline, IntersectionObserver + scroll listener.
-4. #about — Stacked bands: mint/sage 2-col band, textured gray band with carousel, dark experience band with 3-photo collage.
-5. #services — Dark section. Sticky horizontal scroll: 8 service cards scroll left as user scrolls down. Lime dot icon (inline SVG, not emoji) per card. Pretext equal-height.
-6. #tooth-3d — Three.js molar GLB. Idle Y rotation + inverse cursor parallax tilt. Respect prefers-reduced-motion. Lazy mount.
-7. #team — Dark section. 2 dentist cards with dark premium style (charcoal gradient, lime border, lime-tinted names). 4 staff photo cards. Scroll-reveal entrance.
-8. #gallery — Light gray (#F4F4F4). Clinic photo grid. Scroll-reveal per photo.
-9. #hours — White. Mon-Sat table in Syne Mono.
-10. #first-visit — Light gray. Split: intro + PDF CTA left, 6-step procedure list right. Pretext step alignment.
-11. #appointment — White. Form: name, email, phone, preferred date, reason textarea. mailto: submit, inline validation.
-12. #contact — Dark (#1a1a1a). Lime accent divider. Address, email, phone, map placeholder.
-13. #footer — Dark, logo, nav links, hours summary, dynamic copyright, Calytek credit.
-
-KEY DESIGN DECISIONS (approved, do not change):
 - Nav gradient: transparent top fading to lime (#B0D64E at ~56% opacity bottom)
 - Meet the Dentists: dark premium cards (charcoal #1f1f1f→#2a2a2a gradient, rgba(176,214,78,.42) border, lime-tinted names)
 - Bottom CTA: dark card with "Need an appointment this week?" / "Besoin d'un rendez-vous cette semaine?"
 - Both hero CTAs: "Request Appointment" + phone number
 - Clinic exterior image in hero near top (object-fit: contain)
 - Light/dark alternation across sections for visual rhythm
-
-IMAGES (renamed, source: DentalContent/Images/):
-Logo: Logo/clinic-logo-primary.png
-Exterior: Outside of the building/clinic-exterior-front-signage-01.jpg
-Interior: Inside of the practice/clinic-reception-01.jpg, clinic-waiting-room-01.jpg, clinic-waiting-room-02.jpg, clinic-waiting-room-03.jpg, clinic-treatment-room-01.jpg, clinic-sterilization-room-01.jpg
-Dentists: Team/Dentists/dentist-dr-nathalie-vaillancourt.jpg, dentist-dr-marie-christine-st-onge.jpg
-Team group: Team/Dr. Marie-Christine St-Onge's Team/team-dr-st-onge-group-photo.jpg
-Staff: Team/Team/staff-audrey-roy.jpg, staff-elizabeth-ciricillo.jpg, staff-virginie-curadeau.jpg, staff-yamina-bounessis.jpg
-3D: DentalContent/3D models/molar_tooth.glb → public/models/molar_tooth.glb
-Video: DentalContent/Video/Dentist Teeth Video centre dentaire vaillancourt st-onge logo (1).mp4
-
-ANIMATIONS (CSS only unless noted):
-- Nav: gradient + backdrop-blur + scroll-solidity via animation-timeline: scroll()
-- 2px lime progress bar: @keyframes with animation-timeline: scroll()
-- Hero text: word-by-word fade-in, animation-timeline: view()
-- Services: sticky horizontal scroll via vertical scroll progress
-- Sections: clip-path polygon reveals, animation-timeline: view()
-- Cards: scale(1.02) hover, cubic-bezier(0.16,1,0.3,1) transitions
-- Logo video: vanilla JS IntersectionObserver + scroll (exception to CSS-only rule)
-- 3D tooth: R3F useFrame + pointer handlers (exception to CSS-only rule)
-
-Build everything. Compose in app/page.tsx. Add mobile breakpoints. Run Quebec French copy review + English parity QA before launch.
-```
-
+- FR/EN pill toggle in nav — fr-CA default, localStorage persistence
