@@ -1,0 +1,171 @@
+{
+  "version": "1.0",
+  "tool": "website_one_page",
+  "seed_url": "https://lavadental.lv/en",
+  "seed_origin": "https://lavadental.lv:443",
+  "seed_host": "lavadental.lv",
+  "final_url": "https://lavadental.lv/en",
+  "final_host": "lavadental.lv",
+  "origin_lock_mode": "host_only",
+  "captured_at": "2026-03-30T06:24:28.667376Z",
+  "base_href_used": false,
+  "base_href_value": null,
+  "budgets": {
+    "max_pages": 1,
+    "max_assets": 200,
+    "max_assets_per_page": 200,
+    "max_redirects": 5,
+    "max_css_import_depth": 2,
+    "max_html_bytes": 2097152,
+    "max_css_bytes": 1048576,
+    "max_asset_bytes": 104857600,
+    "max_total_asset_bytes": 52428800
+  },
+  "budgets_used": {
+    "pages": 1,
+    "assets": 32,
+    "total_asset_bytes": 2773975
+  },
+  "counts": {
+    "html_pages": 1,
+    "assets_total": 32,
+    "assets_included": 32,
+    "assets_excluded": 0
+  },
+  "excluded": [],
+  "mapping": {
+    "https://lavadental.lv/_nuxt/JosefinSans-Medium.iMg_S0DK.woff2": {
+      "local_path": "assets/534a16a00930254a6b99a8dcdd90b2e3125e5dcb6ef48147bb76ba20100045cf.bin",
+      "content_type": "font/woff2"
+    },
+    "https://lavadental.lv/_nuxt/Jost-Medium.DP9o0ADl.woff2": {
+      "local_path": "assets/811eb1c02f2ad4496ab406357dbdcf69996eb1c5206d3a62e57e2b9a39baa4d3.bin",
+      "content_type": "font/woff2"
+    },
+    "https://lavadental.lv/_nuxt/PPNeueMontreal-Book.DtZobgF6.woff2": {
+      "local_path": "assets/0d867457a30301ecb50ab32e287760bba8346f026c0921f50bea8bcaa0b590b7.bin",
+      "content_type": "font/woff2"
+    },
+    "https://lavadental.lv/_nuxt/PPNeueMontreal-Medium.IanQHWYU.woff2": {
+      "local_path": "assets/3b74ca6b541e977b72790680f3d0a180468d1dec005cdae9234d3339d14e875c.bin",
+      "content_type": "font/woff2"
+    },
+    "https://lavadental.lv/_nuxt/RevealBlock.CugKleyA.css": {
+      "local_path": "assets/3a1b0adeb71b54754032624f7eec3d89c848338aae1032b565a1fdd8764b65c7.css",
+      "content_type": "text/css; charset=utf-8"
+    },
+    "https://lavadental.lv/_nuxt/entry.CmBNsUTl.css": {
+      "local_path": "assets/a7fd5eb636bfaa999e7b08b2da09d30af5267d27e56039f0e070340bd722afec.css",
+      "content_type": "text/css; charset=utf-8"
+    },
+    "https://lavadental.lv/_nuxt/useVacancies.CnSkbPS5.css": {
+      "local_path": "assets/91b75b86bed29ff2d8b836d51e2549f1187968dd4e2b85b1928766f30b39bbb7.css",
+      "content_type": "text/css; charset=utf-8"
+    },
+    "https://lavadental.lv/cms/api/media/file/1p%C4%93c-2-960x635.avif": {
+      "local_path": "assets/0fab8fcdff7b41fb8a4f7667f995a36b01b927fc867c8b339a5e7f6884bf7afe.bin",
+      "content_type": "image/avif"
+    },
+    "https://lavadental.lv/cms/api/media/file/1p%C4%93c-3-960x635.avif": {
+      "local_path": "assets/80c36e0c7120e611406dc4557cbffecc33c94b9b009a60507c54acd1eb12e077.bin",
+      "content_type": "image/avif"
+    },
+    "https://lavadental.lv/cms/api/media/file/1p%C4%93c-8-960x635.avif": {
+      "local_path": "assets/aa39be4e5fecb029bafdfcf120705cc77e60153fbc8b0f3d45f533c187c299e6.bin",
+      "content_type": "image/avif"
+    },
+    "https://lavadental.lv/cms/api/media/file/2p%C4%93c-1-960x635.avif": {
+      "local_path": "assets/1deede54c143455d3866c827b1f130aaf5b4caab25baf4302408a486034ef714.bin",
+      "content_type": "image/avif"
+    },
+    "https://lavadental.lv/cms/api/media/file/2p%C4%93c-7-960x635.avif": {
+      "local_path": "assets/9c30cfc9848c2c73a40634ce1e2819819143dba309625330ae8279e3c1befef9.bin",
+      "content_type": "image/avif"
+    },
+    "https://lavadental.lv/cms/api/media/file/3p%C4%93c-1-960x635.avif": {
+      "local_path": "assets/616fb317910c35010bb4db5a37680766422d1f0795ac2eb456d0ba8d5f058eb3.bin",
+      "content_type": "image/avif"
+    },
+    "https://lavadental.lv/cms/api/media/file/3p%C4%93c-2-960x635.avif": {
+      "local_path": "assets/bbb5a8fda66a758e8d3a7d079944e9e278723ad3c720bd5a0e3f9b6075b48c6c.bin",
+      "content_type": "image/avif"
+    },
+    "https://lavadental.lv/cms/api/media/file/3p%C4%93c-3-960x635.avif": {
+      "local_path": "assets/525ca0118a177d5391364db07fed6912522f7cfdc70ff37c24c5ec64ed2ebac1.bin",
+      "content_type": "image/avif"
+    },
+    "https://lavadental.lv/cms/api/media/file/4p%C4%93c-960x635.avif": {
+      "local_path": "assets/cd62ebc8d82c540854eeb07b4518ad4a94ae0840abdd0490d48786fb7a7caf80.bin",
+      "content_type": "image/avif"
+    },
+    "https://lavadental.lv/cms/api/media/file/Aligners-600x820.avif": {
+      "local_path": "assets/55d8b4879509d1e6993d3e9a6c376d40b33849409b421ffa56231a8773e2b54f.bin",
+      "content_type": "image/avif"
+    },
+    "https://lavadental.lv/cms/api/media/file/Complex%20diagnostics-1290x300.avif": {
+      "local_path": "assets/330f0b712b4d5c7889c221a48d193eeea8844459ad69405fa585f56e5b5d64a3.bin",
+      "content_type": "image/avif"
+    },
+    "https://lavadental.lv/cms/api/media/file/Hygien-600x820.avif": {
+      "local_path": "assets/9f9f8a5504cfb45472e1aa526d923d96a4b98385aa2c1e0ccac5c1ad3ef99dd6.bin",
+      "content_type": "image/avif"
+    },
+    "https://lavadental.lv/cms/api/media/file/Implants-600x820.avif": {
+      "local_path": "assets/bf3c5c92efab4b6a8f1fc5126c0c8f84d862607beb30d39167faf76d13b57f17.bin",
+      "content_type": "image/avif"
+    },
+    "https://lavadental.lv/cms/api/media/file/LavaDental_Diana_72dpi-680x850.avif": {
+      "local_path": "assets/db29036d7f418298a077df02b85e0fb5ec2cd142a682f7c8b7e973697d8efc5b.bin",
+      "content_type": "image/avif"
+    },
+    "https://lavadental.lv/cms/api/media/file/LavaDental_Dr_Aleksejeva_72dpi-680x850.avif": {
+      "local_path": "assets/5970da0e1d5ee050235d940e439ec29bba43f4804f43ae8e69efe2609ab8c620.bin",
+      "content_type": "image/avif"
+    },
+    "https://lavadental.lv/cms/api/media/file/LavaDental_Dr_Aleksejevs_72dpi-680x850.avif": {
+      "local_path": "assets/30998ad7baf63733baba5c980300adbb5ce1894dca0355293d5373de33bb2ecf.bin",
+      "content_type": "image/avif"
+    },
+    "https://lavadental.lv/cms/api/media/file/LavaDental_Dr_Bunkovskis_72dpi-680x850.avif": {
+      "local_path": "assets/ebbe85785c6ef75d71dd282feef11058b8dbaaba7063186cb90d5d1899884227.bin",
+      "content_type": "image/avif"
+    },
+    "https://lavadental.lv/cms/api/media/file/LavaDental_Dr_Ergle_72dpi-680x850.avif": {
+      "local_path": "assets/180ce831b31baa01f3ff4412885ac1ad9bbb283f9be621632f28d021d3cb2932.bin",
+      "content_type": "image/avif"
+    },
+    "https://lavadental.lv/cms/api/media/file/LavaDental_Dr_Limonova_72dpi-680x850.avif": {
+      "local_path": "assets/60d511c0a165e649be02291ab71135acee2fc416f4db48fa139995a2f1a1cab2.bin",
+      "content_type": "image/avif"
+    },
+    "https://lavadental.lv/cms/api/media/file/LavaDental_Dr_Ostapova_72dpi-680x850.avif": {
+      "local_path": "assets/8c01e2c588ca6ee028001bcc7b44048f61349d7d963e491e3ba6f7c4c237f877.bin",
+      "content_type": "image/avif"
+    },
+    "https://lavadental.lv/cms/api/media/file/LavaDental_Dr_Skidans_72dpi-680x850.avif": {
+      "local_path": "assets/e546a529291e66782f221726adf9a821632ecae1e549452cff81723977a9d16f.bin",
+      "content_type": "image/avif"
+    },
+    "https://lavadental.lv/cms/api/media/file/LavaDental_IevaGranta_72dpi-2-680x850.avif": {
+      "local_path": "assets/16256afb9d790ff44b88b6665476b9ec66e776fb64da4936562be3e6e2e2b8f1.bin",
+      "content_type": "image/avif"
+    },
+    "https://lavadental.lv/cms/api/media/file/LavaDental_Jekaterina_72dpi-680x851.avif": {
+      "local_path": "assets/e671afbfc7edd98cd6d78c5be013fc2566cc4f04ff7053b76842eec59b832ee4.bin",
+      "content_type": "image/avif"
+    },
+    "https://lavadental.lv/cms/api/media/file/LavaDental_Polina_72dpi-680x849.avif": {
+      "local_path": "assets/5323f4469c6a4d9ccb33829725942fe632c96fd7039698c6eb41a141b9923a7f.bin",
+      "content_type": "image/avif"
+    },
+    "https://lavadental.lv/cms/api/media/file/Veneers-600x820.avif": {
+      "local_path": "assets/f797742b6f262c80524054e6b743b95067bb3f2eac3c1fc9fb290f8129c98a56.bin",
+      "content_type": "image/avif"
+    }
+  },
+  "heuristics": {
+    "script_src_count": 1,
+    "meaningful_elements": 170,
+    "text_content_length": 9987
+  }
+}
