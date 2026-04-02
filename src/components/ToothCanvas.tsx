@@ -1,47 +1,56 @@
-import React, { Suspense, useRef, useState } from 'react';
+import React, { Suspense, useLayoutEffect, useRef } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
-import { useGLTF, Float, Environment, ContactShadows, Text } from '@react-three/drei';
+import { useGLTF, Environment } from '@react-three/drei';
 import * as THREE from 'three';
 
-function MolarModel({ url }: { url: string }) {
-  try {
-    const { scene } = useGLTF(url);
-    const meshRef = useRef<THREE.Group>(null);
+const POINTER_TILT_X = 0.19;
+const POINTER_TILT_Y = 0.23;
+const POINTER_GAIN = 2.35;
+const POINTER_SMOOTH = 22;
 
-    useFrame((state) => {
-      if (!meshRef.current) return;
-      // Idle rotation
-      meshRef.current.rotation.y += 0.005;
-      
-      // Inverse cursor parallax
-      const targetX = -state.pointer.y * 0.2;
-      const targetY = state.pointer.x * 0.2;
-      
-      meshRef.current.rotation.x = THREE.MathUtils.lerp(meshRef.current.rotation.x, targetX, 0.1);
-      meshRef.current.rotation.z = THREE.MathUtils.lerp(meshRef.current.rotation.z, targetY, 0.1);
+function MolarModel({ url, hoverRef }: { url: string; hoverRef: React.MutableRefObject<boolean> }) {
+  const { scene } = useGLTF(url);
+  const groupRef = useRef<THREE.Group>(null);
+  const spinRef = useRef(0);
+  const tiltXRef = useRef(0);
+  const tiltYRef = useRef(0);
+
+  useLayoutEffect(() => {
+    scene.traverse((obj) => {
+      if (!(obj instanceof THREE.Mesh)) return;
+      const mat = obj.material;
+      const mats = Array.isArray(mat) ? mat : [mat];
+      for (const m of mats) {
+        if (!m || !('isMeshStandardMaterial' in m) || !m.isMeshStandardMaterial) continue;
+        m.envMapIntensity = Math.min(m.envMapIntensity ?? 1, 0.75);
+      }
     });
+  }, [scene]);
 
-    return (
-      <primitive 
-        ref={meshRef}
-        object={scene} 
-        scale={2.5} 
-        position={[0, -1, 0]}
-      />
-    );
-  } catch (e) {
-    return (
-      <Text
-        color="#B0D64E"
-        fontSize={0.5}
-        maxWidth={2}
-        textAlign="center"
-        font="/fonts/Syne-Bold.ttf"
-      >
-        3D Model Loading...
-      </Text>
-    );
-  }
+  useFrame((state, delta) => {
+    const g = groupRef.current;
+    if (!g) return;
+
+    const { pointer } = state;
+    const over = hoverRef.current ?? false;
+    const px = over ? THREE.MathUtils.clamp(pointer.x * POINTER_GAIN, -1, 1) : 0;
+    const py = over ? THREE.MathUtils.clamp(pointer.y * POINTER_GAIN, -1, 1) : 0;
+    const targetX = -py * POINTER_TILT_X;
+    const targetY = -px * POINTER_TILT_Y;
+    const t = Math.min(1, POINTER_SMOOTH * delta);
+    tiltXRef.current = THREE.MathUtils.lerp(tiltXRef.current, targetX, t);
+    tiltYRef.current = THREE.MathUtils.lerp(tiltYRef.current, targetY, t);
+
+    spinRef.current += delta * 0.3924;
+    g.rotation.x = tiltXRef.current;
+    g.rotation.y = spinRef.current + tiltYRef.current;
+  });
+
+  return (
+    <group ref={groupRef}>
+      <primitive object={scene} scale={2} position={[0, -0.55, 0]} />
+    </group>
+  );
 }
 
 // Error Boundary Component
@@ -68,29 +77,32 @@ class ErrorBoundary extends React.Component<{ children: React.ReactNode }, { has
 }
 
 export const ToothCanvas: React.FC = () => {
+  const hoverRef = useRef(false);
+
   return (
     <ErrorBoundary>
-      <Canvas camera={{ position: [0, 0, 5], fov: 45 }}>
-        <ambientLight intensity={0.5} />
-        <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} intensity={1} />
-        <pointLight position={[-10, -10, -10]} intensity={0.5} />
+      <Canvas
+        camera={{ position: [0, 0, 12.45], fov: 45 }}
+        className="h-full w-full touch-none"
+        onPointerEnter={() => {
+          hoverRef.current = true;
+        }}
+        onPointerLeave={() => {
+          hoverRef.current = false;
+        }}
+      >
+        <hemisphereLight color="#f2f5f7" groundColor="#2a2520" intensity={0.55} />
+        <ambientLight intensity={0.35} />
+        <directionalLight position={[6, 8, 4]} intensity={0.85} />
+        <pointLight position={[-6, 4, 6]} intensity={0.35} />
         
         <Suspense fallback={null}>
-          <Float speed={2} rotationIntensity={0.5} floatIntensity={0.5}>
-            <MolarModel url="/models/molar_tooth.glb" />
-          </Float>
-          <Environment preset="city" />
+          <MolarModel url="/models/molar_tooth.glb" hoverRef={hoverRef} />
+          <Environment preset="city" environmentIntensity={0.72} />
         </Suspense>
-        
-        <ContactShadows 
-          position={[0, -2, 0]} 
-          opacity={0.4} 
-          scale={10} 
-          blur={2} 
-          far={4.5} 
-        />
       </Canvas>
     </ErrorBoundary>
   );
 };
 
+useGLTF.preload('/models/molar_tooth.glb');

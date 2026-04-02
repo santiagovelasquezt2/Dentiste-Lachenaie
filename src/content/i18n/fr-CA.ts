@@ -10,9 +10,12 @@ export const fr = {
     contact: "Contact",
   },
   hero: {
-    tagline: "Une dentisterie qui vous fera sourire",
+    tagline: "Centre Dentaire Vaillancourt St-Onge",
     body: "Sécuritaire, moderne, indolore et avec le sourire!",
     cta: "Demander un rendez-vous",
+  },
+  logoVideo: {
+    quote: "Une dentisterie qui vous fait sourire",
   },
   about: {
     title: "Nous changeons l'expérience et vous aidons à retrouver votre confiance",
@@ -68,6 +71,9 @@ export const fr = {
   },
   hours: {
     title: "Heures d'ouverture",
+    tagline: "Planifiez votre visite en toute confiance",
+    scheduleLabel: "Horaire hebdomadaire",
+    description: "Choisissez un moment qui s'intègre à votre routine, puis contactez-nous si vous souhaitez être guidé vers le meilleur créneau.",
     monday: "Lundi",
     tuesday: "Mardi",
     wednesday: "Mercredi",

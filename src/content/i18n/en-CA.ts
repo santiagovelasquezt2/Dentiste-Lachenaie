@@ -10,9 +10,12 @@ export const en = {
     contact: "Contact",
   },
   hero: {
-    tagline: "Dentistry that will make you smile",
+    tagline: "Centre Dentaire Vaillancourt St-Onge",
     body: "Safe, modern, painless and with a smile!",
     cta: "Request Appointment",
+  },
+  logoVideo: {
+    quote: "Dentistry that makes you smile",
   },
   about: {
     title: "We change the experience and help you regain confidence",
@@ -68,6 +71,9 @@ export const en = {
   },
   hours: {
     title: "Clinic Hours",
+    tagline: "Plan your visit with confidence",
+    scheduleLabel: "Weekly schedule",
+    description: "Choose a time that fits your routine and reach out if you need help finding the best appointment slot.",
     monday: "Monday",
     tuesday: "Tuesday",
     wednesday: "Wednesday",

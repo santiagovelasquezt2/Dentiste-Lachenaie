@@ -1,61 +1,35 @@
-import React, { useEffect, useRef } from 'react';
+import React from 'react';
+import clinicExteriorHero from '@/DentalContent/Images/Ouside of the building/clinic-exterior-front-signage-01.jpg';
+import clinicLogo from '@/DentalContent/Images/Logo/clinic-logo-primary.png';
 import { useLanguage } from '../context/LanguageContext';
 import { Button } from './Button';
 import { clinicData } from '../content/clinic';
-import { cn } from '../lib/utils';
 
 export const Hero: React.FC = () => {
   const { t } = useLanguage();
-  const titleRef = useRef<HTMLHeadingElement>(null);
-
-  useEffect(() => {
-    if (!titleRef.current) return;
-    const words = titleRef.current.innerText.split(' ');
-    titleRef.current.innerHTML = words
-      .map((word, i) => `<span class="inline-block opacity-0 translate-y-4 transition-all duration-700" style="transition-delay: ${i * 100}ms">${word}</span>`)
-      .join(' ');
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            const spans = entry.target.querySelectorAll('span');
-            spans.forEach((span) => {
-              span.classList.remove('opacity-0', 'translate-y-4');
-              span.classList.add('opacity-100', 'translate-y-0');
-            });
-          }
-        });
-      },
-      { threshold: 0.1 }
-    );
-
-    observer.observe(titleRef.current);
-    return () => observer.disconnect();
-  }, [t.hero.tagline]);
 
   return (
     <section id="hero" className="relative min-h-[100svh] flex flex-col items-center justify-center bg-bg-dark text-bg-inverse overflow-hidden pt-20">
       {/* Background Image (Exterior) */}
-      <div className="absolute inset-0 opacity-30">
-        <img 
-          src="https://images.unsplash.com/photo-1629909613654-28e377c37b09?q=80&w=2068&auto=format&fit=crop" 
-          alt="Clinic Exterior" 
-          className="w-full h-full object-cover"
+      <div className="absolute inset-0 opacity-40">
+        <img
+          src={clinicExteriorHero}
+          alt=""
+          className="w-full h-full object-cover object-center"
         />
       </div>
 
-      <div className="container mx-auto px-6 relative z-10 text-center flex flex-col items-center gap-8">
-        <div className="w-20 h-20 bg-accent rounded-full flex items-center justify-center text-bg-dark font-heading font-bold text-3xl mb-4 shadow-lg">
-          VS
-        </div>
-
-        
-        <h1 
-          ref={titleRef}
-          className="text-hero font-bold max-w-5xl"
-        >
-          {t.hero.tagline}
+      <div className="container mx-auto px-6 relative z-10 text-center flex flex-col items-center gap-8 -translate-y-12 md:-translate-y-24">
+        <h1 className="flex justify-center items-center max-w-6xl w-full px-6 py-6 sm:px-10 sm:py-8 md:py-10 bg-white text-bg-dark rounded-[2rem] shadow-lg ring-1 ring-black/10">
+          <span className="sr-only">{t.hero.tagline}</span>
+          <img
+            src={clinicLogo}
+            alt=""
+            width={900}
+            height={260}
+            decoding="async"
+            className="w-full max-w-[min(56rem,calc(100vw-3rem))] h-auto object-contain object-center [filter:drop-shadow(0_1px_2px_rgb(0_0_0/0.12))]"
+          />
         </h1>
 
         <p className="text-xl md:text-2xl font-body text-bg-inverse/80 max-w-2xl">
@@ -66,7 +40,7 @@ export const Hero: React.FC = () => {
           <Button size="lg" onClick={() => window.location.href = '#appointment'}>
             {t.hero.cta}
           </Button>
-          <a 
+          <a
             href={`tel:${clinicData.phone.replace(/\D/g, '')}`}
             className="text-xl font-mono text-accent hover:text-accent-dark transition-colors"
           >

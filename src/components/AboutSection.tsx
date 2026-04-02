@@ -2,44 +2,65 @@ import React, { useRef } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { useLanguage } from '../context/LanguageContext';
 import { CheckSquare } from 'lucide-react';
+import about01 from '@/DentalContent/Images/About/about-01-best-smile.png';
+import about02 from '@/DentalContent/Images/About/about-02.png';
+import about03 from '@/DentalContent/Images/About/about-03.png';
+import about04 from '@/DentalContent/Images/About/about-04.png';
+import about05 from '@/DentalContent/Images/About/about-05.png';
+import about06 from '@/DentalContent/Images/About/about-06.png';
+import about07 from '@/DentalContent/Images/About/about-07-dentist-with-patient.jpg';
 
-const images = [
-  {
-    src: "https://images.unsplash.com/photo-1629909615184-74f495363b67?q=80&w=2069&auto=format&fit=crop",
-    alt: "Reception",
-    aspect: "aspect-[3/4]"
-  },
-  {
-    src: "https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?q=80&w=2053&auto=format&fit=crop",
-    alt: "Waiting Room",
-    aspect: "aspect-square"
-  },
-  {
-    src: "https://images.unsplash.com/photo-1606811841689-23dfddce3e95?q=80&w=2070&auto=format&fit=crop",
-    alt: "Treatment Room",
-    aspect: "aspect-[4/3]"
-  },
-  {
-    src: "https://images.unsplash.com/photo-1588776814546-1ffcf47267a5?q=80&w=2070&auto=format&fit=crop",
-    alt: "Sterilization",
-    aspect: "aspect-[3/4]"
-  },
-  {
-    src: "https://images.unsplash.com/photo-1600170311833-c2cf5280ce49?q=80&w=2070&auto=format&fit=crop",
-    alt: "Clinic",
-    aspect: "aspect-square"
-  },
-  {
-    src: "https://images.unsplash.com/photo-1504280658469-166299298811?q=80&w=2070&auto=format&fit=crop",
-    alt: "Clinic Details",
-    aspect: "aspect-[4/3]"
-  },
-  {
-    src: "https://images.unsplash.com/photo-1598256989800-fea5ce5146f2?q=80&w=2070&auto=format&fit=crop",
-    alt: "Dentist Working",
-    aspect: "aspect-[3/4]"
-  }
+/** CSS px² — display width/height scale so (w×h) stays ~constant while aspect ratios stay true to each file. */
+const TARGET_DISPLAY_AREA_PX2 = 238_473;
+
+type AboutImage = {
+  src: string;
+  alt: string;
+  intrinsicW: number;
+  intrinsicH: number;
+};
+
+const images: AboutImage[] = [
+  { src: about01, alt: "Patient smile", intrinsicW: 1024, intrinsicH: 683 },
+  { src: about02, alt: "Dental practice", intrinsicW: 425, intrinsicH: 650 },
+  { src: about03, alt: "Dental care", intrinsicW: 648, intrinsicH: 926 },
+  { src: about04, alt: "Clinic", intrinsicW: 743, intrinsicH: 926 },
+  { src: about05, alt: "Treatment", intrinsicW: 891, intrinsicH: 926 },
+  { src: about06, alt: "Dental team", intrinsicW: 736, intrinsicH: 926 },
+  { src: about07, alt: "Dentist with patient", intrinsicW: 2048, intrinsicH: 1365 }
 ];
+
+function equalAreaWidthPx(w: number, h: number): number {
+  return Math.round(Math.sqrt(TARGET_DISPLAY_AREA_PX2 * (w / h)));
+}
+
+const AboutImageFrame = ({
+  image,
+  side
+}: {
+  image: AboutImage;
+  side: "start" | "end";
+}) => {
+  const widthPx = equalAreaWidthPx(image.intrinsicW, image.intrinsicH);
+  return (
+    <div
+      className={`rounded-2xl overflow-hidden shadow-2xl bg-black/[0.03] ${side === "start" ? "self-start" : "self-end"}`}
+      style={{
+        width: `min(${widthPx}px, 88vw)`,
+        aspectRatio: `${image.intrinsicW} / ${image.intrinsicH}`
+      }}
+    >
+      <img
+        src={image.src}
+        alt={image.alt}
+        width={image.intrinsicW}
+        height={image.intrinsicH}
+        className="h-full w-full object-contain"
+        decoding="async"
+      />
+    </div>
+  );
+};
 
 // Helper to render bold text from markdown-style **bold** strings
 const formatText = (text: string) => {
@@ -99,9 +120,7 @@ export const AboutSection: React.FC = () => {
           className="absolute top-full w-full max-w-5xl px-6 flex flex-col gap-24 pt-[10vh] pb-[100vh] z-10"
         >
           {/* Image 1 */}
-          <div className={`w-[45%] md:w-[35%] ${images[0].aspect} rounded-2xl overflow-hidden shadow-2xl self-start`}>
-            <img src={images[0].src} alt={images[0].alt} className="w-full h-full object-cover" />
-          </div>
+          <AboutImageFrame image={images[0]} side="start" />
 
           {/* Text Block 1: Goal */}
           <TextBlock 
@@ -111,12 +130,8 @@ export const AboutSection: React.FC = () => {
           />
 
           {/* Image 2 & 3 */}
-          <div className={`w-[45%] md:w-[35%] ${images[1].aspect} rounded-2xl overflow-hidden shadow-2xl self-end`}>
-            <img src={images[1].src} alt={images[1].alt} className="w-full h-full object-cover" />
-          </div>
-          <div className={`w-[45%] md:w-[35%] ${images[2].aspect} rounded-2xl overflow-hidden shadow-2xl self-start`}>
-            <img src={images[2].src} alt={images[2].alt} className="w-full h-full object-cover" />
-          </div>
+          <AboutImageFrame image={images[1]} side="end" />
+          <AboutImageFrame image={images[2]} side="start" />
 
           {/* Text Block 2: Commitment */}
           <TextBlock 
@@ -131,12 +146,8 @@ export const AboutSection: React.FC = () => {
           />
 
           {/* Image 4 & 5 */}
-          <div className={`w-[45%] md:w-[35%] ${images[3].aspect} rounded-2xl overflow-hidden shadow-2xl self-end`}>
-            <img src={images[3].src} alt={images[3].alt} className="w-full h-full object-cover" />
-          </div>
-          <div className={`w-[45%] md:w-[35%] ${images[4].aspect} rounded-2xl overflow-hidden shadow-2xl self-start`}>
-            <img src={images[4].src} alt={images[4].alt} className="w-full h-full object-cover" />
-          </div>
+          <AboutImageFrame image={images[3]} side="end" />
+          <AboutImageFrame image={images[4]} side="start" />
 
           {/* Text Block 3: Promise */}
           <TextBlock 
@@ -151,12 +162,8 @@ export const AboutSection: React.FC = () => {
           />
 
           {/* Image 6 & 7 */}
-          <div className={`w-[45%] md:w-[35%] ${images[5].aspect} rounded-2xl overflow-hidden shadow-2xl self-end`}>
-            <img src={images[5].src} alt={images[5].alt} className="w-full h-full object-cover" />
-          </div>
-          <div className={`w-[45%] md:w-[35%] ${images[6].aspect} rounded-2xl overflow-hidden shadow-2xl self-start`}>
-            <img src={images[6].src} alt={images[6].alt} className="w-full h-full object-cover" />
-          </div>
+          <AboutImageFrame image={images[5]} side="end" />
+          <AboutImageFrame image={images[6]} side="start" />
 
         </motion.div>
       </div>
