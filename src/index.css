@@ -1,0 +1,95 @@
+@import "./styles/variables.css";
+@import "tailwindcss";
+
+@layer base {
+  body {
+    @apply bg-bg text-text font-body antialiased;
+    scroll-behavior: smooth;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-heading font-medium tracking-tight;
+  }
+}
+
+
+@layer utilities {
+  .text-hero {
+    font-size: clamp(3rem, 8vw, 7rem);
+    line-height: 1.1;
+  }
+  .text-section-title {
+    font-size: clamp(2rem, 4vw, 3.5rem);
+    line-height: 1.2;
+  }
+  .text-card-title {
+    font-size: clamp(1.25rem, 2vw, 1.5rem);
+  }
+  .text-nav {
+    font-size: clamp(0.65rem, 1vw, 0.75rem);
+    @apply font-nav uppercase tracking-[0.15em];
+  }
+
+  /* Scroll-driven animations */
+  @keyframes grow-progress {
+    from { transform: scaleX(0); }
+    to { transform: scaleX(1); }
+  }
+
+  #scroll-progress {
+    animation: grow-progress auto linear;
+    animation-timeline: scroll(root);
+  }
+
+  @keyframes fade-in-up {
+    from {
+      opacity: 0;
+      transform: translateY(40px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .reveal-on-scroll {
+    view-timeline-name: --reveal;
+    view-timeline-axis: block;
+    animation-name: fade-in-up;
+    animation-fill-mode: both;
+    animation-timeline: --reveal;
+    animation-range: entry 10% cover 30%;
+  }
+
+  @keyframes slide-in-right {
+    from {
+      opacity: 0;
+      transform: translateX(150px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  .slide-in-right-on-scroll {
+    view-timeline-name: --slide-in-right;
+    view-timeline-axis: block;
+    animation-name: slide-in-right;
+    animation-fill-mode: both;
+    animation-timeline: --slide-in-right;
+    animation-range: entry 5% cover 35%;
+  }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  @apply bg-bg;
+}
+::-webkit-scrollbar-thumb {
+  @apply bg-accent/20 rounded-full hover:bg-accent/40 transition-colors;
+}
+
+
