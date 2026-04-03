@@ -4,7 +4,7 @@ import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { useLanguage } from '../context/LanguageContext';
 import { clinicData } from '../content/clinic';
-import mapMarkerTooth from '@/DentalContent/Images/Map/map-marker-tooth.svg';
+import mapPinToothShield from '@/DentalContent/Images/Map/tooth-with-shield-map-lime.png';
 import { Phone, Mail, MapPin, LocateFixed } from 'lucide-react';
 
 // Leaflet coords = [lat, lng] (opposite of MapLibre's [lng, lat])
@@ -14,10 +14,10 @@ const CENTER: [number, number] = [LAT, LNG];
 const ZOOM = clinicData.mapZoom;
 
 // ---------------------------------------------------------------------------
-// Stylized tooth marker (lime #B0D64E contour) — see DentalContent/Images/Map/
+// Tooth + health shield doodle (brand lime #B0D64E) — raster from client asset
 // ---------------------------------------------------------------------------
 function makeIcon(markerSrc: string): L.DivIcon {
-  const size = 56;
+  const size = 64;
   return L.divIcon({
     html: `<div class="clinic-map-pin">
              <div class="clinic-map-pin-inner">
@@ -27,7 +27,7 @@ function makeIcon(markerSrc: string): L.DivIcon {
     className: '', // clear Leaflet's default white-box class
     iconSize: [size, size],
     iconAnchor: [size / 2, size], // bottom center on the coordinate
-    popupAnchor: [0, -(size + 8)],
+    popupAnchor: [0, -(size + 10)],
   });
 }
 
@@ -60,7 +60,7 @@ export const ContactSection: React.FC = () => {
   const { t } = useLanguage();
 
   // Build the icon once — logo URL is stable across renders
-  const toothMarkerIcon = useMemo(() => makeIcon(mapMarkerTooth as string), []);
+  const toothMarkerIcon = useMemo(() => makeIcon(mapPinToothShield as string), []);
 
   return (
     <section id="contact" className="overflow-hidden bg-bg-dark py-32 text-bg-inverse">

@@ -31,10 +31,10 @@
     border-style: none !important;
   }
 
-  /* Map pin: stylized tooth (DentalContent/Images/Map/map-marker-tooth.svg) */
+  /* Map pin: tooth + shield doodle (DentalContent/Images/Map/tooth-with-shield-map-lime.png) */
   .clinic-map-pin {
-    width: 56px;
-    height: 56px;
+    width: 64px;
+    height: 64px;
     border-radius: 50%;
     border: 2px solid rgba(176, 214, 78, 0.5);
     outline: 2px solid white;

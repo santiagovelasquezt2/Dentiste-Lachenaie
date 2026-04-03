@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 72" width="64" height="72" fill="none" aria-hidden="true">
-  <!-- Line-art molar: twin crown bumps + notch, two rounded roots — stroke matches brand lime -->
+  <!-- Fallback asset: kept so Vite CSS resolution never ENOENTs if this path is referenced. Map pin uses tooth-with-shield-map-lime.png in ContactSection. -->
   <path
     fill="#FFFFFF"
     stroke="#B0D64E"

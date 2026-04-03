@@ -1,4 +1,5 @@
 node_modules/
+.venv-map-pin/
 build/
 dist/
 coverage/
