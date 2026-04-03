@@ -1,8 +1,9 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import teethVideo from '@/DentalContent/Video/Dentist Teeth Video centre dentaire vaillancourt st-onge logo (1).mp4';
 import { useLanguage } from '../context/LanguageContext';
+import { cn } from '../lib/utils';
 
-/** How much of the section must be visible before playback runs. */
+/** How much of the section must be visible before autoplay runs. */
 const VISIBILITY_THRESHOLD = 0.2;
 
 /**
@@ -15,12 +16,19 @@ export const LogoVideoSection: React.FC = () => {
   const visibleRef = useRef(false);
   const [videoError, setVideoError] = useState(false);
   const [quoteVisible, setQuoteVisible] = useState(false);
+  /** First frame is usable — Safari and lazy off-screen videos often skip `canplay` but fire `loadeddata`. */
+  const [videoReady, setVideoReady] = useState(false);
 
-  const tryPlay = () => {
+  const tryPlay = useCallback(() => {
     const video = videoRef.current;
     if (!video || !visibleRef.current) return;
     void video.play().catch(() => {});
-  };
+  }, []);
+
+  const revealAndTryPlay = useCallback(() => {
+    setVideoReady(true);
+    tryPlay();
+  }, [tryPlay]);
 
   useEffect(() => {
     const section = sectionRef.current;
@@ -45,7 +53,7 @@ export const LogoVideoSection: React.FC = () => {
       observer.disconnect();
       video.pause();
     };
-  }, [videoError]);
+  }, [videoError, tryPlay]);
 
   return (
     <section
@@ -65,11 +73,12 @@ export const LogoVideoSection: React.FC = () => {
               loop
               preload="auto"
               tabIndex={-1}
-              className="relative z-10 h-auto max-h-[85vh] w-full object-contain opacity-0 transition-opacity duration-700"
-              onCanPlay={(e) => {
-                e.currentTarget.style.opacity = '1';
-                tryPlay();
-              }}
+              className={cn(
+                'relative z-10 h-auto max-h-[85vh] w-full object-contain transition-opacity duration-700',
+                videoReady ? 'opacity-100' : 'opacity-0'
+              )}
+              onLoadedData={revealAndTryPlay}
+              onCanPlay={revealAndTryPlay}
               onError={() => {
                 console.warn('Signature video failed to load; showing fallback.');
                 setVideoError(true);
