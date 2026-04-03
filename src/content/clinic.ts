@@ -1,8 +1,30 @@
+import drMarieChristineStOnge from '@/DentalContent/Images/Team/Dentists/dentist-dr-marie-christine-st-onge.jpg';
+import drNathalieVaillancourt from '@/DentalContent/Images/Team/Dentists/dentist-dr-nathalie-vaillancourt.jpg';
+import teamDrStOngeGroupPhoto from '@/DentalContent/Images/Team/Dr. Marie-Christine St-Onge\'s Team/team-dr-st-onge-group-photo.jpg';
+import staffAudreyRoy from '@/DentalContent/Images/Team/Team/staff-audrey-roy.jpg';
+import staffElizabethCiricillo from '@/DentalContent/Images/Team/Team/staff-elizabeth-ciricillo.jpg';
+import staffVirginieCuradeau from '@/DentalContent/Images/Team/Team/staff-virginie-curadeau.jpg';
+import staffYaminaBounessis from '@/DentalContent/Images/Team/Team/staff-yamina-bounessis.jpg';
+
+type TeamMember = {
+  name: string;
+  image: string | null;
+};
+
+type TeamBucket = {
+  hygienists: TeamMember[];
+  assistants: TeamMember[];
+  secretaries: TeamMember[];
+};
+
 export const clinicData = {
   name: "Centre dentaire Vaillancourt St-Onge",
   phone: "(450) 582-2219",
   email: "info@dentistelachenaie.com",
   address: "355, Montée des Pionniers, suite 201, Terrebonne, Qc J6V 1N5",
+  /** [longitude, latitude] for MapLibre / mapcn (Montée des Pionniers, Terrebonne) */
+  mapCenter: [-73.5123831, 45.7138807] as [number, number],
+  mapZoom: 15,
   hours: {
     monday: "8:00 - 20:00",
     tuesday: "8:00 - 19:30",
@@ -16,37 +38,68 @@ export const clinicData = {
     {
       name: "Dr Nathalie Vaillancourt",
       role: "Dentist",
-      bio: "A graduate of l'Université de Montréal and practicing since 1999, Dr. Nathalie Vaillancourt has been at the clinic since its founding. She is assisted by dental hygienists Joannie and Myriam; dental assistant Audrey; and receptionists Martine and Manon.",
-      image: "https://ui-avatars.com/api/?name=Nathalie+Vaillancourt&background=F4F4F4&color=333333&size=512&font-size=0.3",
+      bio: "A graduate of l'Université de Montréal and practicing since 1999, Dr Nathalie Vaillancourt has been at the clinic since its founding. She is surrounded by Yamina, Élizabeth and Anne-Sophie, dental hygienists; Audrey and Virginie, dental assistants; and Marie-Pier and Marjolaine, secretary-receptionists.",
+      image: drNathalieVaillancourt,
     },
     {
       name: "Dr Marie-Christine St-Onge",
       role: "Dentist",
-      bio: "Graduate of l'Université Laval in 1998, Dre Marie-Christine St-Onge has been with the clinic since 2001. Dr Nadeige Moquin Charbonneau joined the practice a few years later. Their team members are dental hygienists Sylvie, Myrlène and Éveline; dental assistants Martine and Marie-Pier; and receptionists Nathalie and Diane.",
-      image: "https://ui-avatars.com/api/?name=Marie-Christine+St-Onge&background=F4F4F4&color=333333&size=512&font-size=0.3",
+      bio: "Graduate of l'Université Laval in 1998, Dre Marie-Christine St-Onge has been with the clinic since 2001. Her team includes Sylvie, Myrlène and Éveline, dental hygienists; Martine and Marie-Pier, dental assistants; and Nathalie and Diane, secretary-receptionists.",
+      image: drMarieChristineStOnge,
     },
     {
       name: "Dr Nadeige Moquin",
       role: "Dentist",
       bio: "Texte à venir",
-      image: "https://ui-avatars.com/api/?name=Nadeige+Moquin&background=F4F4F4&color=333333&size=512&font-size=0.3",
+      image: null,
     }
   ],
-  staff: {
-    team2GroupImage: "https://images.unsplash.com/photo-1576091160550-2173ff9e5ee5?q=80&w=2070&auto=format&fit=crop",
-    hygienists: [
-      { name: "Élizabeth", image: "https://ui-avatars.com/api/?name=Elizabeth&background=F4F4F4&color=333333&size=256" },
-      { name: "Yamina", image: "https://ui-avatars.com/api/?name=Yamina&background=F4F4F4&color=333333&size=256" },
-      { name: "Anne-Sophie", image: null }, // null means "Pictures coming soon"
-    ],
-    assistants: [
-      { name: "Audrey", image: "https://ui-avatars.com/api/?name=Audrey&background=F4F4F4&color=333333&size=256" },
-      { name: "Virginie", image: "https://ui-avatars.com/api/?name=Virginie&background=F4F4F4&color=333333&size=256" },
-    ],
-    secretaries: [
-      { name: "Johanne", image: null },
-      { name: "Gina", image: null },
-    ]
+  teams: {
+    team1: {
+      lead: {
+        name: "Dr Nathalie Vaillancourt",
+        role: "Dentist",
+        image: drNathalieVaillancourt,
+      },
+      roles: {
+        hygienists: [
+          { name: "Yamina", image: staffYaminaBounessis },
+          { name: "Élizabeth", image: staffElizabethCiricillo },
+          { name: "Anne-Sophie", image: null },
+        ],
+        assistants: [
+          { name: "Audrey", image: staffAudreyRoy },
+          { name: "Virginie", image: staffVirginieCuradeau },
+        ],
+        secretaries: [
+          { name: "Marie-Pier", image: null },
+          { name: "Marjolaine", image: null },
+        ],
+      } satisfies TeamBucket,
+    },
+    team2: {
+      lead: {
+        name: "Dr Marie-Christine St-Onge",
+        role: "Dentist",
+        image: drMarieChristineStOnge,
+      },
+      groupImage: teamDrStOngeGroupPhoto,
+      roles: {
+        hygienists: [
+          { name: "Sylvie", image: null },
+          { name: "Myrlène", image: null },
+          { name: "Éveline", image: null },
+        ],
+        assistants: [
+          { name: "Martine", image: null },
+          { name: "Marie-Pier", image: null },
+        ],
+        secretaries: [
+          { name: "Nathalie", image: null },
+          { name: "Diane", image: null },
+        ],
+      } satisfies TeamBucket,
+    },
   },
   services: [
     { id: "orthodontics", icon: "dot" },

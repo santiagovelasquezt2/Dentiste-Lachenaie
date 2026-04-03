@@ -5,6 +5,7 @@ export const fr = {
     about: "À propos",
     services: "Services",
     gallery: "Galerie",
+    hours: "Heures",
     firstVisit: "Première visite",
     appointment: "Rendez-vous",
     contact: "Contact",
@@ -15,7 +16,7 @@ export const fr = {
     cta: "Demander un rendez-vous",
   },
   logoVideo: {
-    quote: "Une dentisterie qui vous fait sourire",
+    quote: "Un dentiste qui vous fait sourire",
   },
   about: {
     title: "Nous changeons l'expérience et vous aidons à retrouver votre confiance",
@@ -70,7 +71,8 @@ export const fr = {
     title: "Notre Clinique",
   },
   hours: {
-    title: "Venez nous rendre visite",
+    overlayTitle: "Venez nous rendre visite",
+    cardTitle: "Heures",
     tagline: "Planifiez votre visite en toute confiance",
     scheduleLabel: "Horaire hebdomadaire",
     description: "Choisissez un moment qui s'intègre à votre routine, puis contactez-nous si vous souhaitez être guidé vers le meilleur créneau.",
@@ -108,6 +110,7 @@ export const fr = {
   contact: {
     title: "Nous sommes ici",
     address: "355, Montée des Pionniers, suite 201, Terrebonne, Qc J6V 1N5",
+    mapRecenter: "Recentrer la carte sur la clinique",
   },
   reviews: {
     title: "Laissez-nous un avis sur Google et Facebook",

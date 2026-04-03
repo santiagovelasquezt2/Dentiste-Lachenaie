@@ -135,7 +135,7 @@ export const HoursSection: React.FC = () => {
           className="pointer-events-none absolute inset-0 z-[25] flex items-center justify-center px-6 sm:px-10"
         >
           <h2 className="text-center text-[clamp(2.25rem,6.5vw,4.5rem)] font-bold leading-none tracking-[-0.05em] text-black">
-            {t.hours.title}
+            {t.hours.overlayTitle}
           </h2>
         </motion.div>
 
@@ -153,21 +153,22 @@ export const HoursSection: React.FC = () => {
             />
 
             <div className="grid gap-0 lg:grid-cols-[1.02fr_0.98fr]">
-              <div className="relative overflow-hidden bg-[#082F22] p-8 text-[#F7FAF5] sm:p-10 md:p-12">
-                <HoursContourPattern className="hours-pattern hours-pattern-slow absolute inset-[-18%] h-[136%] w-[136%] stroke-white/6 stroke-[2] fill-none" />
+              <div className="relative overflow-hidden bg-[#B0D64E] p-8 text-[#17352D] sm:p-10 md:p-12">
+                <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.34),transparent_48%),linear-gradient(145deg,rgba(198,230,118,0.98),rgba(176,214,78,0.96)_42%,rgba(150,188,63,1))]" />
+                <HoursContourPattern className="hours-pattern hours-pattern-slow absolute inset-[-18%] h-[136%] w-[136%] stroke-[#17352D]/10 stroke-[2] fill-none" />
 
                 <div className="relative z-10 max-w-md">
-                  <p className="text-nav text-white/70">{t.hours.scheduleLabel}</p>
-                  <h3 className="mt-5 text-[clamp(2rem,4vw,3.4rem)] font-bold leading-[0.98] tracking-[-0.04em] text-white">
-                    {t.hours.title}
+                  <p className="text-nav text-[#17352D]/65">{t.hours.scheduleLabel}</p>
+                  <h3 className="mt-5 text-[clamp(2rem,4vw,3.4rem)] font-bold leading-[0.98] tracking-[-0.04em] text-[#17352D]">
+                    {t.hours.cardTitle}
                   </h3>
-                  <p className="mt-6 text-base leading-relaxed text-white md:text-lg">
+                  <p className="mt-6 text-base leading-relaxed text-[#17352D]/80 md:text-lg">
                     {t.hours.description}
                   </p>
 
-                  <div className="mt-8 flex items-start gap-3 rounded-[1.25rem] border border-white/12 bg-[#174736] px-5 py-4 text-left">
-                    <MapPin className="mt-0.5 h-5 w-5 shrink-0 text-[#B0D64E]" />
-                    <span className="text-sm leading-relaxed text-white md:text-base">
+                  <div className="mt-8 flex items-start gap-3 rounded-[1.25rem] border border-[#17352D]/10 bg-[rgba(255,255,255,0.28)] px-5 py-4 text-left backdrop-blur-sm">
+                    <MapPin className="mt-0.5 h-5 w-5 shrink-0 text-[#17352D]" />
+                    <span className="text-sm leading-relaxed text-[#17352D] md:text-base">
                       {clinicData.address}
                     </span>
                   </div>
@@ -200,6 +201,13 @@ export const HoursSection: React.FC = () => {
           </motion.div>
         </motion.div>
       </div>
+      {/* Nav target: lands at the point where the full hours card is in view, skipping the early reveal state. */}
+      <div
+        id="hours-card"
+        className="pointer-events-none absolute left-0 h-px w-full"
+        style={{ top: '176vh' }}
+        aria-hidden
+      />
     </section>
   );
 };

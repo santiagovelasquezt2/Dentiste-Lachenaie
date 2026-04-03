@@ -22,6 +22,7 @@ export const Nav: React.FC = () => {
     { href: '#about', label: t.nav.about },
     { href: '#services', label: t.nav.services },
     { href: '#gallery', label: t.nav.gallery },
+    { href: '#hours-card', label: t.nav.hours },
     { href: '#first-visit-steps', label: t.nav.firstVisit },
     { href: '#appointment', label: t.nav.appointment },
     { href: '#contact', label: t.nav.contact },

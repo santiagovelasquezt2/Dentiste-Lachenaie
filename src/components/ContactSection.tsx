@@ -1,57 +1,111 @@
-import React from 'react';
+import React, { useMemo } from 'react';
+import { MapContainer, TileLayer, Marker, Popup, ZoomControl, useMap } from 'react-leaflet';
+import L from 'leaflet';
+import 'leaflet/dist/leaflet.css';
 import { useLanguage } from '../context/LanguageContext';
 import { clinicData } from '../content/clinic';
-import { Phone, Mail, MapPin } from 'lucide-react';
+import mapMarkerTooth from '@/DentalContent/Images/Map/map-marker-tooth.svg';
+import { Phone, Mail, MapPin, LocateFixed } from 'lucide-react';
 
+// Leaflet coords = [lat, lng] (opposite of MapLibre's [lng, lat])
+const LAT = clinicData.mapCenter[1];
+const LNG = clinicData.mapCenter[0];
+const CENTER: [number, number] = [LAT, LNG];
+const ZOOM = clinicData.mapZoom;
+
+// ---------------------------------------------------------------------------
+// Stylized tooth marker (lime #B0D64E contour) — see DentalContent/Images/Map/
+// ---------------------------------------------------------------------------
+function makeIcon(markerSrc: string): L.DivIcon {
+  const size = 56;
+  return L.divIcon({
+    html: `<div class="clinic-map-pin">
+             <div class="clinic-map-pin-inner">
+               <img src="${markerSrc}" alt="" decoding="async" />
+             </div>
+           </div>`,
+    className: '', // clear Leaflet's default white-box class
+    iconSize: [size, size],
+    iconAnchor: [size / 2, size], // bottom center on the coordinate
+    popupAnchor: [0, -(size + 8)],
+  });
+}
+
+// ---------------------------------------------------------------------------
+// Recenter button — must live inside <MapContainer> to call useMap()
+// ---------------------------------------------------------------------------
+function RecenterButton({ label }: { label: string }) {
+  const map = useMap();
+  return (
+    <div className="absolute top-2 right-[3.25rem] z-[1000]">
+      <div className="overflow-hidden rounded-md border border-[#ccc] bg-white shadow-sm">
+        <button
+          type="button"
+          onClick={() => map.flyTo(CENTER, ZOOM, { duration: 1 })}
+          title={label}
+          aria-label={label}
+          className="flex size-8 items-center justify-center text-[#333] transition-colors hover:bg-[#B0D64E] hover:text-[#1a1a1a]"
+        >
+          <LocateFixed className="size-4" aria-hidden />
+        </button>
+      </div>
+    </div>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// ContactSection
+// ---------------------------------------------------------------------------
 export const ContactSection: React.FC = () => {
   const { t } = useLanguage();
 
+  // Build the icon once — logo URL is stable across renders
+  const toothMarkerIcon = useMemo(() => makeIcon(mapMarkerTooth as string), []);
+
   return (
-    <section id="contact" className="bg-bg-dark py-32 text-bg-inverse overflow-hidden">
+    <section id="contact" className="overflow-hidden bg-bg-dark py-32 text-bg-inverse">
       <div className="container mx-auto px-6">
-        <div className="grid lg:grid-cols-2 gap-20 items-center">
+        <div className="grid items-center gap-20 lg:grid-cols-2">
+
+          {/* ── Contact info ──────────────────────────────────────────── */}
           <div>
-            <h2 className="text-section-title font-bold mb-12">
-              {t.contact.title}
-            </h2>
-            
+            <h2 className="mb-12 text-section-title font-bold">{t.contact.title}</h2>
+
             <div className="flex flex-col gap-10">
-              <div className="flex items-start gap-6 group">
-                <div className="w-12 h-12 bg-accent/10 rounded-full flex items-center justify-center flex-shrink-0 group-hover:bg-accent transition-colors">
+              <div className="group flex items-start gap-6">
+                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-accent/10 transition-colors group-hover:bg-accent">
                   <MapPin className="text-accent group-hover:text-bg-dark" />
                 </div>
                 <div>
-                  <h3 className="text-nav text-accent/60 mb-2">Adresse</h3>
-                  <p className="text-xl font-medium leading-relaxed">
-                    {clinicData.address}
-                  </p>
+                  <h3 className="text-nav mb-2 text-accent/60">Adresse</h3>
+                  <p className="text-xl font-medium leading-relaxed">{clinicData.address}</p>
                 </div>
               </div>
 
-              <div className="flex items-start gap-6 group">
-                <div className="w-12 h-12 bg-accent/10 rounded-full flex items-center justify-center flex-shrink-0 group-hover:bg-accent transition-colors">
+              <div className="group flex items-start gap-6">
+                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-accent/10 transition-colors group-hover:bg-accent">
                   <Phone className="text-accent group-hover:text-bg-dark" />
                 </div>
                 <div>
-                  <h3 className="text-nav text-accent/60 mb-2">Téléphone</h3>
-                  <a 
+                  <h3 className="text-nav mb-2 text-accent/60">Téléphone</h3>
+                  <a
                     href={`tel:${clinicData.phone.replace(/\D/g, '')}`}
-                    className="text-2xl md:text-3xl font-mono hover:text-accent transition-colors"
+                    className="text-2xl font-mono transition-colors hover:text-accent md:text-3xl"
                   >
                     {clinicData.phone}
                   </a>
                 </div>
               </div>
 
-              <div className="flex items-start gap-6 group">
-                <div className="w-12 h-12 bg-accent/10 rounded-full flex items-center justify-center flex-shrink-0 group-hover:bg-accent transition-colors">
+              <div className="group flex items-start gap-6">
+                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-accent/10 transition-colors group-hover:bg-accent">
                   <Mail className="text-accent group-hover:text-bg-dark" />
                 </div>
                 <div>
-                  <h3 className="text-nav text-accent/60 mb-2">Courriel</h3>
-                  <a 
+                  <h3 className="text-nav mb-2 text-accent/60">Courriel</h3>
+                  <a
                     href={`mailto:${clinicData.email}`}
-                    className="text-xl font-medium hover:text-accent transition-colors"
+                    className="text-xl font-medium transition-colors hover:text-accent"
                   >
                     {clinicData.email}
                   </a>
@@ -60,23 +114,41 @@ export const ContactSection: React.FC = () => {
             </div>
           </div>
 
-          <div className="relative aspect-square md:aspect-video rounded-[40px] overflow-hidden shadow-2xl border-2 border-accent/20">
-            {/* Map Placeholder */}
-            <div className="absolute inset-0 bg-bg-alt/10 flex items-center justify-center">
-              <img 
-                src="https://images.unsplash.com/photo-1524661135-423995f22d0b?q=80&w=2074&auto=format&fit=crop" 
-                alt="Map" 
-                className="w-full h-full object-cover opacity-50 grayscale"
+          {/* ── Map ───────────────────────────────────────────────────── */}
+          {/*
+            Explicit pixel height avoids the CSS layout race that caused
+            MapLibre's canvas to initialise at 0×0.
+          */}
+          <div className="h-[380px] overflow-hidden rounded-[40px] border-2 border-accent/20 shadow-2xl md:h-[460px] lg:h-[480px]">
+            <MapContainer
+              center={CENTER}
+              zoom={ZOOM}
+              zoomControl={false}
+              scrollWheelZoom={false}
+              style={{ height: '100%', width: '100%' }}
+            >
+              {/* CARTO Positron — clean light basemap, free, no API key */}
+              <TileLayer
+                url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
+                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
+                subdomains="abcd"
+                maxZoom={20}
               />
-              <div className="absolute inset-0 bg-bg-dark/40" />
-              <div className="relative z-10 flex flex-col items-center gap-4">
-                <div className="w-16 h-16 bg-accent rounded-full flex items-center justify-center animate-pulse">
-                  <MapPin size={32} className="text-bg-dark" />
-                </div>
-                <span className="text-nav font-bold">Terrebonne, QC</span>
-              </div>
-            </div>
+
+              <ZoomControl position="bottomright" />
+              <RecenterButton label={t.contact.mapRecenter} />
+
+              <Marker position={CENTER} icon={toothMarkerIcon}>
+                <Popup>
+                  <div className="clinic-map-popup">
+                    <strong>{clinicData.name}</strong>
+                    <span>{clinicData.address}</span>
+                  </div>
+                </Popup>
+              </Marker>
+            </MapContainer>
           </div>
+
         </div>
       </div>
     </section>

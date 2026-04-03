@@ -70,22 +70,23 @@ export const FirstVisitSection: React.FC = () => {
   // #endregion
 
   return (
-    <section ref={containerRef} id="first-visit" className="relative h-[300vh] bg-[#062A1D]">
-      <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden>
-        <div className="absolute inset-0 bg-[linear-gradient(135deg,rgba(7,44,33,0.92),rgba(3,28,20,0.98))]" />
-        <HoursContourPattern className="hours-pattern hours-pattern-slow absolute inset-[-12%] h-[124%] w-[124%] stroke-white/14 stroke-[2] fill-none" />
-        <HoursContourPattern className="hours-pattern hours-pattern-fast absolute inset-[-18%] h-[136%] w-[136%] stroke-[#DFF0E0]/8 stroke-[1.5] fill-none" />
-      </div>
-      <div className="sticky top-0 h-screen w-full flex items-center overflow-hidden">
-        <div className="container relative z-10 mx-auto px-6">
-          <div className="grid lg:grid-cols-2 gap-20 items-center">
+    <section ref={containerRef} id="first-visit" className="relative h-[300vh] bg-[#B0D64E]">
+      <div className="sticky top-0 h-screen w-full overflow-hidden">
+        <div className="pointer-events-none absolute inset-0" aria-hidden>
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.38),transparent_44%),linear-gradient(135deg,rgba(196,228,109,0.98),rgba(176,214,78,0.98)_42%,rgba(140,176,55,1))]" />
+          <HoursContourPattern className="hours-pattern hours-pattern-slow absolute inset-[-12%] h-[124%] w-[124%] stroke-[#17352D]/10 stroke-[2] fill-none" />
+          <HoursContourPattern className="hours-pattern hours-pattern-fast absolute inset-[-18%] h-[136%] w-[136%] stroke-white/12 stroke-[1.5] fill-none" />
+        </div>
+        <div className="flex h-full w-full items-center overflow-hidden">
+          <div className="container relative z-10 mx-auto px-6">
+            <div className="grid lg:grid-cols-2 gap-20 items-center">
             
             {/* Left Column - Static */}
-            <div className="text-[#E7F1E3]">
-              <h2 className="text-section-title font-bold text-[#E7F1E3] mb-8">
+            <div className="text-[#17352D]">
+              <h2 className="text-section-title font-bold text-[#17352D] mb-8">
                 {t.firstVisit.title}
               </h2>
-              <p className="text-xl text-[#E7F1E3]/80 mb-12 leading-relaxed">
+              <p className="text-xl text-[#17352D]/78 mb-12 leading-relaxed">
                 {t.firstVisit.intro}
               </p>
               
@@ -95,7 +96,11 @@ export const FirstVisitSection: React.FC = () => {
                 </p>
               </div>
 
-              <Button size="lg" onClick={() => window.location.href = '#appointment'}>
+              <Button
+                size="lg"
+                className="bg-[#17352D] text-white hover:bg-[#0F241E]"
+                onClick={() => window.location.href = '#appointment'}
+              >
                 Prendre rendez-vous
               </Button>
             </div>
@@ -112,6 +117,7 @@ export const FirstVisitSection: React.FC = () => {
               ))}
             </div>
 
+            </div>
           </div>
         </div>
       </div>
@@ -126,4 +132,3 @@ export const FirstVisitSection: React.FC = () => {
     </section>
   );
 };
-
