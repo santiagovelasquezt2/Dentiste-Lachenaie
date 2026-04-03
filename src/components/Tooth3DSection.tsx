@@ -1,27 +1,199 @@
-import React from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { Pause, Play } from 'lucide-react';
 import { ToothCanvas } from './ToothCanvas';
 
+const DISPLAY_IMAGES = [
+  {
+    src: '/tool-dentist-display/grok-image-8f683b71-47ea-4c4e-a6dd-4e8c6ec5de27.png',
+    alt: 'Green-gloved hands holding a dental model and tool',
+  },
+  {
+    src: '/tool-dentist-display/grok-image-0aafe2b4-2a3c-4f14-8877-03934595054a.png',
+    alt: 'Green-gloved hands presenting two dental instruments',
+  },
+  {
+    src: '/tool-dentist-display/grok-image-d2822071-ca53-4ad2-98c4-e0a54960ca6b.png',
+    alt: 'Green-gloved hands shaping a clear dental aligner',
+  },
+  {
+    src: '/tool-dentist-display/grok-image-9605161a-3f5c-4354-9f3f-14031207f894.png',
+    alt: 'Green-gloved hands adjusting a dental mold with an instrument',
+  },
+  {
+    src: '/tool-dentist-display/grok-image-32634553-9e61-4c79-afd3-e34802dc143f.png',
+    alt: 'Green-gloved hands holding a set of dental tools',
+  },
+  {
+    src: '/tool-dentist-display/grok-image-691dc2b8-2956-4e62-8235-fe8515029d5a.png',
+    alt: 'Green-gloved hands working on a dental model with tweezers',
+  },
+] as const;
+
+const AUTO_ADVANCE_MS = 2800;
+const VISIBILITY_THRESHOLD = 0.4;
+
 export const Tooth3DSection: React.FC = () => {
+  const sectionRef = useRef<HTMLElement>(null);
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [indicatorCycle, setIndicatorCycle] = useState(0);
+  const [isPlaying, setIsPlaying] = useState(true);
+  const [isVisible, setIsVisible] = useState(false);
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
+
+  const indicatorStates = useMemo(
+    () => DISPLAY_IMAGES.map((_, index) => index === activeIndex),
+    [activeIndex]
+  );
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+    const updatePreference = () => {
+      setPrefersReducedMotion(mediaQuery.matches);
+    };
+
+    updatePreference();
+    mediaQuery.addEventListener('change', updatePreference);
+
+    return () => mediaQuery.removeEventListener('change', updatePreference);
+  }, []);
+
+  useEffect(() => {
+    const section = sectionRef.current;
+    if (!section) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsVisible(entry.isIntersecting);
+      },
+      { threshold: VISIBILITY_THRESHOLD, rootMargin: '0px 0px -10% 0px' }
+    );
+
+    observer.observe(section);
+
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    if (!isPlaying || !isVisible || prefersReducedMotion) return;
+
+    const timer = window.setInterval(() => {
+      setIndicatorCycle((current) => current + 1);
+      setActiveIndex((current) => (current + 1) % DISPLAY_IMAGES.length);
+    }, AUTO_ADVANCE_MS);
+
+    return () => window.clearInterval(timer);
+  }, [isPlaying, isVisible, prefersReducedMotion]);
+
   return (
-    <section id="tooth-3d" className="relative min-h-screen bg-bg flex items-center overflow-hidden">
-      <div className="container mx-auto px-6 py-20 grid gap-12 md:grid-cols-2 items-center">
-        <div className="relative z-10">
-          <h2 className="text-section-title font-bold text-text mb-8">
-            Technologie de pointe pour votre sourire
-          </h2>
-          <p className="text-xl text-text-light max-w-md leading-relaxed">
-            Nous utilisons les dernières innovations en dentisterie numérique pour assurer des résultats précis, durables et esthétiques.
-          </p>
-          <div className="mt-12 flex items-center gap-4">
-            <div className="w-12 h-[2px] bg-accent" />
-            <span className="text-nav text-accent font-bold">Modélisation 3D avancée</span>
+    <section
+      ref={sectionRef}
+      id="tooth-3d"
+      className="relative overflow-hidden bg-bg-alt/70 py-10 md:py-14"
+    >
+      <div
+        className="pointer-events-none absolute inset-0 opacity-45"
+        aria-hidden
+        style={{
+          backgroundImage:
+            'radial-gradient(circle at 20% 15%, rgba(255,255,255,0.85), transparent 28%), radial-gradient(circle at 80% 0%, rgba(176,214,78,0.18), transparent 24%), linear-gradient(180deg, rgba(255,255,255,0.65), rgba(255,255,255,0.15))',
+        }}
+      />
+
+      <div className="container relative z-10 mx-auto px-6">
+        <div className="grid items-center gap-10 md:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)] md:gap-14">
+          <div className="mx-auto w-full max-w-[620px] md:mx-0">
+            <h2 className="text-section-title font-bold text-text">
+              Technologie de pointe pour votre sourire
+            </h2>
+            <p className="mt-4 max-w-[42rem] text-base leading-relaxed text-text-light md:text-lg">
+              Nous utilisons les dernières innovations en dentisterie numérique pour assurer des résultats précis, durables et esthétiques.
+            </p>
+
+            <div className="mt-8 w-full max-w-[500px]">
+              <div className="rounded-[1.6rem] bg-[#cfcfcf] p-3 shadow-[0_18px_50px_rgba(0,0,0,0.12)] ring-1 ring-black/5">
+                <div className="relative aspect-[4/5] w-full overflow-hidden rounded-[1.2rem] bg-[#bfbfbf]">
+                  {DISPLAY_IMAGES.map((image, index) => (
+                    <img
+                      key={image.src}
+                      src={image.src}
+                      alt={image.alt}
+                      className={`absolute inset-0 h-full w-full object-cover transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+                        indicatorStates[index]
+                          ? 'scale-100 opacity-100'
+                          : 'scale-[1.03] opacity-0'
+                      }`}
+                      loading={index === 0 ? 'eager' : 'lazy'}
+                      aria-hidden={!indicatorStates[index]}
+                    />
+                  ))}
+                  <div
+                    className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.08),transparent_22%,transparent_78%,rgba(0,0,0,0.08))]"
+                    aria-hidden
+                  />
+                </div>
+              </div>
+
+              <div className="mt-4 flex w-full items-center justify-center gap-3">
+                <button
+                  type="button"
+                  onClick={() => setIsPlaying((current) => !current)}
+                  className="flex h-10 w-10 items-center justify-center rounded-full bg-[#0e241f] text-white shadow-[0_12px_24px_rgba(14,36,31,0.24)] transition-transform duration-300 hover:scale-105 active:scale-95"
+                  aria-label={isPlaying ? 'Mettre le diaporama en pause' : 'Reprendre le diaporama'}
+                >
+                  {isPlaying && !prefersReducedMotion ? <Pause className="h-4 w-4" /> : <Play className="h-4 w-4 translate-x-[1px]" />}
+                </button>
+
+                <div className="flex h-11 items-center rounded-full bg-[#0e241f] px-4 shadow-[0_12px_24px_rgba(14,36,31,0.2)]">
+                  <div className="flex items-center gap-2.5">
+                    {DISPLAY_IMAGES.map((image, index) => {
+                      const isActive = indicatorStates[index];
+                      const indicatorKey = isActive ? `${image.src}-${indicatorCycle}` : image.src;
+
+                      return (
+                        <button
+                          key={indicatorKey}
+                          type="button"
+                          onClick={() => {
+                            setIndicatorCycle((current) => current + 1);
+                            setActiveIndex(index);
+                            setIsPlaying(true);
+                          }}
+                          aria-label={`Afficher l'image ${index + 1}`}
+                          aria-current={isActive}
+                          className={`relative h-2 overflow-hidden rounded-full bg-white/25 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+                            isActive ? 'w-7' : 'w-2 hover:bg-white/45'
+                          }`}
+                        >
+                          {isActive && (
+                            <span
+                              className="carousel-indicator-fill absolute inset-y-0 left-0 block w-full rounded-full bg-[#e5efd0]"
+                              style={{ ['--indicator-duration' as string]: `${AUTO_ADVANCE_MS}ms` }}
+                              aria-hidden
+                            />
+                          )}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="relative mx-auto h-[320px] w-full max-w-[560px] sm:h-[400px] md:h-[520px]">
+            <div className="absolute inset-0 rounded-[2rem] bg-[radial-gradient(circle_at_50%_40%,rgba(255,255,255,0.65),rgba(255,255,255,0.1)_55%,transparent_80%)]" />
+            <div className="relative h-full w-full">
+              <ToothCanvas />
+            </div>
           </div>
         </div>
-        
-        <div className="relative h-[380px] sm:h-[460px] md:h-[560px] w-full -translate-y-3 md:-translate-y-5">
-          <ToothCanvas />
-        </div>
       </div>
+
+      <div
+        className="pointer-events-none absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-bg-alt/80 to-transparent"
+        aria-hidden
+      />
     </section>
   );
 };

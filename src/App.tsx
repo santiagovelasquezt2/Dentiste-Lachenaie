@@ -17,6 +17,7 @@ import { HoursSection } from './components/HoursSection';
 import { FirstVisitSection } from './components/FirstVisitSection';
 import { AppointmentForm } from './components/AppointmentForm';
 import { ContactSection } from './components/ContactSection';
+import { ReviewSection } from './components/ReviewSection';
 import { Footer } from './components/Footer';
 
 export default function App() {
@@ -36,11 +37,11 @@ export default function App() {
           <FirstVisitSection />
           <AppointmentForm />
           <ContactSection />
+          <ReviewSection />
         </main>
         <Footer />
       </div>
     </LanguageProvider>
   );
 }
-
 

@@ -1,4 +1,5 @@
 export const clinicData = {
+  name: "Centre dentaire Vaillancourt St-Onge",
   phone: "(450) 582-2219",
   email: "info@dentistelachenaie.com",
   address: "355, Montée des Pionniers, suite 201, Terrebonne, Qc J6V 1N5",

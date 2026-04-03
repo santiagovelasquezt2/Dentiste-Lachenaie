@@ -1,33 +1,70 @@
-import React, { useLayoutEffect, useRef } from 'react';
-import { motion, useMotionValueEvent, useScroll, useTransform } from 'framer-motion';
+import React, { useLayoutEffect, useRef, useState } from 'react';
+import { motion, useScroll, useTransform } from 'framer-motion';
 import { MapPin } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 import { clinicData } from '../content/clinic';
 import { HoursContourPattern } from './HoursContourPattern';
 
+const lerp = (start: number, end: number, progress: number) => start + (end - start) * progress;
+
 export const HoursSection: React.FC = () => {
   const { t } = useLanguage();
   const containerRef = useRef<HTMLElement>(null);
+  const viewportRef = useRef<HTMLDivElement>(null);
+  const [viewportSize, setViewportSize] = useState({ width: 1, height: 1, rootFontSize: 16 });
 
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ['start start', 'end end'],
   });
 
-  /** `clamp: false` avoids Framer attaching scroll-driven WAAPI to these transforms (can desync vs real progress). */
+  useLayoutEffect(() => {
+    const viewportEl = viewportRef.current;
+    if (!viewportEl) return;
+
+    const updateViewportSize = () => {
+      const { width, height } = viewportEl.getBoundingClientRect();
+      const rootFontSize =
+        typeof window !== 'undefined'
+          ? Number.parseFloat(window.getComputedStyle(document.documentElement).fontSize) || 16
+          : 16;
+
+      setViewportSize({
+        width: Math.max(width, 1),
+        height: Math.max(height, 1),
+        rootFontSize,
+      });
+    };
+
+    updateViewportSize();
+
+    const resizeObserver = new ResizeObserver(updateViewportSize);
+    resizeObserver.observe(viewportEl);
+    window.addEventListener('resize', updateViewportSize);
+
+    return () => {
+      resizeObserver.disconnect();
+      window.removeEventListener('resize', updateViewportSize);
+    };
+  }, []);
+
   const panelOpacity = useTransform(scrollYProgress, [0, 0.14, 0.16, 1], [0, 0, 1, 1], { clamp: false });
-  const panelWidth = useTransform(
-    scrollYProgress,
-    [0, 0.14, 0.3, 0.48, 1],
-    ['0rem', '0rem', '44rem', '100vw', '100vw'],
-    { clamp: false }
-  );
-  const panelHeight = useTransform(
-    scrollYProgress,
-    [0, 0.14, 0.3, 0.48, 1],
-    ['0rem', '0rem', '12rem', '100dvh', '100dvh'],
-    { clamp: false }
-  );
+  const panelScaleX = useTransform(scrollYProgress, (v) => {
+    const collapsedScale = (44 * viewportSize.rootFontSize) / viewportSize.width;
+
+    if (v <= 0.14) return 0;
+    if (v <= 0.3) return lerp(0, collapsedScale, (v - 0.14) / 0.16);
+    if (v <= 0.48) return lerp(collapsedScale, 1, (v - 0.3) / 0.18);
+    return 1;
+  });
+  const panelScaleY = useTransform(scrollYProgress, (v) => {
+    const collapsedScale = (12 * viewportSize.rootFontSize) / viewportSize.height;
+
+    if (v <= 0.14) return 0;
+    if (v <= 0.3) return lerp(0, collapsedScale, (v - 0.14) / 0.16);
+    if (v <= 0.48) return lerp(collapsedScale, 1, (v - 0.3) / 0.18);
+    return 1;
+  });
   const panelRadius = useTransform(
     scrollYProgress,
     [0, 0.14, 0.3, 0.48, 1],
@@ -56,76 +93,6 @@ export const HoursSection: React.FC = () => {
     return (v - 0.74) / 0.06;
   });
 
-  // #region agent log
-  const dbgLast = useRef(0);
-  useLayoutEffect(() => {
-    const sid = 'a76245';
-    const ep = 'http://127.0.0.1:7516/ingest/8d447b25-2b2c-4cbb-b15f-8fbee55e32bb';
-    const send = () => {
-      const el = containerRef.current;
-      const ov = document.querySelector('[data-hours-overlay]');
-      const p = scrollYProgress.get();
-      fetch(ep, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'X-Debug-Session-Id': sid },
-        body: JSON.stringify({
-          sessionId: sid,
-          hypothesisId: 'H2',
-          location: 'HoursSection.tsx:layout',
-          message: 'mount/layout sample',
-          data: {
-            sectionOffsetH: el?.offsetHeight ?? null,
-            rectTop: el?.getBoundingClientRect().top ?? null,
-            scrollY: typeof window !== 'undefined' ? window.scrollY : null,
-            hash: typeof window !== 'undefined' ? window.location.hash : null,
-            scrollYProgress: p,
-            titleLen: t.hours.title?.length ?? 0,
-            panelOp: panelOpacity.get(),
-            hoursOverlayOp: hoursOverlayOpacity.get(),
-            contentOp: contentOpacity.get(),
-            computedOverlayOpacity:
-              ov && typeof getComputedStyle !== 'undefined' ? getComputedStyle(ov as Element).opacity : null,
-          },
-          timestamp: Date.now(),
-        }),
-      }).catch(() => {});
-    };
-    send();
-    requestAnimationFrame(() => requestAnimationFrame(send));
-  }, [t.hours.title]);
-
-  useMotionValueEvent(scrollYProgress, 'change', (v) => {
-    const now = Date.now();
-    if (now - dbgLast.current < 280) return;
-    dbgLast.current = now;
-    const sid = 'a76245';
-    const ep = 'http://127.0.0.1:7516/ingest/8d447b25-2b2c-4cbb-b15f-8fbee55e32bb';
-    const el = document.querySelector('[data-hours-overlay]');
-    const computed = el && typeof getComputedStyle !== 'undefined' ? getComputedStyle(el as Element).opacity : null;
-    fetch(ep, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'X-Debug-Session-Id': sid },
-      body: JSON.stringify({
-        sessionId: sid,
-        hypothesisId: 'H1',
-        location: 'HoursSection.tsx:scroll',
-        message: 'scrollYProgress',
-        data: {
-          v,
-          panelOp: panelOpacity.get(),
-          hoursOverlayOp: hoursOverlayOpacity.get(),
-          contentOp: contentOpacity.get(),
-          panelW: typeof panelWidth.get === 'function' ? panelWidth.get() : null,
-          panelH: typeof panelHeight.get === 'function' ? panelHeight.get() : null,
-          computedOverlayOpacity: computed,
-          overlayInDom: !!el,
-        },
-        timestamp: Date.now(),
-      }),
-    }).catch(() => {});
-  });
-  // #endregion
-
   const days = [
     { key: 'monday', label: t.hours.monday },
     { key: 'tuesday', label: t.hours.tuesday },
@@ -142,23 +109,24 @@ export const HoursSection: React.FC = () => {
       id="hours"
       className="relative h-[320vh] overflow-clip bg-[#E7F1E3]"
     >
-      <div className="sticky top-0 h-[100dvh] overflow-hidden">
+      <div ref={viewportRef} className="sticky top-0 h-[100dvh] overflow-hidden">
         <div className="absolute inset-0 bg-[#E7F1E3]" />
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(255,255,255,0.42),_transparent_56%)]" />
 
         <motion.div
           style={{
             opacity: panelOpacity,
-            width: panelWidth,
-            height: panelHeight,
+            scaleX: panelScaleX,
+            scaleY: panelScaleY,
             borderRadius: panelRadius,
             boxShadow: panelShadow,
+            willChange: 'transform, opacity, border-radius, box-shadow',
           }}
-          className="absolute left-1/2 top-1/2 z-10 -translate-x-1/2 -translate-y-1/2 overflow-hidden bg-[#062A1D]"
+          className="absolute inset-0 z-10 origin-center overflow-hidden bg-[#B0D64E]"
         >
-          <div className="absolute inset-0 bg-[linear-gradient(135deg,rgba(9,55,40,0.98),rgba(4,31,22,1))]" />
-          <HoursContourPattern className="hours-pattern hours-pattern-slow absolute inset-[-12%] h-[124%] w-[124%] stroke-white/6 stroke-[2] fill-none" />
-          <HoursContourPattern className="hours-pattern hours-pattern-fast absolute inset-[-18%] h-[136%] w-[136%] stroke-[#E7F1E3]/3 stroke-[1.5] fill-none" />
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.38),transparent_44%),linear-gradient(135deg,rgba(196,228,109,0.98),rgba(176,214,78,0.98)_42%,rgba(140,176,55,1))]" />
+          <HoursContourPattern className="hours-pattern hours-pattern-slow absolute inset-[-12%] h-[124%] w-[124%] stroke-[#17352D]/10 stroke-[2] fill-none" />
+          <HoursContourPattern className="hours-pattern hours-pattern-fast absolute inset-[-18%] h-[136%] w-[136%] stroke-white/12 stroke-[1.5] fill-none" />
         </motion.div>
 
         <motion.div

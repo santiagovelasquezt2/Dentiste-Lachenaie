@@ -70,7 +70,7 @@ export const fr = {
     title: "Notre Clinique",
   },
   hours: {
-    title: "Heures d'ouverture",
+    title: "Venez nous rendre visite",
     tagline: "Planifiez votre visite en toute confiance",
     scheduleLabel: "Horaire hebdomadaire",
     description: "Choisissez un moment qui s'intègre à votre routine, puis contactez-nous si vous souhaitez être guidé vers le meilleur créneau.",
@@ -108,6 +108,13 @@ export const fr = {
   contact: {
     title: "Nous sommes ici",
     address: "355, Montée des Pionniers, suite 201, Terrebonne, Qc J6V 1N5",
+  },
+  reviews: {
+    title: "Laissez-nous un avis sur Google et Facebook",
+    body: "Si votre visite s'est bien passée, un avis rapide aide d'autres familles à choisir notre clinique en toute confiance.",
+    googleCta: "Avis Google",
+    facebookCta: "Page Facebook",
+    note: "Merci de prendre un moment pour partager votre expérience.",
   },
   footer: {
     copy: "Tous droits réservés © {year} Centre dentaire Vaillancourt St-Onge",
