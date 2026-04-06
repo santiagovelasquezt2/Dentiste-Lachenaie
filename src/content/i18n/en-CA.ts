@@ -12,17 +12,20 @@ export const en = {
   },
   hero: {
     tagline: "Centre Dentaire Vaillancourt St-Onge",
-    body: "Safe, modern, painless and with a smile!",
+    body: "Experience dental care where your comfort and health are our top priorities.",
     cta: "Request Appointment",
   },
   logoVideo: {
-    quote: "A dentist that makes you smile",
+    lead: "A smile starts here",
+    quote: "Dentistry that makes you smile",
+    sectionLabel: "Signature video for the dental centre",
+    fallbackLabel: "Signature experience",
   },
   about: {
     title: "We change the experience and help you regain confidence",
     slogan: "So that you feel good every step of the way.",
     body1: "We believe that a smile is not just aesthetics. It is your strength, confidence and business card.",
-    body2: "Our mission is to change the perception of dentistry. Music, ambiance and a finely designed interior will enable you to experience a completely different dentistry.",
+    body2: "Our mission is to change the perception of dental care. Music, ambiance, and a thoughtfully designed interior let you experience dentistry in a completely different way.",
     since: "SINCE 2000",
     goal: {
       title: "Our Goal",
@@ -37,10 +40,24 @@ export const en = {
       title: "Our Promise",
       desc1: "To act with courtesy, listen, and respond to the needs and expectations of each client.",
       desc2: "We **believe in service excellence**, and we continually strive to improve our processes to ensure client satisfaction."
-    }
+    },
+    images: {
+      patientSmile: "Patient smile",
+      dentalPractice: "Dental practice",
+      dentalCare: "Dental care",
+      clinic: "Clinic",
+      treatment: "Treatment",
+      dentalTeam: "Dental team",
+      dentistWithPatient: "Dentist with patient",
+    },
   },
   services: {
     title: "Our Services",
+    cardTeaser: "Specialized, personalized care for your oral health.",
+    learnMore: "Learn more",
+    bookAppointment: "Book appointment",
+    whatToExpect: "What to expect",
+    closeDialog: "Close dialog",
     items: {
       orthodontics: "Orthodontics",
       prevention: "Prevention and Hygiene",
@@ -55,6 +72,10 @@ export const en = {
   team: {
     title: "Meet the Members of Our Team",
     subtitle: "Smiling and enthusiastic teams with unparalleled professional competence and attentiveness to your needs.",
+    featuredImageLabel: "Our team at a glance",
+    dentistsTitle: "Dentists",
+    rostersTitle: "Clinical teams",
+    dentistRole: "Dentist",
     midText1: "Two dynamic teams dedicated to your health and well-being.",
     midText2: "Don't hesitate to make an appointment today.",
     midText3: "We're here for you!",
@@ -69,13 +90,23 @@ export const en = {
   },
   gallery: {
     title: "Our Clinic",
+    images: {
+      exterior: "Exterior",
+      reception: "Reception",
+      waitingRoom: "Waiting room",
+      treatmentRoom: "Treatment room",
+      sterilizationRoom: "Sterilization room",
+      waitingArea: "Waiting area",
+    },
+    openFullScreen: "View full screen",
+    closeFullScreen: "Close full-screen view",
   },
   hours: {
     overlayTitle: "Come visit us",
-    cardTitle: "Hours",
+    cardTitle: "Schedule",
     tagline: "Plan your visit with confidence",
     scheduleLabel: "Weekly schedule",
-    description: "Choose a time that fits your routine and reach out if you need help finding the best appointment slot.",
+    description: "Choose a time that fits your schedule and contact us if you need help finding the best appointment time.",
     monday: "Monday",
     tuesday: "Tuesday",
     wednesday: "Wednesday",
@@ -88,6 +119,7 @@ export const en = {
   firstVisit: {
     title: "Your First Visit",
     intro: "Welcome to Vaillancourt St-Onge Dental Centre. We look forward to meeting you.",
+    button: "Book an appointment",
     steps: [
       "Warm welcome and file opening",
       "Complete oral health examination",
@@ -100,17 +132,34 @@ export const en = {
   },
   appointment: {
     title: "Request an Appointment",
+    intro: "Fill out the form below and we will get back to you shortly.",
     name: "Full Name",
     email: "Email",
     phone: "Phone",
     date: "Preferred Date",
     reason: "Reason for visit",
     submit: "Send Request",
+    placeholderName: "Jane Doe",
+    placeholderEmail: "jane@example.com",
+    placeholderPhone: "(450) 000-0000",
+    placeholderReason: "Briefly describe the reason for your visit...",
+    subjectPrefix: "Appointment request",
+    bodyName: "Name",
+    bodyEmail: "Email",
+    bodyPhone: "Phone",
+    bodyDate: "Preferred date",
+    bodyReason: "Reason",
   },
   contact: {
-    title: "We are right here",
+    title: "Contact us",
     address: "355, Montée des Pionniers, suite 201, Terrebonne, Qc J6V 1N5",
+    addressLabel: "Address",
+    phoneLabel: "Phone",
+    emailLabel: "Email",
     mapRecenter: "Center map on the clinic",
+    callNow: "Call now",
+    getDirections: "Get directions",
+    openToday: "Open today",
   },
   reviews: {
     title: "Review us on Google and Facebook",
@@ -122,5 +171,21 @@ export const en = {
   footer: {
     copy: "All rights reserved © {year} Centre dentaire Vaillancourt St-Onge",
     credit: "Designed and powered by Calytek",
+  },
+  tooth3d: {
+    title: "Cutting-edge technology for your smile",
+    body: "We use the latest innovations in digital dentistry to deliver precise, durable, and aesthetic results.",
+    pause: "Pause slideshow",
+    resume: "Resume slideshow",
+    previewUnavailable: "3D preview unavailable",
+    images: {
+      modelAndTool: "Green-gloved hands holding a dental model and tool",
+      instruments: "Green-gloved hands presenting two dental instruments",
+      aligner: "Green-gloved hands shaping a clear dental aligner",
+      mold: "Green-gloved hands adjusting a dental mold with an instrument",
+      tools: "Green-gloved hands holding a set of dental tools",
+      tweezers: "Green-gloved hands working on a dental model with tweezers",
+    },
+    selectImage: "Show image {index}",
   }
 };

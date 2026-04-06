@@ -134,7 +134,7 @@ export const HoursSection: React.FC = () => {
           style={{ opacity: hoursOverlayOpacity }}
           className="pointer-events-none absolute inset-0 z-[25] flex items-center justify-center px-6 sm:px-10"
         >
-          <h2 className="text-center text-[clamp(2.25rem,6.5vw,4.5rem)] font-bold leading-none tracking-[-0.05em] text-black">
+          <h2 className="text-center text-section-title font-heading font-semibold leading-none tracking-[-0.04em] text-black">
             {t.hours.overlayTitle}
           </h2>
         </motion.div>
@@ -145,37 +145,36 @@ export const HoursSection: React.FC = () => {
         >
           <motion.div
             style={{ pointerEvents: contentPointerEvents as any }}
-            className="relative w-full max-w-5xl overflow-hidden rounded-[2rem] bg-[#FBFDF8] text-[#17352D] shadow-[0_28px_80px_rgba(2,33,24,0.24)] lg:rounded-[2.5rem]"
+            className="relative w-full max-w-5xl overflow-hidden rounded-[2rem] bg-white text-[#17352D] shadow-[0_24px_70px_rgba(2,33,24,0.14)] ring-1 ring-black/5 lg:rounded-[2.5rem]"
           >
             <motion.div
               style={{ opacity: cardBorderOpacity }}
-              className="absolute inset-0 rounded-[inherit] border border-white/40"
+              className="absolute inset-0 rounded-[inherit] border border-black/5"
             />
 
             <div className="grid gap-0 lg:grid-cols-[1.02fr_0.98fr]">
-              <div className="relative overflow-hidden bg-[#B0D64E] p-8 text-[#17352D] sm:p-10 md:p-12">
-                <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.34),transparent_48%),linear-gradient(145deg,rgba(198,230,118,0.98),rgba(176,214,78,0.96)_42%,rgba(150,188,63,1))]" />
-                <HoursContourPattern className="hours-pattern hours-pattern-slow absolute inset-[-18%] h-[136%] w-[136%] stroke-[#17352D]/10 stroke-[2] fill-none" />
+              <div className="relative overflow-hidden bg-white p-8 text-[#17352D] sm:p-10 md:p-12 lg:border-r lg:border-black/5">
+                <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(176,214,78,0.08),transparent_52%)]" />
 
                 <div className="relative z-10 max-w-md">
-                  <p className="text-nav text-[#17352D]/65">{t.hours.scheduleLabel}</p>
-                  <h3 className="mt-5 text-[clamp(2rem,4vw,3.4rem)] font-bold leading-[0.98] tracking-[-0.04em] text-[#17352D]">
+                  <p className="text-nav text-[#17352D]/55">{t.hours.scheduleLabel}</p>
+                  <h3 className="mt-5 text-section-title font-heading font-semibold leading-[0.98] tracking-[-0.04em] text-[#17352D]">
                     {t.hours.cardTitle}
                   </h3>
-                  <p className="mt-6 text-base leading-relaxed text-[#17352D]/80 md:text-lg">
+                  <p className="mt-6 text-base leading-relaxed text-[#17352D]/72 md:text-lg">
                     {t.hours.description}
                   </p>
 
-                  <div className="mt-8 flex items-start gap-3 rounded-[1.25rem] border border-[#17352D]/10 bg-[rgba(255,255,255,0.28)] px-5 py-4 text-left backdrop-blur-sm">
-                    <MapPin className="mt-0.5 h-5 w-5 shrink-0 text-[#17352D]" />
-                    <span className="text-sm leading-relaxed text-[#17352D] md:text-base">
+                  <div className="mt-8 flex items-start gap-3 rounded-[1.25rem] border border-black/5 bg-[#FAFAF7] px-5 py-4 text-left shadow-[0_1px_0_rgba(255,255,255,0.9)_inset]">
+                    <MapPin className="mt-0.5 h-5 w-5 shrink-0 text-[#B0D64E]" />
+                    <span className="text-base leading-relaxed text-[#17352D]">
                       {clinicData.address}
                     </span>
                   </div>
                 </div>
               </div>
 
-              <div className="bg-[#FBFDF8] p-8 sm:p-10 md:p-12">
+              <div className="bg-white p-8 sm:p-10 md:p-12">
                 <div className="space-y-4">
                   {days.map((day) => {
                     const value = clinicData.hours[day.key as keyof typeof clinicData.hours];
@@ -189,7 +188,7 @@ export const HoursSection: React.FC = () => {
                         <span className="text-lg font-medium text-[#17352D] md:text-xl">
                           {day.label}
                         </span>
-                        <span className="text-right font-mono text-sm text-[#17352D] md:text-base">
+                        <span className="text-right font-body tabular-nums text-base text-[#17352D] md:text-lg">
                           {displayValue}
                         </span>
                       </div>

@@ -15,6 +15,7 @@ const LanguageContext = createContext<LanguageContextType | undefined>(undefined
 
 export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [language, setLanguageState] = useState<Language>('fr');
+  const t = language === 'fr' ? fr : en;
 
   useEffect(() => {
     const saved = localStorage.getItem('language') as Language;
@@ -23,12 +24,15 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     }
   }, []);
 
+  useEffect(() => {
+    document.documentElement.lang = language === 'fr' ? 'fr-CA' : 'en-CA';
+    document.title = t.nav.practiceName;
+  }, [language, t]);
+
   const setLanguage = (lang: Language) => {
     setLanguageState(lang);
     localStorage.setItem('language', lang);
   };
-
-  const t = language === 'fr' ? fr : en;
 
   return (
     <LanguageContext.Provider value={{ language, setLanguage, t }}>

@@ -60,11 +60,11 @@ export const LogoVideoSection: React.FC = () => {
       ref={sectionRef}
       id="logo-video"
       className="relative scroll-mt-20 bg-bg-alt py-12 md:py-20"
-      aria-label="Signature experience video"
+      aria-label={t.logoVideo.sectionLabel}
     >
       <div className="container mx-auto flex flex-col items-center px-6">
         {!videoError && (
-          <div className="relative w-full max-w-5xl overflow-hidden rounded-[28px] bg-white shadow-[0_24px_80px_rgba(31,41,55,0.12)]">
+          <div className="relative w-full max-w-5xl overflow-hidden rounded-[32px] bg-white shadow-[0_28px_90px_rgba(31,41,55,0.14)] ring-1 ring-black/5">
             <video
               ref={videoRef}
               src={teethVideo}
@@ -86,25 +86,25 @@ export const LogoVideoSection: React.FC = () => {
             />
 
             <div
-              className="pointer-events-none absolute inset-x-0 bottom-0 z-20 h-[42%] bg-gradient-to-t from-black/46 via-black/12 to-transparent"
+              className="pointer-events-none absolute inset-x-0 bottom-0 z-20 h-[46%] bg-gradient-to-t from-black/52 via-black/16 to-transparent"
               aria-hidden
             />
 
-            <div className="pointer-events-none absolute inset-x-0 bottom-0 z-30 flex justify-end px-6 pb-8 text-right md:px-10 md:pb-14">
+            <div className="pointer-events-none absolute inset-x-0 bottom-0 z-30 flex justify-center px-5 pb-6 md:px-8 md:pb-10">
               <div
                 className={[
-                  'max-w-[15rem] rounded-[20px] border border-white/12 bg-white/8 px-4 py-3 text-right backdrop-blur-md shadow-[0_12px_32px_rgba(0,0,0,0.14)]',
-                  'font-nav text-[clamp(1rem,1.8vw,1.45rem)] font-light leading-[1.08] tracking-[0.04em] text-white/82',
+                  'max-w-[36rem] rounded-[26px] border border-white/14 bg-white/10 px-5 py-4 text-center backdrop-blur-2xl shadow-[0_18px_54px_rgba(0,0,0,0.18)]',
+                  'font-body text-white/88',
                   'transform-gpu transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]',
                   quoteVisible ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0',
                 ].join(' ')}
                 lang={language === 'fr' ? 'fr-CA' : 'en-CA'}
               >
                 <h2 className="text-balance">
-                  <span className="block text-[0.64rem] uppercase tracking-[0.28em] text-white/48">
+                  <span className="text-overline block text-white/54">
                     {t.logoVideo.lead}
                   </span>
-                  <span className="mt-1 block text-[0.92em] text-white/68">
+                  <span className="text-title mt-2 block text-white/92">
                     {t.logoVideo.quote}
                   </span>
                 </h2>
@@ -119,8 +119,8 @@ export const LogoVideoSection: React.FC = () => {
               <div className="mx-auto mb-8 flex h-32 w-32 items-center justify-center rounded-full border-4 border-accent/30 bg-accent/20 text-5xl font-bold font-heading text-accent">
                 VS
               </div>
-              <p className="font-nav uppercase tracking-[0.2em] text-accent opacity-40">
-                Expérience Signature
+              <p className="text-nav text-accent opacity-40">
+                {t.logoVideo.fallbackLabel}
               </p>
             </div>
           </div>

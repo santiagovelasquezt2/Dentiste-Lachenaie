@@ -39,11 +39,11 @@ const StepCard = ({
       className="bg-white p-6 rounded-2xl shadow-sm flex items-start gap-6 group hover:shadow-md transition-shadow duration-300"
     >
       <div className="w-12 h-12 bg-accent/10 rounded-full flex items-center justify-center flex-shrink-0 group-hover:bg-accent transition-colors">
-        <span className="text-accent font-bold text-lg group-hover:text-bg-dark">
+        <span className="text-card-title text-accent group-hover:text-bg-dark">
           {index + 1}
         </span>
       </div>
-      <p className="text-lg text-text font-medium pt-2">
+      <p className="text-body-lg pt-2 text-text">
         {step}
       </p>
     </motion.div>
@@ -86,12 +86,12 @@ export const FirstVisitSection: React.FC = () => {
               <h2 className="text-section-title font-bold text-[#17352D] mb-8">
                 {t.firstVisit.title}
               </h2>
-              <p className="text-xl text-[#17352D]/78 mb-12 leading-relaxed">
+              <p className="text-lead mb-12 text-[#17352D]/78">
                 {t.firstVisit.intro}
               </p>
               
               <div className="bg-white/95 p-8 rounded-3xl shadow-lg border-l-4 border-accent mb-12 backdrop-blur-sm">
-                <p className="text-lg font-medium text-text italic">
+                <p className="text-body-lg text-text italic">
                   {t.firstVisit.cancellation}
                 </p>
               </div>
@@ -101,7 +101,7 @@ export const FirstVisitSection: React.FC = () => {
                 className="bg-[#17352D] text-white hover:bg-[#0F241E]"
                 onClick={() => window.location.href = '#appointment'}
               >
-                Prendre rendez-vous
+                {t.firstVisit.button}
               </Button>
             </div>
 

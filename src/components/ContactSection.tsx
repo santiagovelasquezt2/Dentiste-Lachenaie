@@ -69,47 +69,64 @@ export const ContactSection: React.FC = () => {
 
           {/* ── Contact info ──────────────────────────────────────────── */}
           <div>
-            <h2 className="mb-12 text-section-title font-bold">{t.contact.title}</h2>
+            <h2 className="mb-12 text-section-title font-heading font-semibold">{t.contact.title}</h2>
 
             <div className="flex flex-col gap-10">
-              <div className="group flex items-start gap-6">
-                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-accent/10 transition-colors group-hover:bg-accent">
-                  <MapPin className="text-accent group-hover:text-bg-dark" />
-                </div>
-                <div>
-                  <h3 className="text-nav mb-2 text-accent/60">Adresse</h3>
-                  <p className="text-xl font-medium leading-relaxed">{clinicData.address}</p>
-                </div>
-              </div>
-
-              <div className="group flex items-start gap-6">
-                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-accent/10 transition-colors group-hover:bg-accent">
-                  <Phone className="text-accent group-hover:text-bg-dark" />
-                </div>
-                <div>
-                  <h3 className="text-nav mb-2 text-accent/60">Téléphone</h3>
+              {/* PHONE */}
+              <div>
+                <h3 className="text-xs uppercase tracking-widest text-bg-inverse/40 mb-1">{t.contact.phoneLabel}</h3>
+                <div className="flex flex-col items-start gap-3 sm:flex-row sm:items-center sm:gap-4">
                   <a
                     href={`tel:${clinicData.phone.replace(/\D/g, '')}`}
-                    className="text-2xl font-mono transition-colors hover:text-accent md:text-3xl"
+                    className="text-3xl font-medium tracking-tight text-bg-inverse transition-colors hover:text-accent md:text-4xl"
                   >
                     {clinicData.phone}
                   </a>
+                  <div className="inline-flex items-center gap-2 rounded-full border border-accent/20 bg-accent/10 px-3 py-1 text-sm font-medium text-accent">
+                    <span className="relative flex h-2 w-2">
+                      <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent opacity-75"></span>
+                      <span className="relative inline-flex h-2 w-2 rounded-full bg-accent"></span>
+                    </span>
+                    {t.contact.openToday}
+                  </div>
                 </div>
               </div>
 
-              <div className="group flex items-start gap-6">
-                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-accent/10 transition-colors group-hover:bg-accent">
-                  <Mail className="text-accent group-hover:text-bg-dark" />
-                </div>
-                <div>
-                  <h3 className="text-nav mb-2 text-accent/60">Courriel</h3>
-                  <a
-                    href={`mailto:${clinicData.email}`}
-                    className="text-xl font-medium transition-colors hover:text-accent"
-                  >
-                    {clinicData.email}
-                  </a>
-                </div>
+              {/* ADDRESS */}
+              <div>
+                <h3 className="text-xs uppercase tracking-widest text-bg-inverse/40 mb-1">{t.contact.addressLabel}</h3>
+                <p className="text-base text-bg-inverse/80 md:text-lg max-w-sm">{clinicData.address}</p>
+              </div>
+
+              {/* EMAIL */}
+              <div>
+                <h3 className="text-xs uppercase tracking-widest text-bg-inverse/40 mb-1">{t.contact.emailLabel}</h3>
+                <a
+                  href={`mailto:${clinicData.email}`}
+                  className="text-base text-bg-inverse/80 transition-colors hover:text-accent md:text-lg"
+                >
+                  {clinicData.email}
+                </a>
+              </div>
+
+              {/* CTAs */}
+              <div className="mt-4 flex flex-col gap-4 sm:flex-row">
+                <a
+                  href={`tel:${clinicData.phone.replace(/\D/g, '')}`}
+                  className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-accent px-6 py-4 text-base font-semibold text-bg-dark transition-transform hover:scale-105 active:scale-95 sm:w-auto"
+                >
+                  <Phone className="size-5" />
+                  {t.contact.callNow}
+                </a>
+                <a
+                  href={`https://maps.google.com/?q=${encodeURIComponent(clinicData.address)}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex w-full items-center justify-center gap-2 rounded-full border border-accent/20 bg-bg-dark px-6 py-4 text-base font-semibold text-bg-inverse transition-colors hover:bg-accent/10 sm:w-auto"
+                >
+                  <MapPin className="size-5" />
+                  {t.contact.getDirections}
+                </a>
               </div>
             </div>
           </div>

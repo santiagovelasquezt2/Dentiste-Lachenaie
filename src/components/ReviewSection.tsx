@@ -24,10 +24,10 @@ export const ReviewSection: React.FC = () => {
                 <Star className="h-4 w-4 fill-current" />
               </div>
               <div className="min-w-0">
-                <p className="font-nav text-[10px] uppercase tracking-[0.22em] text-bg-inverse/45">
+                <p className="text-nav text-bg-inverse/45">
                   Google
                 </p>
-                <p className="truncate text-sm font-medium text-bg-inverse">
+                <p className="truncate text-base font-medium text-bg-inverse">
                   {t.reviews.googleCta}
                 </p>
               </div>
@@ -46,10 +46,10 @@ export const ReviewSection: React.FC = () => {
                 <Facebook className="h-4 w-4 text-accent" />
               </div>
               <div className="min-w-0">
-                <p className="font-nav text-[10px] uppercase tracking-[0.22em] text-bg-inverse/45">
+                <p className="text-nav text-bg-inverse/45">
                   Facebook
                 </p>
-                <p className="truncate text-sm font-medium text-bg-inverse">
+                <p className="truncate text-base font-medium text-bg-inverse">
                   {t.reviews.facebookCta}
                 </p>
               </div>

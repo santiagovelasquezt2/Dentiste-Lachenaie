@@ -240,7 +240,7 @@ export const ServicesSection: React.FC = () => {
     >
       <div className="sticky top-0 h-screen w-full flex flex-col justify-center overflow-hidden">
         <div className="container mx-auto px-6 mb-12">
-          <h2 className="text-section-title text-bg-inverse font-bold">
+          <h2 className="text-section-title font-heading font-semibold text-bg-inverse">
             {t.services.title}
           </h2>
         </div>
@@ -259,17 +259,15 @@ export const ServicesSection: React.FC = () => {
               <div className="w-16 h-16 bg-accent/20 rounded-2xl flex items-center justify-center text-accent group-hover:bg-accent group-hover:text-bg-dark transition-colors duration-300">
                 {serviceIcons[service.id] || <Sparkles className="w-6 h-6" />}
               </div>
-              <h3 className="text-2xl md:text-3xl font-heading font-bold text-text group-hover:text-accent transition-colors">
+              <h3 className="text-card-title md:text-3xl font-heading font-semibold text-text group-hover:text-accent transition-colors">
                 {t.services.items[service.id as keyof typeof t.services.items]}
               </h3>
-              <p className="text-text-light leading-relaxed">
-                {language === 'fr'
-                  ? 'Soins spécialisés et personnalisés pour votre santé buccodentaire.'
-                  : 'Specialized, personalized care for your oral health.'}
+              <p className="text-base leading-relaxed text-text-light">
+                {t.services.cardTeaser}
               </p>
               <div className="mt-auto pt-8 border-t border-bg-alt flex items-center justify-between">
-                <span className="text-nav text-accent font-bold">
-                  {language === 'fr' ? 'En savoir plus' : 'Learn More'}
+                <span className="text-nav text-accent/90">
+                  {t.services.learnMore}
                 </span>
                 <div className="w-10 h-10 border border-accent rounded-full flex items-center justify-center group-hover:bg-accent group-hover:text-bg-dark transition-all">
                   <ChevronRight className="w-5 h-5" />
@@ -310,47 +308,47 @@ export const ServicesSection: React.FC = () => {
                       {activeServiceData.icon}
                     </div>
                     <div>
-                      <p className="text-nav text-accent font-bold mb-2">
+                      <p className="mb-2 text-nav text-accent/90">
                         {activeServiceData.eyebrow}
                       </p>
-                      <h3 id="service-modal-title" className="text-3xl md:text-4xl font-bold text-text">
+                      <h3 id="service-modal-title" className="text-3xl md:text-4xl font-heading font-semibold leading-tight tracking-tight text-text">
                         {activeServiceData.title}
                       </h3>
                     </div>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => setActiveService(null)}
+                      className="w-11 h-11 rounded-full border border-bg-alt text-text-light flex items-center justify-center hover:bg-bg-alt transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+                      aria-label={t.services.closeDialog}
+                    >
+                      <X className="w-5 h-5" />
+                    </button>
                   </div>
-                  <button
-                    type="button"
-                    onClick={() => setActiveService(null)}
-                    className="w-11 h-11 rounded-full border border-bg-alt text-text-light flex items-center justify-center hover:bg-bg-alt transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
-                    aria-label={language === 'fr' ? 'Fermer la fenêtre' : 'Close dialog'}
-                  >
-                    <X className="w-5 h-5" />
-                  </button>
-                </div>
 
                 <div className="mt-8 grid gap-8 md:grid-cols-[1.2fr_0.8fr]">
                   <div className="space-y-6">
-                    <p id="service-modal-description" className="text-lg text-text-light leading-relaxed">
+                    <p id="service-modal-description" className="text-base md:text-lg text-text-light leading-relaxed">
                       {activeServiceData.description}
                     </p>
                     <div className="flex flex-wrap gap-3">
                       <a
                         href="#appointment"
                         onClick={() => setActiveService(null)}
-                        className="inline-flex items-center justify-center rounded-full bg-accent px-6 py-3 font-nav uppercase tracking-widest text-bg-dark transition-transform hover:scale-[1.02]"
+                        className="inline-flex items-center justify-center rounded-full bg-accent px-6 py-3 text-sm font-nav uppercase tracking-[0.15em] text-bg-dark transition-transform hover:scale-[1.02]"
                       >
-                        {language === 'fr' ? 'Prendre rendez-vous' : 'Book appointment'}
+                        {t.services.bookAppointment}
                       </a>
                     </div>
                   </div>
 
                   <div className="rounded-[1.5rem] bg-bg-alt p-6">
-                    <p className="text-nav text-text/60 font-bold mb-4">
-                      {language === 'fr' ? 'Ce que vous obtenez' : 'What to expect'}
+                    <p className="mb-4 text-nav text-text/60">
+                      {t.services.whatToExpect}
                     </p>
                     <ul className="space-y-4">
                       {activeServiceData.highlights.map((highlight) => (
-                        <li key={highlight} className="flex gap-3 text-text-light leading-relaxed">
+                        <li key={highlight} className="flex gap-3 text-sm md:text-base text-text-light leading-relaxed">
                           <ArrowRight className="w-5 h-5 text-accent shrink-0 mt-0.5" />
                           <span>{highlight}</span>
                         </li>

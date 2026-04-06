@@ -15,19 +15,18 @@ const TARGET_DISPLAY_AREA_PX2 = 238_473;
 
 type AboutImage = {
   src: string;
-  alt: string;
   intrinsicW: number;
   intrinsicH: number;
 };
 
 const images: AboutImage[] = [
-  { src: about01, alt: "Patient smile", intrinsicW: 1024, intrinsicH: 683 },
-  { src: about02, alt: "Dental practice", intrinsicW: 425, intrinsicH: 650 },
-  { src: about03, alt: "Dental care", intrinsicW: 648, intrinsicH: 926 },
-  { src: about04, alt: "Clinic", intrinsicW: 743, intrinsicH: 926 },
-  { src: about05, alt: "Treatment", intrinsicW: 891, intrinsicH: 926 },
-  { src: about06, alt: "Dental team", intrinsicW: 736, intrinsicH: 926 },
-  { src: about07, alt: "Dentist with patient", intrinsicW: 2048, intrinsicH: 1365 }
+  { src: about01, intrinsicW: 1024, intrinsicH: 683 },
+  { src: about02, intrinsicW: 425, intrinsicH: 650 },
+  { src: about03, intrinsicW: 648, intrinsicH: 926 },
+  { src: about04, intrinsicW: 743, intrinsicH: 926 },
+  { src: about05, intrinsicW: 891, intrinsicH: 926 },
+  { src: about06, intrinsicW: 736, intrinsicH: 926 },
+  { src: about07, intrinsicW: 2048, intrinsicH: 1365 }
 ];
 
 function equalAreaWidthPx(w: number, h: number): number {
@@ -36,9 +35,11 @@ function equalAreaWidthPx(w: number, h: number): number {
 
 const AboutImageFrame = ({
   image,
+  alt,
   side
 }: {
   image: AboutImage;
+  alt: string;
   side: "start" | "end";
 }) => {
   const widthPx = equalAreaWidthPx(image.intrinsicW, image.intrinsicH);
@@ -52,7 +53,7 @@ const AboutImageFrame = ({
     >
       <img
         src={image.src}
-        alt={image.alt}
+        alt={alt}
         width={image.intrinsicW}
         height={image.intrinsicH}
         className="h-full w-full object-contain"
@@ -80,10 +81,10 @@ const TextBlock = ({ title, content, isLeft }: { title: string, content: React.R
       <div className="mb-6 text-text">
         <CheckSquare className="w-10 h-10 stroke-[1.5]" />
       </div>
-      <h3 className="text-3xl md:text-4xl font-heading font-normal text-text mb-6">
+      <h3 className="text-title mb-6 text-text">
         {firstWord} <span className="text-accent font-bold">{restOfTitle}</span>
       </h3>
-      <div className="space-y-4 text-text-light leading-relaxed text-lg">
+      <div className="text-body-lg space-y-4 text-text-light">
         {content}
       </div>
     </div>
@@ -110,7 +111,7 @@ export const AboutSection: React.FC = () => {
         
         {/* Background "SINCE 2000" Text */}
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-0">
-          <span className="text-[11vw] font-heading font-bold text-black/10 whitespace-nowrap select-none">
+          <span className="font-heading whitespace-nowrap select-none text-[clamp(4.5rem,11vw,10rem)] font-semibold tracking-[-0.07em] text-black/10">
             {t.about.since}
           </span>
         </div>
@@ -120,7 +121,7 @@ export const AboutSection: React.FC = () => {
           className="absolute top-full w-full max-w-5xl px-6 flex flex-col gap-24 pt-[10vh] pb-[100vh] z-10"
         >
           {/* Image 1 */}
-          <AboutImageFrame image={images[0]} side="start" />
+          <AboutImageFrame image={images[0]} alt={t.about.images.patientSmile} side="start" />
 
           {/* Text Block 1: Goal */}
           <TextBlock 
@@ -130,8 +131,8 @@ export const AboutSection: React.FC = () => {
           />
 
           {/* Image 2 & 3 */}
-          <AboutImageFrame image={images[1]} side="end" />
-          <AboutImageFrame image={images[2]} side="start" />
+          <AboutImageFrame image={images[1]} alt={t.about.images.dentalPractice} side="end" />
+          <AboutImageFrame image={images[2]} alt={t.about.images.dentalCare} side="start" />
 
           {/* Text Block 2: Commitment */}
           <TextBlock 
@@ -146,8 +147,8 @@ export const AboutSection: React.FC = () => {
           />
 
           {/* Image 4 & 5 */}
-          <AboutImageFrame image={images[3]} side="end" />
-          <AboutImageFrame image={images[4]} side="start" />
+          <AboutImageFrame image={images[3]} alt={t.about.images.clinic} side="end" />
+          <AboutImageFrame image={images[4]} alt={t.about.images.treatment} side="start" />
 
           {/* Text Block 3: Promise */}
           <TextBlock 
@@ -162,8 +163,8 @@ export const AboutSection: React.FC = () => {
           />
 
           {/* Image 6 & 7 */}
-          <AboutImageFrame image={images[5]} side="end" />
-          <AboutImageFrame image={images[6]} side="start" />
+          <AboutImageFrame image={images[5]} alt={t.about.images.dentalTeam} side="end" />
+          <AboutImageFrame image={images[6]} alt={t.about.images.dentistWithPatient} side="start" />
 
         </motion.div>
       </div>

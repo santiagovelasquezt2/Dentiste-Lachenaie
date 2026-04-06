@@ -1,60 +1,105 @@
 import React from 'react';
+import { motion, type Variants } from 'framer-motion';
 import clinicExteriorHero from '@/DentalContent/Images/Ouside of the building/clinic-exterior-front-signage-01.jpg';
-import clinicLogo from '@/DentalContent/Images/Logo/clinic-logo-primary.png';
 import { useLanguage } from '../context/LanguageContext';
 import { Button } from './Button';
-import { clinicData } from '../content/clinic';
+import { Play } from 'lucide-react';
 
 export const Hero: React.FC = () => {
   const { t } = useLanguage();
 
+  const containerVariants: Variants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.15,
+        delayChildren: 0.2,
+      },
+    },
+  };
+
+  const itemVariants: Variants = {
+    hidden: { opacity: 0, y: 30 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.8,
+        ease: [0.16, 1, 0.3, 1] as const,
+      },
+    },
+  };
+
   return (
-    <section id="hero" className="relative min-h-[100svh] flex flex-col items-center justify-center bg-bg-dark text-bg-inverse overflow-hidden pt-20">
-      {/* Background Image (Exterior) */}
-      <div className="absolute inset-0 opacity-40">
+    <section id="hero" className="relative min-h-screen flex flex-col lg:flex-row bg-[#fafbfa] overflow-hidden">
+      {/* Left Side: Content */}
+      <div className="flex-1 flex flex-col justify-center px-8 sm:px-16 lg:px-24 py-32 lg:py-0 z-10">
+        <motion.div
+          variants={containerVariants}
+          initial="hidden"
+          animate="visible"
+          className="max-w-xl"
+        >
+          <motion.h1 
+            variants={itemVariants}
+            className="text-5xl sm:text-6xl lg:text-7xl font-heading font-bold text-gray-900 leading-[1.1] tracking-tight mb-12"
+          >
+            {t.logoVideo.quote}
+          </motion.h1>
+
+          <motion.p 
+            variants={itemVariants}
+            className="text-lg sm:text-xl text-gray-600 mb-16 max-w-md leading-relaxed font-medium"
+          >
+            {t.hero.body}
+          </motion.p>
+
+          <motion.div variants={itemVariants}>
+            <Button 
+              size="lg" 
+              pill={true}
+              onClick={() => window.location.href = '#appointment'}
+              className="bg-[#b0d64e] text-white hover:bg-[#9cbd42] transition-all duration-300 px-12 py-7 text-lg font-bold shadow-lg shadow-[#b0d64e]/20"
+            >
+              {t.firstVisit.button}
+            </Button>
+          </motion.div>
+        </motion.div>
+      </div>
+
+      {/* Right Side: Image */}
+      <div className="flex-1 relative min-h-[50vh] lg:min-h-screen">
+        <div className="absolute inset-0 z-10 bg-gradient-to-r from-[#fafbfa] via-transparent to-transparent hidden lg:block w-32" />
         <img
           src={clinicExteriorHero}
-          alt=""
-          className="w-full h-full object-cover object-center"
+          alt="Clinic Exterior"
+          className="absolute inset-0 w-full h-full object-cover"
         />
       </div>
 
-      <div className="container mx-auto px-6 relative z-10 text-center flex flex-col items-center gap-8 -translate-y-12 md:-translate-y-24">
-        <h1 className="flex justify-center items-center max-w-6xl w-full px-6 py-6 sm:px-10 sm:py-8 md:py-10 bg-white text-bg-dark rounded-[2rem] shadow-lg ring-1 ring-black/10">
-          <span className="sr-only">{t.hero.tagline}</span>
-          <img
-            src={clinicLogo}
-            alt=""
-            width={900}
-            height={260}
-            decoding="async"
-            className="w-full max-w-[min(56rem,calc(100vw-3rem))] h-auto object-contain object-center [filter:drop-shadow(0_1px_2px_rgb(0_0_0/0.12))]"
-          />
-        </h1>
-
-        <p className="text-xl md:text-2xl font-body text-bg-inverse/80 max-w-2xl">
-          {t.hero.body}
-        </p>
-
-        <div className="flex flex-col sm:flex-row items-center gap-4 mt-8">
-          <Button size="lg" onClick={() => window.location.href = '#appointment'}>
-            {t.hero.cta}
-          </Button>
-          <a
-            href={`tel:${clinicData.phone.replace(/\D/g, '')}`}
-            className="text-xl font-mono text-accent hover:text-accent-dark transition-colors"
-          >
-            {clinicData.phone}
-          </a>
+      {/* Center Overlay: Video/Action */}
+      <motion.div 
+        initial={{ opacity: 0, scale: 0.8, x: '-50%', y: '-50%' }}
+        animate={{ opacity: 1, scale: 1, x: '-50%', y: '-50%' }}
+        transition={{ delay: 0.8, duration: 0.6 }}
+        className="absolute top-1/2 left-1/2 lg:left-1/2 -translate-x-1/2 -translate-y-1/2 z-20 hidden md:block"
+      >
+        <div className="relative group cursor-pointer">
+          <div className="w-64 h-48 sm:w-80 sm:h-60 bg-white/30 backdrop-blur-md rounded-3xl overflow-hidden shadow-[0_32px_64px_-12px_rgba(0,0,0,0.15)] ring-1 ring-white/50">
+             <img 
+               src={clinicExteriorHero} 
+               alt="Video Preview" 
+               className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+             />
+             <div className="absolute inset-0 flex items-center justify-center bg-black/10 transition-colors duration-300 group-hover:bg-transparent">
+                <div className="w-16 h-16 bg-[#b0d64e]/95 backdrop-blur-sm rounded-full flex items-center justify-center text-white group-hover:scale-110 transition-transform duration-300 shadow-lg">
+                  <Play fill="currentColor" size={24} className="ml-1" />
+                </div>
+             </div>
+          </div>
         </div>
-      </div>
-
-      {/* Scroll Indicator */}
-      <div className="absolute bottom-10 left-1/2 -translate-x-1/2 animate-bounce">
-        <div className="w-6 h-10 border-2 border-accent/30 rounded-full flex justify-center p-1">
-          <div className="w-1 h-2 bg-accent rounded-full" />
-        </div>
-      </div>
+      </motion.div>
     </section>
   );
 };

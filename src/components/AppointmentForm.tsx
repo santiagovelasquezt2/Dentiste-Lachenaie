@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { useLanguage } from '../context/LanguageContext';
 import { Button } from './Button';
-import { cn } from '../lib/utils';
 
 export const AppointmentForm: React.FC = () => {
   const { t } = useLanguage();
@@ -15,13 +14,13 @@ export const AppointmentForm: React.FC = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const subject = `Demande de rendez-vous: ${formData.name}`;
+    const subject = `${t.appointment.subjectPrefix}: ${formData.name}`;
     const body = `
-      Nom: ${formData.name}
-      Email: ${formData.email}
-      Téléphone: ${formData.phone}
-      Date souhaitée: ${formData.date}
-      Raison: ${formData.reason}
+      ${t.appointment.bodyName}: ${formData.name}
+      ${t.appointment.bodyEmail}: ${formData.email}
+      ${t.appointment.bodyPhone}: ${formData.phone}
+      ${t.appointment.bodyDate}: ${formData.date}
+      ${t.appointment.bodyReason}: ${formData.reason}
     `;
     window.location.href = `mailto:info@dentistelachenaie.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
   };
@@ -33,8 +32,8 @@ export const AppointmentForm: React.FC = () => {
           <h2 className="text-section-title font-bold text-text mb-4">
             {t.appointment.title}
           </h2>
-          <p className="text-lg text-text-light">
-            Remplissez le formulaire ci-dessous et nous vous contacterons sous peu.
+          <p className="text-body-lg text-text-light">
+            {t.appointment.intro}
           </p>
         </div>
 
@@ -45,8 +44,8 @@ export const AppointmentForm: React.FC = () => {
               <input 
                 required
                 type="text"
-                placeholder="Jean Dupont"
-                className="bg-bg-alt border-none rounded-full px-6 py-4 focus:ring-2 focus:ring-accent outline-none transition-all"
+                placeholder={t.appointment.placeholderName}
+                className="text-body bg-bg-alt rounded-full border-none px-6 py-4 placeholder:text-text-light/60 focus:ring-2 focus:ring-accent outline-none transition-all"
                 value={formData.name}
                 onChange={(e) => setFormData({...formData, name: e.target.value})}
               />
@@ -56,8 +55,8 @@ export const AppointmentForm: React.FC = () => {
               <input 
                 required
                 type="email"
-                placeholder="jean@exemple.com"
-                className="bg-bg-alt border-none rounded-full px-6 py-4 focus:ring-2 focus:ring-accent outline-none transition-all"
+                placeholder={t.appointment.placeholderEmail}
+                className="text-body bg-bg-alt rounded-full border-none px-6 py-4 placeholder:text-text-light/60 focus:ring-2 focus:ring-accent outline-none transition-all"
                 value={formData.email}
                 onChange={(e) => setFormData({...formData, email: e.target.value})}
               />
@@ -70,8 +69,8 @@ export const AppointmentForm: React.FC = () => {
               <input 
                 required
                 type="tel"
-                placeholder="(450) 000-0000"
-                className="bg-bg-alt border-none rounded-full px-6 py-4 focus:ring-2 focus:ring-accent outline-none transition-all"
+                placeholder={t.appointment.placeholderPhone}
+                className="text-body bg-bg-alt rounded-full border-none px-6 py-4 placeholder:text-text-light/60 focus:ring-2 focus:ring-accent outline-none transition-all"
                 value={formData.phone}
                 onChange={(e) => setFormData({...formData, phone: e.target.value})}
               />
@@ -81,7 +80,7 @@ export const AppointmentForm: React.FC = () => {
               <input 
                 required
                 type="date"
-                className="bg-bg-alt border-none rounded-full px-6 py-4 focus:ring-2 focus:ring-accent outline-none transition-all"
+                className="text-body bg-bg-alt rounded-full border-none px-6 py-4 focus:ring-2 focus:ring-accent outline-none transition-all"
                 value={formData.date}
                 onChange={(e) => setFormData({...formData, date: e.target.value})}
               />
@@ -92,8 +91,8 @@ export const AppointmentForm: React.FC = () => {
             <label className="text-nav text-text/60 ml-4">{t.appointment.reason}</label>
             <textarea 
               rows={4}
-              placeholder="Décrivez brièvement la raison de votre visite..."
-              className="bg-bg-alt border-none rounded-3xl px-6 py-4 focus:ring-2 focus:ring-accent outline-none transition-all resize-none"
+              placeholder={t.appointment.placeholderReason}
+              className="text-body bg-bg-alt resize-none rounded-3xl border-none px-6 py-4 placeholder:text-text-light/60 focus:ring-2 focus:ring-accent outline-none transition-all"
               value={formData.reason}
               onChange={(e) => setFormData({...formData, reason: e.target.value})}
             />

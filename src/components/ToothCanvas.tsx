@@ -2,18 +2,12 @@ import React, { Suspense, useLayoutEffect, useRef } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { useGLTF, Environment } from '@react-three/drei';
 import * as THREE from 'three';
+import { useLanguage } from '../context/LanguageContext';
 
-const POINTER_TILT_X = 0.19;
-const POINTER_TILT_Y = 0.23;
-const POINTER_GAIN = 2.35;
-const POINTER_SMOOTH = 22;
-
-function MolarModel({ url, hoverRef }: { url: string; hoverRef: React.MutableRefObject<boolean> }) {
+function MolarModel({ url }: { url: string }) {
   const { scene } = useGLTF(url);
   const groupRef = useRef<THREE.Group>(null);
   const spinRef = useRef(0);
-  const tiltXRef = useRef(0);
-  const tiltYRef = useRef(0);
 
   useLayoutEffect(() => {
     scene.traverse((obj) => {
@@ -27,23 +21,13 @@ function MolarModel({ url, hoverRef }: { url: string; hoverRef: React.MutableRef
     });
   }, [scene]);
 
-  useFrame((state, delta) => {
+  useFrame((_, delta) => {
     const g = groupRef.current;
     if (!g) return;
 
-    const { pointer } = state;
-    const over = hoverRef.current ?? false;
-    const px = over ? THREE.MathUtils.clamp(pointer.x * POINTER_GAIN, -1, 1) : 0;
-    const py = over ? THREE.MathUtils.clamp(pointer.y * POINTER_GAIN, -1, 1) : 0;
-    const targetX = -py * POINTER_TILT_X;
-    const targetY = -px * POINTER_TILT_Y;
-    const t = Math.min(1, POINTER_SMOOTH * delta);
-    tiltXRef.current = THREE.MathUtils.lerp(tiltXRef.current, targetX, t);
-    tiltYRef.current = THREE.MathUtils.lerp(tiltYRef.current, targetY, t);
-
     spinRef.current += delta * 0.3924;
-    g.rotation.x = tiltXRef.current;
-    g.rotation.y = spinRef.current + tiltYRef.current;
+    g.rotation.x = 0;
+    g.rotation.y = spinRef.current;
   });
 
   return (
@@ -54,8 +38,8 @@ function MolarModel({ url, hoverRef }: { url: string; hoverRef: React.MutableRef
 }
 
 // Error Boundary Component
-class ErrorBoundary extends React.Component<{ children: React.ReactNode }, { hasError: boolean }> {
-  constructor(props: { children: React.ReactNode }) {
+class ErrorBoundary extends React.Component<{ children: React.ReactNode; fallbackLabel: string }, { hasError: boolean }> {
+  constructor(props: { children: React.ReactNode; fallbackLabel: string }) {
     super(props);
     this.state = { hasError: false };
   }
@@ -68,7 +52,7 @@ class ErrorBoundary extends React.Component<{ children: React.ReactNode }, { has
     if (this.state.hasError) {
       return (
         <div className="flex items-center justify-center h-full w-full bg-bg-alt rounded-3xl border-2 border-dashed border-accent/20">
-          <p className="text-accent font-nav uppercase tracking-widest">3D Preview Unavailable</p>
+          <p className="text-accent font-nav uppercase tracking-[0.18em]">{this.props.fallbackLabel}</p>
         </div>
       );
     }
@@ -77,19 +61,13 @@ class ErrorBoundary extends React.Component<{ children: React.ReactNode }, { has
 }
 
 export const ToothCanvas: React.FC = () => {
-  const hoverRef = useRef(false);
+  const { t } = useLanguage();
 
   return (
-    <ErrorBoundary>
+    <ErrorBoundary fallbackLabel={t.tooth3d.previewUnavailable}>
       <Canvas
         camera={{ position: [0, 0, 12.45], fov: 45 }}
         className="h-full w-full touch-none"
-        onPointerEnter={() => {
-          hoverRef.current = true;
-        }}
-        onPointerLeave={() => {
-          hoverRef.current = false;
-        }}
       >
         <hemisphereLight color="#f2f5f7" groundColor="#2a2520" intensity={0.55} />
         <ambientLight intensity={0.35} />
@@ -97,7 +75,7 @@ export const ToothCanvas: React.FC = () => {
         <pointLight position={[-6, 4, 6]} intensity={0.35} />
         
         <Suspense fallback={null}>
-          <MolarModel url="/models/molar_tooth.glb" hoverRef={hoverRef} />
+          <MolarModel url="/models/molar_tooth.glb" />
           <Environment preset="city" environmentIntensity={0.72} />
         </Suspense>
       </Canvas>

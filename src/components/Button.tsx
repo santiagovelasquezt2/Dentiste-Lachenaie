@@ -21,15 +21,15 @@ export const Button: React.FC<ButtonProps> = ({
   };
 
   const sizes = {
-    sm: 'px-4 py-2 text-sm',
-    md: 'px-6 py-3 text-base',
-    lg: 'px-8 py-4 text-lg',
+    sm: 'px-4 py-2.5',
+    md: 'px-6 py-3.5',
+    lg: 'px-8 py-4',
   };
 
   return (
     <button
       className={cn(
-        'inline-flex items-center justify-center font-nav uppercase tracking-widest transition-all duration-300 active:scale-95 disabled:opacity-50 disabled:pointer-events-none',
+        'text-button inline-flex items-center justify-center transition-all duration-300 active:scale-95 disabled:pointer-events-none disabled:opacity-50',
         variants[variant],
         sizes[size],
         pill ? 'rounded-full' : 'rounded-md',

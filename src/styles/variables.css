@@ -1,22 +1,21 @@
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Josefin+Sans:ital,wght@0,100..700;1,100..700&family=Syne:wght@400..800&family=Syne+Mono&display=swap');
-
 @theme {
   /* Colors */
-  --color-accent: #B0D64E;
-  --color-accent-dark: #9cbd42;
+  --color-accent: #D1E8D1;
+  --color-accent-dark: #B8D1B8;
   --color-bg: #FFFFFF;
   --color-bg-alt: #F4F4F4;
-  --color-bg-dark: #333333;
+  --color-bg-dark: #0A1A14;
   --color-bg-inverse: #FFFFFF;
-  --color-text: #333333;
-  --color-text-light: #666666;
+  --color-text: #0A1A14;
+  --color-text-light: #4A5A54;
   --color-text-inverse: #FFFFFF;
 
   /* Typography */
-  --font-heading: 'Syne', sans-serif;
-  --font-nav: 'Josefin Sans', sans-serif;
-  --font-body: 'DM Sans', sans-serif;
-  --font-mono: 'Syne Mono', monospace;
+  --font-sans: 'Geist Variable', 'Geist', -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Segoe UI', sans-serif;
+  --font-heading: 'Geist Variable', 'Geist', sans-serif;
+  --font-nav: var(--font-sans);
+  --font-body: var(--font-sans);
+  --font-mono: ui-monospace, SFMono-Regular, SF Mono, Menlo, Monaco, Consolas, monospace;
 }
 
 :root {
@@ -51,4 +50,3 @@
   --start-transform: translateY(20vmin);
   --end-transform: translateY(-20vmin);
 }
-
