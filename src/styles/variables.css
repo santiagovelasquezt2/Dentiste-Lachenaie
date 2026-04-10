@@ -1,10 +1,24 @@
 @theme {
   /* Colors */
+  /**
+   * Brand lime — primary vibrant green (#B0D64E). Use for bold brand surfaces,
+   * hero/map accents, and high-energy CTAs. Softer `--color-accent` stays for
+   * large mint-tinted UI fills where full lime would overwhelm.
+   */
+  --color-brand-lime: #B0D64E;
   --color-accent: #D1E8D1;
   --color-accent-dark: #B8D1B8;
+  /**
+   * Mint surface — soft sage for large sections (contact, etc.). Keeps the
+   * lime family without full saturation; pairs with brand-lime accents.
+   */
+  --color-mint-surface: #E6EFE3;
+  --color-mint-surface-deep: #DCE8DD;
   --color-bg: #FFFFFF;
   --color-bg-alt: #F4F4F4;
   --color-bg-dark: #0A1A14;
+  /** Neutral charcoal for dark UI blocks (e.g. Teams-style surfaces) */
+  --color-bg-teams: #252423;
   --color-bg-inverse: #FFFFFF;
   --color-text: #0A1A14;
   --color-text-light: #4A5A54;

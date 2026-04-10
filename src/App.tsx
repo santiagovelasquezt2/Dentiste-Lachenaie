@@ -3,8 +3,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { motion, useScroll, useSpring } from 'framer-motion';
+import { isHoursHash, scrollToHoursSection } from './lib/scrollToHours';
 import { LanguageProvider } from './context/LanguageContext';
 import { Nav } from './components/Nav';
 import { Hero } from './components/Hero';
@@ -28,6 +29,14 @@ export default function App() {
     damping: 30,
     restDelta: 0.001
   });
+
+  useEffect(() => {
+    const hash = window.location.hash;
+    if (!isHoursHash(hash)) return;
+
+    const run = () => scrollToHoursSection('instant');
+    requestAnimationFrame(() => requestAnimationFrame(run));
+  }, []);
 
   return (
     <LanguageProvider>

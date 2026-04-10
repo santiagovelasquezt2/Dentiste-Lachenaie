@@ -3,12 +3,84 @@ import { motion, useScroll, useTransform } from 'framer-motion';
 import { MapPin } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 import { clinicData } from '../content/clinic';
+import { useMediaQuery } from '../hooks/useMediaQuery';
 import { HoursContourPattern } from './HoursContourPattern';
 
 const lerp = (start: number, end: number, progress: number) => start + (end - start) * progress;
 
 export const HoursSection: React.FC = () => {
   const { t } = useLanguage();
+  const isMobile = useMediaQuery('(max-width: 1023px)');
+
+  if (isMobile) {
+    return <HoursSectionMobile t={t} />;
+  }
+
+  return <HoursSectionDesktop t={t} />;
+};
+
+const HoursSectionMobile = ({ t }: { t: ReturnType<typeof useLanguage>['t'] }) => {
+  const days = [
+    { key: 'monday', label: t.hours.monday },
+    { key: 'tuesday', label: t.hours.tuesday },
+    { key: 'wednesday', label: t.hours.wednesday },
+    { key: 'thursday', label: t.hours.thursday },
+    { key: 'friday', label: t.hours.friday },
+    { key: 'saturday', label: t.hours.saturday },
+    { key: 'sunday', label: t.hours.sunday },
+  ];
+
+  return (
+    <section id="hours" className="relative scroll-mt-24 overflow-hidden bg-[#E7F1E3] py-20">
+      <div id="hours-card" className="pointer-events-none absolute top-0 h-px w-full scroll-mt-24" aria-hidden />
+
+      <div className="pointer-events-none absolute inset-0" aria-hidden>
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.42),transparent_56%)]" />
+        <HoursContourPattern className="hours-pattern hours-pattern-slow absolute inset-[-12%] h-[124%] w-[124%] stroke-[#17352D]/10 stroke-[2] fill-none" />
+      </div>
+
+      <div className="container relative z-10 mx-auto px-4 sm:px-6">
+        <div className="mx-auto max-w-3xl overflow-hidden rounded-[2rem] bg-white text-[#17352D] shadow-[0_24px_70px_rgba(2,33,24,0.14)] ring-1 ring-black/5">
+          <div className="bg-[linear-gradient(135deg,rgba(196,228,109,0.98),rgba(176,214,78,0.98)_42%,rgba(140,176,55,1))] px-6 py-10 text-[#17352D]">
+            <p className="text-nav text-[#17352D]/60">{t.hours.scheduleLabel}</p>
+            <h2 className="mt-4 text-section-title font-heading font-semibold leading-[0.98] tracking-[-0.04em] text-[#17352D]">
+              {t.hours.cardTitle}
+            </h2>
+            <p className="mt-4 text-base leading-relaxed text-[#17352D]/78">{t.hours.description}</p>
+          </div>
+
+          <div className="space-y-8 p-6">
+            <div className="flex items-start gap-3 rounded-[1.25rem] border border-black/5 bg-[#FAFAF7] px-5 py-4 text-left shadow-[0_1px_0_rgba(255,255,255,0.9)_inset]">
+              <MapPin className="mt-0.5 h-5 w-5 shrink-0 text-[#B0D64E]" />
+              <span className="text-base leading-relaxed text-[#17352D]">{clinicData.address}</span>
+            </div>
+
+            <div className="space-y-4">
+              {days.map((day) => {
+                const value = clinicData.hours[day.key as keyof typeof clinicData.hours];
+                const displayValue = value === 'Fermé' || value === 'Closed' ? t.hours.closed : value;
+
+                return (
+                  <div
+                    key={day.key}
+                    className="grid grid-cols-[minmax(0,1fr)_auto] items-start gap-4 border-b border-[#17352D]/10 pb-4"
+                  >
+                    <span className="min-w-0 text-base font-medium text-[#17352D]">{day.label}</span>
+                    <span className="max-w-[11rem] justify-self-end break-words text-right font-body text-sm leading-relaxed tabular-nums text-[#17352D]">
+                      {displayValue}
+                    </span>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+const HoursSectionDesktop = ({ t }: { t: ReturnType<typeof useLanguage>['t'] }) => {
   const containerRef = useRef<HTMLElement>(null);
   const viewportRef = useRef<HTMLDivElement>(null);
   const [viewportSize, setViewportSize] = useState({ width: 1, height: 1, rootFontSize: 16 });
@@ -78,7 +150,6 @@ export const HoursSection: React.FC = () => {
     { clamp: false }
   );
 
-  /** Full-screen green panel reaches 100vw / 100dvh at ~0.48; hold title until then, then fade. */
   const hoursOverlayOpacity = useTransform(scrollYProgress, [0, 0.48, 0.54, 1], [1, 1, 0, 0], { clamp: false });
 
   const contentOpacity = useTransform(scrollYProgress, (v) => {
@@ -92,7 +163,6 @@ export const HoursSection: React.FC = () => {
     if (v >= 0.8) return 1;
     return (v - 0.74) / 0.06;
   });
-
   const days = [
     { key: 'monday', label: t.hours.monday },
     { key: 'tuesday', label: t.hours.tuesday },
@@ -107,7 +177,7 @@ export const HoursSection: React.FC = () => {
     <section
       ref={containerRef}
       id="hours"
-      className="relative h-[320vh] overflow-clip bg-[#E7F1E3]"
+      className="relative h-[320vh] scroll-mt-24 overflow-clip bg-[#E7F1E3]"
     >
       <div ref={viewportRef} className="sticky top-0 h-[100dvh] overflow-hidden">
         <div className="absolute inset-0 bg-[#E7F1E3]" />
@@ -167,9 +237,7 @@ export const HoursSection: React.FC = () => {
 
                   <div className="mt-8 flex items-start gap-3 rounded-[1.25rem] border border-black/5 bg-[#FAFAF7] px-5 py-4 text-left shadow-[0_1px_0_rgba(255,255,255,0.9)_inset]">
                     <MapPin className="mt-0.5 h-5 w-5 shrink-0 text-[#B0D64E]" />
-                    <span className="text-base leading-relaxed text-[#17352D]">
-                      {clinicData.address}
-                    </span>
+                    <span className="text-base leading-relaxed text-[#17352D]">{clinicData.address}</span>
                   </div>
                 </div>
               </div>
@@ -185,10 +253,8 @@ export const HoursSection: React.FC = () => {
                         key={day.key}
                         className="flex items-center justify-between gap-6 border-b border-[#17352D]/10 pb-4"
                       >
-                        <span className="text-lg font-medium text-[#17352D] md:text-xl">
-                          {day.label}
-                        </span>
-                        <span className="text-right font-body tabular-nums text-base text-[#17352D] md:text-lg">
+                        <span className="text-lg font-medium text-[#17352D] md:text-xl">{day.label}</span>
+                        <span className="text-right font-body text-base tabular-nums text-[#17352D] md:text-lg">
                           {displayValue}
                         </span>
                       </div>
@@ -200,10 +266,9 @@ export const HoursSection: React.FC = () => {
           </motion.div>
         </motion.div>
       </div>
-      {/* Nav target: lands at the point where the full hours card is in view, skipping the early reveal state. */}
       <div
         id="hours-card"
-        className="pointer-events-none absolute left-0 h-px w-full"
+        className="pointer-events-none absolute left-0 h-px w-full scroll-mt-24"
         style={{ top: '176vh' }}
         aria-hidden
       />

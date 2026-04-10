@@ -2,6 +2,7 @@ import React, { useRef } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { useLanguage } from '../context/LanguageContext';
 import { clinicData } from '../content/clinic';
+import { useMediaQuery } from '../hooks/useMediaQuery';
 import { Users, User, Shield } from 'lucide-react';
 
 type RoleKey = 'hygienists' | 'assistants' | 'secretaries';
@@ -97,6 +98,7 @@ const TeamPanel = ({
   groupImage,
   roleLabels,
   members,
+  memberGridClassName = 'grid-cols-1 sm:grid-cols-2',
 }: {
   title: string;
   description: string;
@@ -105,11 +107,18 @@ const TeamPanel = ({
   groupImage?: string;
   roleLabels: Record<RoleKey, string>;
   members: Record<RoleKey, { name: string; image: string | null }[]>;
+  memberGridClassName?: string;
 }) => (
   <article className="flex flex-col overflow-hidden rounded-[1.75rem] border border-white/10 bg-black/20 shadow-[0_4px_20px_rgb(0,0,0,0.2)] backdrop-blur-md transition-all duration-300 hover:shadow-[0_8px_30px_rgb(0,0,0,0.3)] hover:bg-black/30">
     {groupImage ? (
-      <div className="relative h-40 overflow-hidden">
-        <img src={groupImage} alt={title} className="h-full w-full object-cover transition-transform duration-700 hover:scale-105" loading="lazy" decoding="async" />
+      <div className="relative h-44 sm:h-48 overflow-hidden">
+        <img
+          src={groupImage}
+          alt={title}
+          className="h-full w-full object-cover object-[50%_22%] origin-[50%_25%] transition-transform duration-700 hover:scale-105"
+          loading="lazy"
+          decoding="async"
+        />
         <div className="absolute inset-0 bg-gradient-to-t from-[#1a1a1a] via-[#1a1a1a]/40 to-transparent" />
         <div className="absolute left-4 bottom-4 flex items-center gap-2 rounded-full bg-black/80 px-3 py-1.5 text-[0.7rem] font-bold text-white shadow-md backdrop-blur-sm border border-white/10">
           <span className="h-2 w-2 rounded-full bg-[#b0d64e] animate-pulse" />
@@ -146,7 +155,7 @@ const TeamPanel = ({
                   {members[role].length}
                 </span>
               </div>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+              <div className={`grid gap-2.5 ${memberGridClassName}`}>
                 {members[role].map((member) => (
                   <MemberChip
                     key={member.name}
@@ -166,20 +175,7 @@ const TeamPanel = ({
 
 export const TeamSection: React.FC = () => {
   const { t } = useLanguage();
-  const containerRef = useRef<HTMLDivElement>(null);
-
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ['start start', 'end end'],
-  });
-
-  const heroOpacity = useTransform(scrollYProgress, [0, 0.34, 0.52], [1, 1, 0], { clamp: false });
-  const heroScale = useTransform(scrollYProgress, [0, 0.52], [1, 0.95]);
-  const heroTranslateY = useTransform(scrollYProgress, [0, 0.52], [0, -24]);
-
-  const revealOpacity = useTransform(scrollYProgress, [0.24, 0.45, 0.62], [0, 0, 1], { clamp: false });
-  const revealTranslateY = useTransform(scrollYProgress, [0.24, 0.62], [72, 0]);
-
+  const isMobile = useMediaQuery('(max-width: 1023px)');
   const roleLabels: Record<RoleKey, string> = {
     hygienists: t.team.hygienists,
     assistants: t.team.assistants,
@@ -204,8 +200,168 @@ export const TeamSection: React.FC = () => {
     },
   ] as const;
 
+  if (isMobile) {
+    return <TeamSectionMobile t={t} dentistCards={dentistCards} roleLabels={roleLabels} />;
+  }
+
+  return <TeamSectionDesktop t={t} dentistCards={dentistCards} roleLabels={roleLabels} />;
+};
+
+const TeamSectionMobile = ({
+  t,
+  dentistCards,
+  roleLabels,
+}: {
+  t: ReturnType<typeof useLanguage>['t'];
+  dentistCards: readonly {
+    name: string;
+    image: string | null;
+    label: string;
+  }[];
+  roleLabels: Record<RoleKey, string>;
+}) => {
   return (
-    <section ref={containerRef} id="team" className="relative h-[330vh] overflow-clip bg-[#fafbfa]">
+    <section id="team" className="relative scroll-mt-24 overflow-hidden bg-[#fafbfa] py-20">
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,_rgba(232,238,214,0.6),_transparent_40%),radial-gradient(circle_at_bottom_left,_rgba(244,247,235,0.8),_transparent_40%)]" />
+      <div className="container relative z-10 mx-auto px-4 sm:px-6">
+        <div className="mx-auto max-w-4xl">
+          <div className="mx-auto max-w-2xl text-center">
+            <span className="mb-5 inline-flex items-center gap-2 rounded-full border border-black/5 bg-white/85 px-4 py-2 text-[0.7rem] font-bold uppercase tracking-[0.2em] text-[#7e8d49] shadow-sm">
+              <Shield className="h-4 w-4" />
+              {t.team.featuredImageLabel}
+            </span>
+            <h2 className="text-section-title font-heading font-bold tracking-tight text-gray-900">
+              {t.team.title}
+            </h2>
+            <p className="mx-auto mt-5 max-w-xl text-base font-medium leading-relaxed text-gray-600">
+              {t.team.subtitle}
+            </p>
+          </div>
+
+          <div className="mx-auto mt-10 w-full max-w-[20rem]">
+            <div className="overflow-hidden rounded-[2rem] border-4 border-white bg-white shadow-[0_24px_80px_rgba(126,141,73,0.15)] ring-1 ring-black/5">
+              <div className="relative aspect-[2/3]">
+                <img
+                  src="/team-hands-reveal.png"
+                  alt={t.team.featuredImageLabel}
+                  className="h-full w-full object-cover object-center"
+                  loading="eager"
+                  decoding="async"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
+              </div>
+            </div>
+          </div>
+
+          <div className="mt-10 space-y-5 rounded-[2rem] bg-[#1f1f1f] p-5 shadow-[0_24px_64px_rgba(0,0,0,0.18)]">
+            <div className="flex items-center gap-3">
+              <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-white/10 shadow-sm ring-1 ring-white/10">
+                <User className="h-5 w-5 text-[#b0d64e]" />
+              </div>
+              <div>
+                <p className="text-[0.7rem] font-bold uppercase tracking-[0.2em] text-[#b0d64e]">
+                  {t.team.dentistsTitle}
+                </p>
+                <h3 className="mt-1 text-xl font-heading font-bold text-white">
+                  {t.team.dentistsTitle}
+                </h3>
+              </div>
+            </div>
+
+            <div className="grid gap-4">
+              {dentistCards.map((dentist) => (
+                <DentistCard
+                  key={dentist.name}
+                  name={dentist.name}
+                  image={dentist.image}
+                  label={dentist.label}
+                  roleLabel={t.team.dentistRole}
+                />
+              ))}
+            </div>
+          </div>
+
+          <div className="mt-6 space-y-5 rounded-[2rem] bg-[#1f1f1f] p-5 shadow-[0_24px_64px_rgba(0,0,0,0.18)]">
+            <div className="flex items-center gap-3">
+              <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-white/10 shadow-sm ring-1 ring-white/10">
+                <Users className="h-5 w-5 text-[#b0d64e]" />
+              </div>
+              <div>
+                <p className="text-[0.7rem] font-bold uppercase tracking-[0.2em] text-[#b0d64e]">
+                  {t.team.rostersTitle}
+                </p>
+                <h3 className="mt-1 text-xl font-heading font-bold text-white">
+                  {t.team.rostersTitle}
+                </h3>
+              </div>
+            </div>
+
+            <div className="grid gap-5">
+              <TeamPanel
+                title={t.team.team1Title}
+                description={t.team.team1Desc}
+                leadName={clinicData.teams.team1.lead.name}
+                leadImage={clinicData.teams.team1.lead.image}
+                roleLabels={roleLabels}
+                members={clinicData.teams.team1.roles}
+                memberGridClassName="grid-cols-1"
+              />
+
+              <TeamPanel
+                title={t.team.team2Title}
+                description={t.team.team2Desc}
+                leadName={clinicData.teams.team2.lead.name}
+                leadImage={clinicData.teams.team2.lead.image}
+                groupImage={clinicData.teams.team2.groupImage}
+                roleLabels={roleLabels}
+                members={clinicData.teams.team2.roles}
+                memberGridClassName="grid-cols-1"
+              />
+            </div>
+          </div>
+
+          <div className="mx-auto mt-8 max-w-3xl space-y-2 px-2 text-center text-sm font-medium text-gray-500">
+            <p>{t.team.midText1}</p>
+            <p>
+              {t.team.midText2}{' '}
+              <span className="font-bold text-[#7e9c2f]">{t.team.midText3}</span>
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+const TeamSectionDesktop = ({
+  t,
+  dentistCards,
+  roleLabels,
+}: {
+  t: ReturnType<typeof useLanguage>['t'];
+  dentistCards: readonly {
+    name: string;
+    image: string | null;
+    label: string;
+  }[];
+  roleLabels: Record<RoleKey, string>;
+}) => {
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ['start start', 'end end'],
+  });
+
+  const heroOpacity = useTransform(scrollYProgress, [0, 0.34, 0.52], [1, 1, 0], { clamp: false });
+  const heroScale = useTransform(scrollYProgress, [0, 0.52], [1, 0.95]);
+  const heroTranslateY = useTransform(scrollYProgress, [0, 0.52], [0, -24]);
+
+  const revealOpacity = useTransform(scrollYProgress, [0.24, 0.45, 0.62], [0, 0, 1], { clamp: false });
+  const revealTranslateY = useTransform(scrollYProgress, [0.24, 0.62], [72, 0]);
+
+  return (
+    <section ref={containerRef} id="team" className="relative h-[330vh] scroll-mt-24 overflow-clip bg-[#fafbfa]">
       <div className="sticky top-0 h-screen overflow-hidden">
         {/* Initial Light Background for Hero Section */}
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,_rgba(232,238,214,0.6),_transparent_40%),radial-gradient(circle_at_bottom_left,_rgba(244,247,235,0.8),_transparent_40%)]" />
@@ -342,8 +498,6 @@ export const TeamSection: React.FC = () => {
             </div>
           </div>
         </motion.div>
-
-        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-[#1a1a1a] via-[#1a1a1a]/80 to-transparent z-25 opacity-0 transition-opacity duration-500" style={{ opacity: revealOpacity.get() > 0 ? 1 : 0 }} />
       </div>
     </section>
   );

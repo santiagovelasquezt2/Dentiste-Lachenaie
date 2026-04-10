@@ -73,11 +73,13 @@ A dental clinic in Lachenaie/Terrebonne, Quebec (established 2000) needs a moder
 
 ## Brand Colors (from client branding)
 
+**Primary brand lime:** `#B0D64E` — canonical token `--color-brand-lime` in `src/styles/variables.css` (Tailwind: `bg-brand-lime`, `text-brand-lime`, `border-brand-lime`, …). Use for bold lime surfaces and high-energy brand accents; the softer `--color-accent` mint is for large quiet fills.
 
 | Token                  | Hex       | Use                                                     |
 | ---------------------- | --------- | ------------------------------------------------------- |
-| `--color-accent`       | `#B0D64E` | Lime green — CTAs, highlights, active nav, hover states |
-| `--color-accent-dark`  | `#8fb335` | Darker lime for hover states                            |
+| `--color-brand-lime`   | `#B0D64E` | Vibrant lime — primary brand green, full-bleed sections, map accents |
+| `--color-accent`       | `#D1E8D1` | Softer mint — UI fills, subtle highlights               |
+| `--color-accent-dark`  | `#B8D1B8` | Darker mint — hover on mint surfaces                    |
 | `--color-bg`           | `#FFFFFF` | Main background                                         |
 | `--color-bg-alt`       | `#F4F4F4` | Alternating sections, cards                             |
 | `--color-bg-dark`      | `#1a1a1a` | Dark sections (hero, contact, footer)                   |

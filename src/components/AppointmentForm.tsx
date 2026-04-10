@@ -26,9 +26,9 @@ export const AppointmentForm: React.FC = () => {
   };
 
   return (
-    <section id="appointment" className="bg-white py-32">
-      <div className="container mx-auto px-6 max-w-3xl">
-        <div className="text-center mb-16">
+    <section id="appointment" className="scroll-mt-24 bg-white py-20 md:py-32">
+      <div className="container mx-auto max-w-3xl px-4 sm:px-6">
+        <div className="mb-12 text-center md:mb-16">
           <h2 className="text-section-title font-bold text-text mb-4">
             {t.appointment.title}
           </h2>
@@ -37,8 +37,8 @@ export const AppointmentForm: React.FC = () => {
           </p>
         </div>
 
-        <form onSubmit={handleSubmit} className="grid gap-8">
-          <div className="grid md:grid-cols-2 gap-8">
+        <form onSubmit={handleSubmit} className="grid gap-6 md:gap-8">
+          <div className="grid gap-6 md:grid-cols-2 md:gap-8">
             <div className="flex flex-col gap-2">
               <label className="text-nav text-text/60 ml-4">{t.appointment.name}</label>
               <input 
@@ -63,12 +63,13 @@ export const AppointmentForm: React.FC = () => {
             </div>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-8">
+          <div className="grid gap-6 md:grid-cols-2 md:gap-8">
             <div className="flex flex-col gap-2">
               <label className="text-nav text-text/60 ml-4">{t.appointment.phone}</label>
               <input 
                 required
                 type="tel"
+                inputMode="tel"
                 placeholder={t.appointment.placeholderPhone}
                 className="text-body bg-bg-alt rounded-full border-none px-6 py-4 placeholder:text-text-light/60 focus:ring-2 focus:ring-accent outline-none transition-all"
                 value={formData.phone}

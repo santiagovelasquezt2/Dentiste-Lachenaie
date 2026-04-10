@@ -2,21 +2,37 @@ import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useLanguage } from '../context/LanguageContext';
 import { clinicData } from '../content/clinic';
+import { useFocusTrap } from '../hooks/useFocusTrap';
+import { useMediaQuery } from '../hooks/useMediaQuery';
 import { cn } from '../lib/utils';
-import { Activity, ArrowRight, Baby, ChevronRight, Shield, Smile, Sparkles, Stethoscope, Syringe, Wrench, X } from 'lucide-react';
+import { ArrowRight, ChevronRight, X } from 'lucide-react';
 
-const serviceIcons: Record<string, React.ReactNode> = {
-  orthodontics: <Smile className="w-6 h-6" />,
-  prevention: <Shield className="w-6 h-6" />,
-  pediatric: <Baby className="w-6 h-6" />,
-  restoration: <Wrench className="w-6 h-6" />,
-  implants: <Activity className="w-6 h-6" />,
-  emergency: <Stethoscope className="w-6 h-6" />,
-  surgery: <Syringe className="w-6 h-6" />,
-  cosmetic: <Sparkles className="w-6 h-6" />,
-};
+/** Bump `?v=` when swapping icons so browsers pick up new assignments (SVG URLs are easy to cache). */
+const SERVICE_ICON_V = '2';
 
-type ServiceId = keyof typeof serviceIcons;
+/** SVGs from client assets (svgrepo), filenames match service themes */
+const serviceIconSrc = {
+  orthodontics: `/assets/services/braces-teeth-svgrepo-com.svg?v=${SERVICE_ICON_V}`,
+  prevention: `/assets/services/teeth-protection-svgrepo-com.svg?v=${SERVICE_ICON_V}`,
+  pediatric: `/assets/services/toothbrush-and-paste-svgrepo-com.svg?v=${SERVICE_ICON_V}`,
+  restoration: `/assets/services/build-fix-repair-svgrepo-com.svg?v=${SERVICE_ICON_V}`,
+  implants: `/assets/services/dentist-tools-dental-svgrepo-com.svg?v=${SERVICE_ICON_V}`,
+  emergency: `/assets/services/urgency-time-urgent-schedule-svgrepo-com.svg?v=${SERVICE_ICON_V}`,
+  surgery: `/assets/services/dental-surgery.svg?v=${SERVICE_ICON_V}`,
+  cosmetic: `/assets/services/dentist-2-svgrepo-com.svg?v=${SERVICE_ICON_V}`,
+} as const;
+
+type ServiceId = keyof typeof serviceIconSrc;
+
+function ServiceIcon({ id, className }: { id: ServiceId; className?: string }) {
+  return (
+    <img
+      src={serviceIconSrc[id]}
+      alt=""
+      className={cn('object-contain', className)}
+    />
+  );
+}
 type Language = 'fr' | 'en';
 
 const serviceDetails: Record<Language, Record<ServiceId, {
@@ -176,23 +192,33 @@ const serviceDetails: Record<Language, Record<ServiceId, {
 
 export const ServicesSection: React.FC = () => {
   const { t, language } = useLanguage();
+  const isMobile = useMediaQuery('(max-width: 1023px)');
   const containerRef = useRef<HTMLDivElement>(null);
   const horizontalRef = useRef<HTMLDivElement>(null);
+  const dialogRef = useRef<HTMLDivElement>(null);
+  const closeButtonRef = useRef<HTMLButtonElement>(null);
   const [activeService, setActiveService] = useState<ServiceId | null>(null);
 
   const activeServiceData = useMemo(() => {
     if (!activeService) return null;
     return {
       title: t.services.items[activeService],
-      icon: serviceIcons[activeService] || <Sparkles className="w-6 h-6" />,
+      icon: <ServiceIcon id={activeService} className="h-7 w-7 md:h-8 md:w-8" />,
       ...serviceDetails[language as Language][activeService],
     };
   }, [activeService, language, t.services.items]);
 
   useEffect(() => {
-    const container = containerRef.current;
     const horizontal = horizontalRef.current;
-    if (!container || !horizontal) return;
+    if (!horizontal) return;
+
+    if (isMobile) {
+      horizontal.style.transform = '';
+      return;
+    }
+
+    const container = containerRef.current;
+    if (!container) return;
 
     const handleScroll = () => {
       const rect = container.getBoundingClientRect();
@@ -209,37 +235,52 @@ export const ServicesSection: React.FC = () => {
       horizontal.style.transform = `translateX(${-progress * scrollWidth}px)`;
     };
 
+    handleScroll();
     window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+    window.addEventListener('resize', handleScroll);
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('resize', handleScroll);
+    };
+  }, [isMobile]);
 
   useEffect(() => {
     if (!activeService) return;
 
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') {
-        setActiveService(null);
-      }
-    };
-
     const previousOverflow = document.body.style.overflow;
     document.body.style.overflow = 'hidden';
-    window.addEventListener('keydown', handleKeyDown);
 
     return () => {
       document.body.style.overflow = previousOverflow;
-      window.removeEventListener('keydown', handleKeyDown);
     };
   }, [activeService]);
+
+  useFocusTrap({
+    active: activeService !== null,
+    containerRef: dialogRef,
+    initialFocusRef: closeButtonRef,
+    onEscape: () => setActiveService(null),
+  });
 
   return (
     <section 
       ref={containerRef}
       id="services" 
-      className="relative h-[300vh] bg-bg-dark"
+      className={cn(
+        'relative scroll-mt-24 bg-bg-teams',
+        isMobile ? 'py-20' : 'h-[300vh]'
+      )}
     >
-      <div className="sticky top-0 h-screen w-full flex flex-col justify-center overflow-hidden">
-        <div className="container mx-auto px-6 mb-12">
+      <div className={cn(
+        isMobile
+          ? 'container mx-auto px-4 sm:px-6'
+          : 'sticky top-0 flex h-screen w-full flex-col justify-center overflow-hidden'
+      )}>
+        <div className={cn(
+          'container mx-auto mb-12',
+          isMobile ? 'px-0 mb-10' : 'px-6'
+        )}>
           <h2 className="text-section-title font-heading font-semibold text-bg-inverse">
             {t.services.title}
           </h2>
@@ -247,17 +288,25 @@ export const ServicesSection: React.FC = () => {
 
         <div 
           ref={horizontalRef}
-          className="flex gap-8 px-6 md:px-[10vw] transition-transform duration-100 ease-out"
+          className={cn(
+            'transition-transform duration-100 ease-out',
+            isMobile
+              ? 'grid gap-4'
+              : 'flex gap-8 px-6 md:px-[10vw]'
+          )}
         >
           {clinicData.services.map((service) => (
             <button 
               key={service.id}
               type="button"
               onClick={() => setActiveService(service.id as ServiceId)}
-              className="flex-shrink-0 w-[300px] md:w-[400px] bg-white rounded-2xl p-8 md:p-12 shadow-xl flex flex-col gap-6 group hover:scale-[1.02] transition-transform duration-500 text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-4"
+              className={cn(
+                'group flex flex-col gap-6 rounded-2xl bg-white p-6 text-left shadow-xl transition-transform duration-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-4 md:p-12',
+                isMobile ? 'w-full' : 'w-[300px] flex-shrink-0 md:w-[400px] hover:scale-[1.02]'
+              )}
             >
               <div className="w-16 h-16 bg-accent/20 rounded-2xl flex items-center justify-center text-accent group-hover:bg-accent group-hover:text-bg-dark transition-colors duration-300">
-                {serviceIcons[service.id] || <Sparkles className="w-6 h-6" />}
+                <ServiceIcon id={service.id as ServiceId} className="h-8 w-8" />
               </div>
               <h3 className="text-card-title md:text-3xl font-heading font-semibold text-text group-hover:text-accent transition-colors">
                 {t.services.items[service.id as keyof typeof t.services.items]}
@@ -281,18 +330,20 @@ export const ServicesSection: React.FC = () => {
       <AnimatePresence>
         {activeServiceData && (
           <motion.div
-            className="fixed inset-0 z-50 flex items-center justify-center bg-black/55 backdrop-blur-md px-4 py-6"
+            className="fixed inset-0 z-50 flex items-start justify-center overflow-hidden bg-black/55 px-4 py-4 backdrop-blur-md sm:items-center sm:py-6"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={() => setActiveService(null)}
           >
             <motion.div
+              ref={dialogRef}
               role="dialog"
               aria-modal="true"
               aria-labelledby="service-modal-title"
               aria-describedby="service-modal-description"
-              className="relative w-full max-w-2xl overflow-hidden rounded-[2rem] bg-white shadow-[0_30px_80px_rgba(0,0,0,0.28)]"
+              tabIndex={-1}
+              className="relative flex max-h-[calc(100svh-2rem)] w-full max-w-2xl flex-col overflow-hidden rounded-[1.75rem] bg-white shadow-[0_30px_80px_rgba(0,0,0,0.28)] sm:rounded-[2rem]"
               initial={{ opacity: 0, scale: 0.92, y: 28 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.96, y: 18 }}
@@ -301,8 +352,18 @@ export const ServicesSection: React.FC = () => {
             >
               <div className="absolute inset-x-0 top-0 h-2 bg-gradient-to-r from-accent via-[#c9d9af] to-[#f6c56a]" />
 
-              <div className="relative p-6 md:p-10">
-                <div className="flex items-start justify-between gap-6">
+              <div className="relative flex flex-col">
+                <button
+                  ref={closeButtonRef}
+                  type="button"
+                  onClick={() => setActiveService(null)}
+                  className="absolute right-4 top-4 flex h-11 w-11 items-center justify-center rounded-full border border-bg-alt text-text-light transition-colors hover:bg-bg-alt focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+                  aria-label={t.services.closeDialog}
+                >
+                  <X className="h-5 w-5" />
+                </button>
+
+                <div className="flex items-start gap-4 px-5 pt-5 pr-14 sm:px-6 sm:pt-6 md:px-10 md:pt-10">
                   <div className="flex items-start gap-4">
                     <div className="w-14 h-14 rounded-2xl bg-accent/15 text-accent flex items-center justify-center shrink-0">
                       {activeServiceData.icon}
@@ -315,18 +376,10 @@ export const ServicesSection: React.FC = () => {
                         {activeServiceData.title}
                       </h3>
                     </div>
-                    </div>
-                    <button
-                      type="button"
-                      onClick={() => setActiveService(null)}
-                      className="w-11 h-11 rounded-full border border-bg-alt text-text-light flex items-center justify-center hover:bg-bg-alt transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
-                      aria-label={t.services.closeDialog}
-                    >
-                      <X className="w-5 h-5" />
-                    </button>
                   </div>
+                </div>
 
-                <div className="mt-8 grid gap-8 md:grid-cols-[1.2fr_0.8fr]">
+                <div className="mt-8 overflow-y-auto px-5 pb-5 sm:px-6 sm:pb-6 md:grid md:grid-cols-[1.2fr_0.8fr] md:gap-8 md:px-10 md:pb-10">
                   <div className="space-y-6">
                     <p id="service-modal-description" className="text-base md:text-lg text-text-light leading-relaxed">
                       {activeServiceData.description}
@@ -342,7 +395,7 @@ export const ServicesSection: React.FC = () => {
                     </div>
                   </div>
 
-                  <div className="rounded-[1.5rem] bg-bg-alt p-6">
+                  <div className="mt-6 rounded-[1.5rem] bg-bg-alt p-6 md:mt-0">
                     <p className="mb-4 text-nav text-text/60">
                       {t.services.whatToExpect}
                     </p>

@@ -5,6 +5,7 @@ export const fr = {
     about: "À propos",
     services: "Services",
     gallery: "Galerie",
+    team: "Équipe",
     hours: "Horaire",
     firstVisit: "Première visite",
     appointment: "Rendez-vous",
@@ -12,8 +13,15 @@ export const fr = {
   },
   hero: {
     tagline: "Centre Dentaire Vaillancourt St-Onge",
-    body: "Vivez une expérience dentaire où votre confort et votre santé sont nos priorités.",
-    cta: "Demander un rendez-vous",
+    eyebrow: "Expérience premium",
+    clinicNameTop: "Centre Dentaire",
+    clinicNameBottom: "Vaillancourt St-Onge",
+    subheader: "Un sourire qui vous semble calme et précis à chaque visite.",
+    cardLabel: "Soins sur mesure",
+    note: "Soins personnalisés, technologies modernes et ambiance apaisante.",
+    cta: "Prendre rendez-vous",
+    location: "Terrebonne, QC",
+    imageAlt: "Façade de la clinique dentaire avec enseigne",
   },
   logoVideo: {
     lead: "Le sourire commence ici",
@@ -100,6 +108,10 @@ export const fr = {
     },
     openFullScreen: "Voir en plein écran",
     closeFullScreen: "Fermer l'affichage plein écran",
+    previousImage: "Image précédente",
+    nextImage: "Image suivante",
+    imagePositionAria: "Image {{current}} sur {{total}}",
+    lightboxKeyboardHint: "Astuce : utilisez ← et → au clavier pour parcourir.",
   },
   hours: {
     overlayTitle: "Venez nous rendre visite",
@@ -118,16 +130,42 @@ export const fr = {
   },
   firstVisit: {
     title: "Votre première visite",
-    intro: "Bienvenue au Centre dentaire Vaillancourt St-Onge. Nous avons hâte de vous rencontrer.",
-    button: "Prendre rendez-vous",
+    eyebrow: "Nous vous invitons à remplir le formulaire de première visite afin d'aider à accélérer le processus de votre première visite.",
+    intro: {
+      prefix: "Afin de vous offrir le service le plus professionnel possible et de nous assurer que vous receviez le meilleur traitement dentaire, nous avons besoin ",
+      emphasis: "d'un historique détaillé de votre santé générale et dentaire",
+      suffix: ". Pour cela, nous avons besoin de quelques renseignements importants sur votre santé, vos antécédents dentaires et les médicaments que vous prenez peut-être.",
+    },
+    followup: "Pour accélérer le déroulement de votre première visite, nous vous suggérons de télécharger et de remplir le formulaire de première visite. Vous pouvez le remplir à l'avance, dans le confort de votre domicile ou au travail, avec toutes vos informations à portée de main.",
+    procedure: {
+      prefix: "Procédure",
+      suffix: "à suivre",
+    },
     steps: [
-      "Accueil chaleureux et ouverture de votre dossier",
-      "Examen complet de votre santé buccodentaire",
-      "Radiographies numériques si nécessaire",
-      "Nettoyage et détartrage professionnel",
-      "Discussion de vos besoins et plan de traitement personnalisé",
-      "Coordination de vos prochains rendez-vous",
+      {
+        text: "Téléchargez le formulaire (format PDF) en cliquant sur cette icône :",
+        download: {
+          href: "/assets/formulaire-premiere-visite.pdf",
+          label: "Télécharger le formulaire de première visite en PDF",
+        },
+      },
+      {
+        text: "Imprimez-le.",
+      },
+      {
+        text: "Remplissez le formulaire (écrivez lisiblement et utilisez un stylo à bille).",
+      },
+      {
+        text: "N'envoyez pas le formulaire par courriel (votre courriel peut ne pas être sécurisé).",
+      },
+      {
+        text: "Apportez le formulaire avec vous à votre premier rendez-vous.",
+      },
+      {
+        text: "Apportez vos informations d'assurance dentaire si vous en avez.",
+      },
     ],
+    button: "Prendre rendez-vous",
     cancellation: "Politique d'annulation : Veuillez nous aviser 48 heures à l'avance pour tout changement.",
   },
   appointment: {

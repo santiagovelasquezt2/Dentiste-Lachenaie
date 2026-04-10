@@ -93,7 +93,7 @@ export const Tooth3DSection: React.FC = () => {
     <section
       ref={sectionRef}
       id="tooth-3d"
-      className="relative overflow-hidden bg-bg-alt/70 py-10 md:py-14"
+      className="relative overflow-hidden bg-bg-alt/70 py-14 md:py-14"
     >
       <div
         className="pointer-events-none absolute inset-0 opacity-45"
@@ -104,7 +104,7 @@ export const Tooth3DSection: React.FC = () => {
         }}
       />
 
-      <div className="container relative z-10 mx-auto px-6">
+      <div className="container relative z-10 mx-auto px-4 sm:px-6">
         <div className="grid items-center gap-10 md:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)] md:gap-14">
           <div className="mx-auto w-full max-w-[620px] md:mx-0">
             <h2 className="text-section-title font-bold text-text">
@@ -138,18 +138,18 @@ export const Tooth3DSection: React.FC = () => {
                 </div>
               </div>
 
-              <div className="mt-4 flex w-full items-center justify-center gap-3">
+              <div className="mt-4 flex w-full flex-wrap items-center justify-center gap-3">
                 <button
                   type="button"
                   onClick={() => setIsPlaying((current) => !current)}
-                  className="flex h-10 w-10 items-center justify-center rounded-full bg-[#0e241f] text-white shadow-[0_12px_24px_rgba(14,36,31,0.24)] transition-transform duration-300 hover:scale-105 active:scale-95"
+                  className="flex h-10 w-10 items-center justify-center rounded-full bg-bg-teams text-text-inverse shadow-[0_12px_24px_rgba(0,0,0,0.28)] transition-transform duration-300 hover:scale-105 active:scale-95"
                   aria-label={isPlaying ? t.tooth3d.pause : t.tooth3d.resume}
                 >
                   {isPlaying && !prefersReducedMotion ? <Pause className="h-4 w-4" /> : <Play className="h-4 w-4 translate-x-[1px]" />}
                 </button>
 
-                <div className="flex h-11 items-center rounded-full bg-[#0e241f] px-4 shadow-[0_12px_24px_rgba(14,36,31,0.2)]">
-                  <div className="flex items-center gap-2.5">
+                <div className="flex min-h-11 items-center rounded-full bg-bg-teams px-4 py-3 shadow-[0_12px_24px_rgba(0,0,0,0.28)]">
+                  <div className="flex flex-wrap items-center justify-center gap-2.5">
                     {displayImages.map((image, index) => {
                       const isActive = indicatorStates[index];
                       const indicatorKey = isActive ? `${image.src}-${indicatorCycle}` : image.src;
@@ -171,7 +171,7 @@ export const Tooth3DSection: React.FC = () => {
                         >
                           {isActive && (
                             <span
-                              className="carousel-indicator-fill absolute inset-y-0 left-0 block w-full rounded-full bg-[#e5efd0]"
+                              className="carousel-indicator-fill absolute inset-y-0 left-0 block w-full rounded-full bg-white"
                               style={{ ['--indicator-duration' as string]: `${AUTO_ADVANCE_MS}ms` }}
                               aria-hidden
                             />
@@ -185,19 +185,50 @@ export const Tooth3DSection: React.FC = () => {
             </div>
           </div>
 
-          <div className="relative mx-auto h-[320px] w-full max-w-[560px] sm:h-[400px] md:h-[520px]">
+          <div className="relative mx-auto h-[240px] w-full max-w-[560px] sm:h-[340px] md:h-[520px]">
             <div className="absolute inset-0 rounded-[2rem] bg-[radial-gradient(circle_at_50%_40%,rgba(255,255,255,0.65),rgba(255,255,255,0.1)_55%,transparent_80%)]" />
             <div className="relative h-full w-full">
               <ToothCanvas />
             </div>
           </div>
+
+          <div className="relative mt-6 overflow-hidden bg-[#26231f] px-5 pb-5 pt-8 after:pointer-events-none after:absolute after:inset-x-0 after:bottom-0 after:h-2 after:content-[''] after:bg-[#f6f3ef] sm:px-6 md:px-8 lg:px-10">
+            <div className="pointer-events-none absolute inset-x-0 top-0 h-28" aria-hidden>
+              <svg
+                viewBox="0 0 1200 140"
+                preserveAspectRatio="none"
+                className="h-full w-full"
+              >
+                <path
+                  d="M 36 48 C 240 47, 430 47, 640 49 C 780 50, 900 51, 1006 56 C 1070 59, 1114 77, 1166 95"
+                  fill="none"
+                  stroke="#2FA56E"
+                  strokeWidth="3"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </div>
+
+            <div className="flex min-h-[9rem] flex-col justify-end gap-4 pt-16 text-text-inverse sm:min-h-[10rem] md:min-h-[12rem]">
+              <div className="flex items-end justify-between gap-4">
+                <div className="text-[clamp(0.78rem,1vw,0.95rem)] font-semibold tracking-[-0.03em] text-white/95">
+                  Faster
+                </div>
+
+                <div className="mx-auto flex flex-col items-center text-center text-[clamp(0.72rem,0.95vw,0.88rem)] leading-tight text-white/72">
+                  <span className="font-medium">Modern Dentistry:</span>
+                  <span className="font-semibold text-white/92">Smarter</span>
+                </div>
+
+                <div className="text-[clamp(0.78rem,1vw,0.95rem)] font-semibold tracking-[-0.03em] text-white/95">
+                  Pain-Free
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
-
-      <div
-        className="pointer-events-none absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-bg-alt/80 to-transparent"
-        aria-hidden
-      />
     </section>
   );
 };

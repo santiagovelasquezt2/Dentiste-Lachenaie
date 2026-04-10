@@ -5,6 +5,7 @@ export const en = {
     about: "About",
     services: "Services",
     gallery: "Gallery",
+    team: "Team",
     hours: "Hours",
     firstVisit: "First Visit",
     appointment: "Appointment",
@@ -12,8 +13,15 @@ export const en = {
   },
   hero: {
     tagline: "Centre Dentaire Vaillancourt St-Onge",
-    body: "Experience dental care where your comfort and health are our top priorities.",
-    cta: "Request Appointment",
+    eyebrow: "Premium experience",
+    clinicNameTop: "Centre Dentaire",
+    clinicNameBottom: "Vaillancourt St-Onge",
+    subheader: "A smile that feels calm and precise every visit.",
+    cardLabel: "Tailored care",
+    note: "Personalized care, modern technology, and a calming atmosphere.",
+    cta: "Book an appointment",
+    location: "Terrebonne, QC",
+    imageAlt: "Dental clinic facade with signage",
   },
   logoVideo: {
     lead: "A smile starts here",
@@ -100,6 +108,10 @@ export const en = {
     },
     openFullScreen: "View full screen",
     closeFullScreen: "Close full-screen view",
+    previousImage: "Previous image",
+    nextImage: "Next image",
+    imagePositionAria: "Image {{current}} of {{total}}",
+    lightboxKeyboardHint: "Tip: use ← and → on your keyboard to browse.",
   },
   hours: {
     overlayTitle: "Come visit us",
@@ -118,16 +130,42 @@ export const en = {
   },
   firstVisit: {
     title: "Your First Visit",
-    intro: "Welcome to Vaillancourt St-Onge Dental Centre. We look forward to meeting you.",
-    button: "Book an appointment",
+    eyebrow: "We invite you to fill out a first-visit form to help speed up the process of your first visit.",
+    intro: {
+      prefix: "To provide you with the most professional service possible, and to ensure you receive the best dental treatment, we require ",
+      emphasis: "a detailed history of your general and dental health",
+      suffix: ". For this, we need a few important details about your health, dental history, and any medications you may be taking.",
+    },
+    followup: "To speed up the process of your first visit, we suggest you download and fill out the first-visit form. You can fill the form out in advance in the comfort of your own home or at work with all of your information at hand.",
+    procedure: {
+      prefix: "Procedure",
+      suffix: "to follow",
+    },
     steps: [
-      "Warm welcome and file opening",
-      "Complete oral health examination",
-      "Digital X-rays if necessary",
-      "Professional cleaning and scaling",
-      "Discussion of your needs and personalized treatment plan",
-      "Coordination of your next appointments",
+      {
+        text: "Download the form (PDF format) by clicking on this icon:",
+        download: {
+          href: "/assets/formulaire-premiere-visite.pdf",
+          label: "Download the first-visit form PDF",
+        },
+      },
+      {
+        text: "Print it out.",
+      },
+      {
+        text: "Fill out the form (print clearly and use a ballpoint pen).",
+      },
+      {
+        text: "Do not send the form by email (your email may not be secure).",
+      },
+      {
+        text: "Bring the form with you to your first appointment.",
+      },
+      {
+        text: "Bring your dental insurance information if you have it.",
+      },
     ],
+    button: "Book an appointment",
     cancellation: "Cancellation Policy: Please notify us 48 hours in advance for any changes.",
   },
   appointment: {

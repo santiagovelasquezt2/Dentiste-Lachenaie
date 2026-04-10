@@ -10,14 +10,18 @@ export const ReviewSection: React.FC = () => {
   const facebookPageUrl = `https://www.facebook.com/search/pages/?q=${encodeURIComponent(clinicData.name)}`;
 
   return (
-    <section id="reviews" className="bg-bg-dark py-10 text-bg-inverse">
-      <div className="container mx-auto px-6">
+    <section id="reviews" className="relative overflow-hidden bg-[#1a1a1a] py-10 text-bg-inverse">
+      <div
+        className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_right,_rgba(176,214,78,0.08),_transparent_40%),radial-gradient(circle_at_bottom_left,_rgba(176,214,78,0.04),_transparent_40%)]"
+        aria-hidden
+      />
+      <div className="container relative z-10 mx-auto px-4 sm:px-6">
         <div className="mx-auto grid max-w-4xl gap-3 sm:grid-cols-2">
           <a
             href={googleReviewUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="group flex items-center justify-between gap-4 rounded-2xl border border-white/10 bg-white/5 px-4 py-3 transition-all duration-300 hover:border-accent/40 hover:bg-white/10"
+            className="group flex items-center justify-between gap-4 rounded-2xl border border-white/10 bg-[#2a2a2a]/80 px-4 py-3 shadow-[0_8px_30px_rgba(0,0,0,0.25)] backdrop-blur-xl transition-all duration-300 hover:border-white/20 hover:bg-[#323232]"
           >
             <div className="flex min-w-0 items-center gap-3">
               <div className="flex h-9 w-9 items-center justify-center rounded-full bg-accent text-bg-dark">
@@ -39,7 +43,7 @@ export const ReviewSection: React.FC = () => {
             href={facebookPageUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="group flex items-center justify-between gap-4 rounded-2xl border border-white/10 bg-white/5 px-4 py-3 transition-all duration-300 hover:border-accent/40 hover:bg-white/10"
+            className="group flex items-center justify-between gap-4 rounded-2xl border border-white/10 bg-[#2a2a2a]/80 px-4 py-3 shadow-[0_8px_30px_rgba(0,0,0,0.25)] backdrop-blur-xl transition-all duration-300 hover:border-white/20 hover:bg-[#323232]"
           >
             <div className="flex min-w-0 items-center gap-3">
               <div className="flex h-9 w-9 items-center justify-center rounded-full bg-white/10 text-bg-inverse">
