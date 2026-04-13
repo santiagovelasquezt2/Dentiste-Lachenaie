@@ -1,13 +1,68 @@
 import React, { useRef } from 'react';
-import { motion, useScroll, useTransform } from 'framer-motion';
+import { motion, useReducedMotion, useScroll, useTransform } from 'framer-motion';
+import { User, Users } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 import { clinicData } from '../content/clinic';
 import { useMediaQuery } from '../hooks/useMediaQuery';
-import { Users, User, Shield } from 'lucide-react';
 
 type RoleKey = 'hygienists' | 'assistants' | 'secretaries';
+type TFunction = ReturnType<typeof useLanguage>['t'];
+
+type TeamPanelData = {
+  id: string;
+  title: string;
+  description: string;
+  summary: string;
+  lead: {
+    name: string;
+    role: string;
+    image: string;
+  };
+  roles: Record<RoleKey, { name: string; image: string | null }[]>;
+  supportingImage?: string;
+};
+
+type FeaturedDentistData = {
+  name: string;
+  image: string | null;
+  meta: string;
+  bio: string;
+};
+
+type TeamSectionData = {
+  roleLabels: Record<RoleKey, string>;
+  featuredDentists: FeaturedDentistData[];
+  incomingDentist: {
+    name: string;
+  } | null;
+  teamPanels: TeamPanelData[];
+};
 
 const roleKeys: RoleKey[] = ['hygienists', 'assistants', 'secretaries'];
+
+const teamTextById = {
+  team1: {
+    titleKey: 'team1Title',
+    descKey: 'team1Desc',
+  },
+  team2: {
+    titleKey: 'team2Title',
+    descKey: 'team2Desc',
+  },
+} as const;
+
+const dentistCopyByName = {
+  "Dr Nathalie Vaillancourt": {
+    bioKey: 'dentist1Bio',
+    metaKey: 'dentist1Meta',
+  },
+  "Dr Marie-Christine St-Onge": {
+    bioKey: 'dentist2Bio',
+    metaKey: 'dentist2Meta',
+  },
+} as const;
+
+const easeOut = [0.22, 1, 0.36, 1] as const;
 
 const initialsFromName = (name: string) =>
   name
@@ -16,6 +71,117 @@ const initialsFromName = (name: string) =>
     .slice(0, 2)
     .map((part) => part[0]?.toUpperCase())
     .join('');
+
+const formatTemplate = (template: string, replacements: Record<string, string | number>) =>
+  Object.entries(replacements).reduce(
+    (result, [key, value]) => result.replace(`{{${key}}}`, String(value)),
+    template
+  );
+
+const getTeamSectionData = (t: TFunction): TeamSectionData => {
+  const roleLabels: Record<RoleKey, string> = {
+    hygienists: t.team.hygienists,
+    assistants: t.team.assistants,
+    secretaries: t.team.secretaries,
+  };
+
+  const featuredDentists = clinicData.dentists
+    .filter((dentist) => dentist.featured)
+    .map((dentist) => {
+      const copy = dentistCopyByName[dentist.name as keyof typeof dentistCopyByName];
+
+      return {
+        name: dentist.name,
+        image: dentist.image,
+        bio: t.team[copy.bioKey],
+        meta: t.team[copy.metaKey],
+      };
+    });
+
+  const incomingDentist = clinicData.dentists.find(
+    (dentist) => dentist.status === 'coming-soon'
+  );
+
+  const teamPanels: TeamPanelData[] = Object.entries(clinicData.teams).map(([teamId, team]) => {
+    const totalMembers = roleKeys.reduce(
+      (count, role) => count + team.roles[role].length,
+      0
+    );
+    const copy = teamTextById[teamId as keyof typeof teamTextById];
+
+    return {
+      ...team,
+      id: teamId,
+      title: t.team[copy.titleKey],
+      description: t.team[copy.descKey],
+      summary: formatTemplate(t.team.teamSummaryLabel, { count: totalMembers }),
+    };
+  });
+
+  return {
+    roleLabels,
+    featuredDentists,
+    incomingDentist: incomingDentist ? { name: incomingDentist.name } : null,
+    teamPanels,
+  };
+};
+
+const sectionRevealProps = (disabled: boolean, delay = 0) =>
+  disabled
+    ? { initial: false as const }
+    : {
+        initial: { opacity: 0, y: 40 },
+        whileInView: { opacity: 1, y: 0 },
+        viewport: { once: true, amount: 0.18 },
+        transition: { duration: 0.75, delay, ease: easeOut },
+      };
+
+const SectionBackdrop = () => (
+  <>
+    <div className="absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-[#f0f1ea] to-transparent" />
+    <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-b from-transparent to-[#f4f4f4]" />
+    <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(232,238,214,0.6),transparent_35%),radial-gradient(circle_at_bottom_left,rgba(244,247,235,0.9),transparent_45%)]" />
+  </>
+);
+
+const TeamIntro = ({
+  t,
+  imageMotionStyle,
+  textMotionStyle,
+}: {
+  t: TFunction;
+  imageMotionStyle?: Record<string, unknown>;
+  textMotionStyle?: Record<string, unknown>;
+}) => (
+  <div className="mx-auto flex w-full max-w-4xl flex-col items-center text-center">
+    <motion.div style={textMotionStyle} className="w-full">
+      <h2 className="text-section-title font-semibold tracking-tight text-gray-900">
+        {t.team.title}
+      </h2>
+      <p className="mx-auto mt-5 max-w-2xl text-[1.02rem] leading-7 text-gray-600 md:text-lg">
+        {t.team.subtitle}
+      </p>
+    </motion.div>
+
+    <motion.div
+      style={imageMotionStyle}
+      className="mx-auto mt-10 w-full max-w-[20rem] md:mt-12 md:max-w-[22rem]"
+    >
+      <div className="overflow-hidden rounded-[2rem] border-4 border-white bg-white shadow-[0_24px_80px_rgba(126,141,73,0.15)] ring-1 ring-black/5">
+        <div className="relative aspect-[2/3]">
+          <img
+            src="/team-hands-reveal.png"
+            alt={t.team.featuredImageLabel}
+            className="h-full w-full object-cover object-center"
+            loading="eager"
+            decoding="async"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/18 via-transparent to-transparent" />
+        </div>
+      </div>
+    </motion.div>
+  </div>
+);
 
 const MemberChip = ({
   name,
@@ -26,66 +192,78 @@ const MemberChip = ({
   image: string | null;
   label: string;
 }) => (
-  <div className="group flex items-center gap-3 rounded-2xl border border-white/10 bg-white/5 p-2.5 shadow-sm transition-all duration-300 hover:bg-white/10 hover:shadow-md hover:-translate-y-0.5">
-    <div className="h-10 w-10 shrink-0 overflow-hidden rounded-xl bg-gradient-to-br from-[#333333] to-[#222222] shadow-inner ring-1 ring-white/10">
+  <div className="flex items-center gap-3 rounded-2xl border border-white/10 bg-white/[0.04] px-3 py-2.5">
+    <div className="flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-[#2e2d2c] text-[0.72rem] font-semibold text-[#b0d64e] ring-1 ring-white/10">
       {image ? (
         <img
           src={image}
           alt={name}
-          className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
+          className="h-full w-full object-cover"
           loading="lazy"
           decoding="async"
         />
       ) : (
-        <div className="flex h-full w-full items-center justify-center text-xs font-heading font-bold text-[#b0d64e]">
-          {initialsFromName(name)}
-        </div>
+        initialsFromName(name)
       )}
     </div>
     <div className="min-w-0">
-      <p className="truncate text-[0.85rem] font-semibold text-white">{name}</p>
-      <p className="truncate text-[0.6rem] uppercase tracking-[0.1em] text-gray-400 font-medium">{label}</p>
+      <p className="text-sm font-semibold text-white">{name}</p>
+      <p className="text-[0.68rem] uppercase tracking-[0.16em] text-white/55">{label}</p>
     </div>
   </div>
 );
 
 const DentistCard = ({
+  t,
   name,
   image,
-  label,
-  roleLabel,
+  meta,
+  bio,
 }: {
+  t: TFunction;
   name: string;
   image: string | null;
-  label: string;
-  roleLabel: string;
+  meta: string;
+  bio: string;
 }) => (
-  <article className="group flex items-center gap-4 rounded-[1.5rem] border border-white/10 bg-white/5 p-3.5 shadow-[0_4px_20px_rgb(0,0,0,0.2)] backdrop-blur-md transition-all duration-300 hover:bg-white/10 hover:shadow-[0_8px_30px_rgb(0,0,0,0.3)] hover:-translate-y-1">
-    <div className="relative h-28 w-24 shrink-0 overflow-hidden rounded-[1.125rem] bg-gradient-to-br from-[#333333] to-[#222222] shadow-inner ring-1 ring-white/10">
-      {image ? (
-        <img
-          src={image}
-          alt={name}
-          className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
-          loading="lazy"
-          decoding="async"
-        />
-      ) : (
-        <div className="flex h-full w-full items-center justify-center">
-          <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[#3a3a3a] text-lg font-heading font-bold text-[#b0d64e] shadow-sm ring-1 ring-white/10">
-            {initialsFromName(name)}
+  <article className="overflow-hidden rounded-[2rem] border border-white/10 bg-[#252423] shadow-[0_28px_64px_rgba(18,18,18,0.16)]">
+    <div className="grid gap-6 p-5 sm:grid-cols-[minmax(180px,0.42fr)_minmax(0,1fr)] sm:p-7">
+      <div className="overflow-hidden rounded-[1.5rem] bg-[#2d2c2b] ring-1 ring-white/10">
+        {image ? (
+          <img
+            src={image}
+            alt={name}
+            className="aspect-[4/5] h-full w-full object-cover"
+            loading="lazy"
+            decoding="async"
+          />
+        ) : (
+          <div className="flex aspect-[4/5] items-center justify-center bg-[radial-gradient(circle_at_top,rgba(176,214,78,0.18),transparent_55%),linear-gradient(180deg,#32312f,#222220)]">
+            <div className="flex h-20 w-20 items-center justify-center rounded-full border border-white/10 bg-black/20 text-2xl font-semibold text-[#b0d64e]">
+              {initialsFromName(name)}
+            </div>
           </div>
-        </div>
-      )}
-    </div>
+        )}
+      </div>
 
-    <div className="min-w-0 flex-1 py-1">
-      <p className="text-[0.65rem] uppercase tracking-[0.15em] text-[#b0d64e] font-bold">{label}</p>
-      <h3 className="mt-1 text-[1.1rem] font-heading font-bold leading-tight text-white">{name}</h3>
-      <p className="mt-3 inline-flex items-center gap-1.5 rounded-full bg-white/10 px-3 py-1.5 text-[0.65rem] font-semibold text-gray-300 shadow-sm border border-white/5">
-        <User className="h-3.5 w-3.5 text-[#b0d64e]" />
-        <span>{roleLabel}</span>
-      </p>
+      <div className="flex min-w-0 flex-col justify-between">
+        <div>
+          <p className="text-[0.7rem] font-semibold uppercase tracking-[0.18em] text-[#b0d64e]">
+            {t.team.leadDentistLabel}
+          </p>
+          <h3 className="mt-3 text-title font-semibold text-white">{name}</h3>
+          <div className="mt-4 flex flex-wrap items-center gap-2.5 text-sm text-white/70">
+            <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.05] px-3 py-1.5">
+              <User className="h-3.5 w-3.5 text-[#b0d64e]" />
+              {t.team.dentistRole}
+            </span>
+            <span className="inline-flex items-center rounded-full border border-white/10 px-3 py-1.5 text-white/65">
+              {meta}
+            </span>
+          </div>
+          <p className="mt-5 max-w-[34rem] text-[1rem] leading-7 text-white/78">{bio}</p>
+        </div>
+      </div>
     </div>
   </article>
 );
@@ -93,70 +271,70 @@ const DentistCard = ({
 const TeamPanel = ({
   title,
   description,
-  leadName,
-  leadImage,
-  groupImage,
+  lead,
+  summary,
+  supportingImage,
+  supportingImageAlt,
   roleLabels,
-  members,
-  memberGridClassName = 'grid-cols-1 sm:grid-cols-2',
-}: {
-  title: string;
-  description: string;
-  leadName: string;
-  leadImage: string;
-  groupImage?: string;
+  roles,
+}: TeamPanelData & {
+  supportingImageAlt: string;
   roleLabels: Record<RoleKey, string>;
-  members: Record<RoleKey, { name: string; image: string | null }[]>;
-  memberGridClassName?: string;
 }) => (
-  <article className="flex flex-col overflow-hidden rounded-[1.75rem] border border-white/10 bg-black/20 shadow-[0_4px_20px_rgb(0,0,0,0.2)] backdrop-blur-md transition-all duration-300 hover:shadow-[0_8px_30px_rgb(0,0,0,0.3)] hover:bg-black/30">
-    {groupImage ? (
-      <div className="relative h-44 sm:h-48 overflow-hidden">
-        <img
-          src={groupImage}
-          alt={title}
-          className="h-full w-full object-cover object-[50%_22%] origin-[50%_25%] transition-transform duration-700 hover:scale-105"
-          loading="lazy"
-          decoding="async"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#1a1a1a] via-[#1a1a1a]/40 to-transparent" />
-        <div className="absolute left-4 bottom-4 flex items-center gap-2 rounded-full bg-black/80 px-3 py-1.5 text-[0.7rem] font-bold text-white shadow-md backdrop-blur-sm border border-white/10">
-          <span className="h-2 w-2 rounded-full bg-[#b0d64e] animate-pulse" />
-          {title}
+  <article className="overflow-hidden rounded-[2rem] border border-white/10 bg-[#252423] shadow-[0_28px_64px_rgba(18,18,18,0.14)]">
+    <div className="border-b border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.04),rgba(255,255,255,0.01))] p-5 sm:p-6">
+      <div className="flex items-start gap-4">
+        <div className="h-14 w-14 shrink-0 overflow-hidden rounded-2xl bg-[#2d2c2b] ring-1 ring-white/10">
+          <img
+            src={lead.image}
+            alt={lead.name}
+            className="h-full w-full object-cover"
+            loading="lazy"
+            decoding="async"
+          />
+        </div>
+        <div className="min-w-0 flex-1">
+          <p className="text-[0.68rem] font-semibold uppercase tracking-[0.18em] text-[#b0d64e]">
+            {title}
+          </p>
+          <div className="mt-2 flex flex-wrap items-center gap-2">
+            <h3 className="text-xl font-semibold text-white">{lead.name}</h3>
+            <span className="inline-flex rounded-full border border-white/10 bg-white/[0.05] px-3 py-1 text-[0.76rem] font-medium text-white/70">
+              {summary}
+            </span>
+          </div>
+          <p className="mt-3 max-w-[36rem] text-sm leading-6 text-white/72">{description}</p>
         </div>
       </div>
-    ) : (
-      <div className="relative overflow-hidden border-b border-white/10 bg-gradient-to-br from-[#2a3a18]/40 to-[#1a1a1a]/80 p-5">
-        <div className="relative z-10 flex items-center gap-4">
-          <div className="h-14 w-14 overflow-hidden rounded-2xl border border-white/10 bg-[#2d2d2d] shadow-sm ring-2 ring-white/10">
-            <img src={leadImage} alt={leadName} className="h-full w-full object-cover" loading="lazy" decoding="async" />
-          </div>
-          <div>
-            <p className="text-[0.65rem] uppercase tracking-[0.15em] text-[#b0d64e] font-bold">{title}</p>
-            <h3 className="mt-0.5 text-[1.1rem] font-heading font-bold text-white">{leadName}</h3>
-          </div>
-        </div>
-        <div className="absolute -right-8 -top-8 h-32 w-32 rounded-full bg-[#b0d64e]/10 blur-3xl" />
-      </div>
-    )}
+    </div>
 
-    <div className="flex-1 p-5 bg-black/10">
-      <p className="text-[0.8rem] leading-relaxed text-gray-300 mb-6 font-medium">{description}</p>
+    <div className="p-5 sm:p-6">
+      {supportingImage ? (
+        <div className="mb-6 overflow-hidden rounded-[1.5rem] border border-white/10">
+          <img
+            src={supportingImage}
+            alt={supportingImageAlt}
+            className="aspect-[16/10] w-full object-cover object-[50%_24%]"
+            loading="lazy"
+            decoding="async"
+          />
+        </div>
+      ) : null}
 
       <div className="space-y-5">
-        {roleKeys.map((role) => (
-          members[role].length > 0 && (
+        {roleKeys.map((role) =>
+          roles[role].length > 0 ? (
             <div key={role}>
-              <div className="mb-3 flex items-center justify-between">
-                <h4 className="text-[0.65rem] uppercase tracking-[0.15em] font-bold text-[#b0d64e]/90">
+              <div className="mb-3 flex items-center justify-between gap-3">
+                <h4 className="text-[0.68rem] font-semibold uppercase tracking-[0.18em] text-[#b0d64e]">
                   {roleLabels[role]}
                 </h4>
-                <span className="flex h-5 w-5 items-center justify-center rounded-full bg-white/10 shadow-sm text-[0.65rem] font-bold text-white border border-white/10">
-                  {members[role].length}
+                <span className="inline-flex min-w-7 items-center justify-center rounded-full border border-white/10 bg-white/[0.05] px-2 py-1 text-[0.72rem] font-semibold text-white/75">
+                  {roles[role].length}
                 </span>
               </div>
-              <div className={`grid gap-2.5 ${memberGridClassName}`}>
-                {members[role].map((member) => (
+              <div className="grid gap-2.5">
+                {roles[role].map((member) => (
                   <MemberChip
                     key={member.name}
                     name={member.name}
@@ -166,185 +344,120 @@ const TeamPanel = ({
                 ))}
               </div>
             </div>
-          )
-        ))}
+          ) : null
+        )}
       </div>
     </div>
   </article>
 );
 
-export const TeamSection: React.FC = () => {
-  const { t } = useLanguage();
-  const isMobile = useMediaQuery('(max-width: 1023px)');
-  const roleLabels: Record<RoleKey, string> = {
-    hygienists: t.team.hygienists,
-    assistants: t.team.assistants,
-    secretaries: t.team.secretaries,
-  };
-
-  const dentistCards = [
-    {
-      name: clinicData.dentists[0].name,
-      image: clinicData.dentists[0].image,
-      label: t.team.team1Title,
-    },
-    {
-      name: clinicData.dentists[1].name,
-      image: clinicData.dentists[1].image,
-      label: t.team.team2Title,
-    },
-    {
-      name: clinicData.dentists[2].name,
-      image: clinicData.dentists[2].image,
-      label: t.team.comingSoon,
-    },
-  ] as const;
-
-  if (isMobile) {
-    return <TeamSectionMobile t={t} dentistCards={dentistCards} roleLabels={roleLabels} />;
-  }
-
-  return <TeamSectionDesktop t={t} dentistCards={dentistCards} roleLabels={roleLabels} />;
-};
-
-const TeamSectionMobile = ({
+const TeamCardsContent = ({
   t,
-  dentistCards,
-  roleLabels,
+  data,
+  reducedMotion,
 }: {
-  t: ReturnType<typeof useLanguage>['t'];
-  dentistCards: readonly {
-    name: string;
-    image: string | null;
-    label: string;
-  }[];
-  roleLabels: Record<RoleKey, string>;
-}) => {
-  return (
-    <section id="team" className="relative scroll-mt-24 overflow-hidden bg-[#fafbfa] py-20">
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,_rgba(232,238,214,0.6),_transparent_40%),radial-gradient(circle_at_bottom_left,_rgba(244,247,235,0.8),_transparent_40%)]" />
-      <div className="container relative z-10 mx-auto px-4 sm:px-6">
-        <div className="mx-auto max-w-4xl">
-          <div className="mx-auto max-w-2xl text-center">
-            <span className="mb-5 inline-flex items-center gap-2 rounded-full border border-black/5 bg-white/85 px-4 py-2 text-[0.7rem] font-bold uppercase tracking-[0.2em] text-[#7e8d49] shadow-sm">
-              <Shield className="h-4 w-4" />
-              {t.team.featuredImageLabel}
+  t: TFunction;
+  data: TeamSectionData;
+  reducedMotion: boolean;
+}) => (
+  <>
+    <motion.div
+      {...sectionRevealProps(reducedMotion, 0)}
+      className="rounded-[2.25rem] border border-black/5 bg-[#eceee4] p-5 shadow-[0_24px_80px_rgba(70,72,54,0.06)] md:p-7"
+    >
+      <div className="max-w-2xl">
+        <div className="flex items-center gap-3">
+          <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-[#252423] shadow-[0_12px_28px_rgba(0,0,0,0.14)]">
+            <User className="h-5 w-5 text-[#b0d64e]" />
+          </div>
+          <p className="text-[0.7rem] font-semibold uppercase tracking-[0.18em] text-[#7e8d49]">
+            {t.team.dentistsTitle}
+          </p>
+        </div>
+        <h3 className="mt-4 text-card-title font-semibold text-gray-900">
+          {t.team.dentistsTitle}
+        </h3>
+        <p className="mt-3 text-[0.98rem] leading-7 text-gray-600">
+          {t.team.dentistsIntro}
+        </p>
+      </div>
+
+      <div className="mt-6 grid gap-5 lg:grid-cols-2">
+        {data.featuredDentists.map((dentist) => (
+          <DentistCard
+            key={dentist.name}
+            t={t}
+            name={dentist.name}
+            image={dentist.image}
+            meta={dentist.meta}
+            bio={dentist.bio}
+          />
+        ))}
+      </div>
+
+      {data.incomingDentist ? (
+        <div className="mt-5 rounded-[1.7rem] border border-[#d6dcc2] bg-white/75 px-5 py-4 shadow-[0_10px_24px_rgba(0,0,0,0.04)]">
+          <p className="text-[0.68rem] font-semibold uppercase tracking-[0.18em] text-[#7e8d49]">
+            {t.team.comingSoon}
+          </p>
+          <div className="mt-2 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+            <div>
+              <h4 className="text-lg font-semibold text-gray-900">
+                {t.team.comingSoonTitle}: {data.incomingDentist.name}
+              </h4>
+              <p className="mt-1 text-sm leading-6 text-gray-600">
+                {t.team.comingSoonBody}
+              </p>
+            </div>
+            <span className="inline-flex self-start rounded-full border border-[#d6dcc2] bg-[#f8f8f2] px-3 py-1.5 text-sm text-gray-700">
+              {t.team.dentistRole}
             </span>
-            <h2 className="text-section-title font-heading font-bold tracking-tight text-gray-900">
-              {t.team.title}
-            </h2>
-            <p className="mx-auto mt-5 max-w-xl text-base font-medium leading-relaxed text-gray-600">
-              {t.team.subtitle}
-            </p>
-          </div>
-
-          <div className="mx-auto mt-10 w-full max-w-[20rem]">
-            <div className="overflow-hidden rounded-[2rem] border-4 border-white bg-white shadow-[0_24px_80px_rgba(126,141,73,0.15)] ring-1 ring-black/5">
-              <div className="relative aspect-[2/3]">
-                <img
-                  src="/team-hands-reveal.png"
-                  alt={t.team.featuredImageLabel}
-                  className="h-full w-full object-cover object-center"
-                  loading="eager"
-                  decoding="async"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
-              </div>
-            </div>
-          </div>
-
-          <div className="mt-10 space-y-5 rounded-[2rem] bg-[#1f1f1f] p-5 shadow-[0_24px_64px_rgba(0,0,0,0.18)]">
-            <div className="flex items-center gap-3">
-              <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-white/10 shadow-sm ring-1 ring-white/10">
-                <User className="h-5 w-5 text-[#b0d64e]" />
-              </div>
-              <div>
-                <p className="text-[0.7rem] font-bold uppercase tracking-[0.2em] text-[#b0d64e]">
-                  {t.team.dentistsTitle}
-                </p>
-                <h3 className="mt-1 text-xl font-heading font-bold text-white">
-                  {t.team.dentistsTitle}
-                </h3>
-              </div>
-            </div>
-
-            <div className="grid gap-4">
-              {dentistCards.map((dentist) => (
-                <DentistCard
-                  key={dentist.name}
-                  name={dentist.name}
-                  image={dentist.image}
-                  label={dentist.label}
-                  roleLabel={t.team.dentistRole}
-                />
-              ))}
-            </div>
-          </div>
-
-          <div className="mt-6 space-y-5 rounded-[2rem] bg-[#1f1f1f] p-5 shadow-[0_24px_64px_rgba(0,0,0,0.18)]">
-            <div className="flex items-center gap-3">
-              <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-white/10 shadow-sm ring-1 ring-white/10">
-                <Users className="h-5 w-5 text-[#b0d64e]" />
-              </div>
-              <div>
-                <p className="text-[0.7rem] font-bold uppercase tracking-[0.2em] text-[#b0d64e]">
-                  {t.team.rostersTitle}
-                </p>
-                <h3 className="mt-1 text-xl font-heading font-bold text-white">
-                  {t.team.rostersTitle}
-                </h3>
-              </div>
-            </div>
-
-            <div className="grid gap-5">
-              <TeamPanel
-                title={t.team.team1Title}
-                description={t.team.team1Desc}
-                leadName={clinicData.teams.team1.lead.name}
-                leadImage={clinicData.teams.team1.lead.image}
-                roleLabels={roleLabels}
-                members={clinicData.teams.team1.roles}
-                memberGridClassName="grid-cols-1"
-              />
-
-              <TeamPanel
-                title={t.team.team2Title}
-                description={t.team.team2Desc}
-                leadName={clinicData.teams.team2.lead.name}
-                leadImage={clinicData.teams.team2.lead.image}
-                groupImage={clinicData.teams.team2.groupImage}
-                roleLabels={roleLabels}
-                members={clinicData.teams.team2.roles}
-                memberGridClassName="grid-cols-1"
-              />
-            </div>
-          </div>
-
-          <div className="mx-auto mt-8 max-w-3xl space-y-2 px-2 text-center text-sm font-medium text-gray-500">
-            <p>{t.team.midText1}</p>
-            <p>
-              {t.team.midText2}{' '}
-              <span className="font-bold text-[#7e9c2f]">{t.team.midText3}</span>
-            </p>
           </div>
         </div>
+      ) : null}
+    </motion.div>
+
+    <motion.div
+      {...sectionRevealProps(reducedMotion, reducedMotion ? 0 : 0.08)}
+      className="mt-8 rounded-[2.25rem] border border-black/5 bg-[#eceee4] p-5 shadow-[0_24px_80px_rgba(70,72,54,0.06)] md:p-7"
+    >
+      <div className="max-w-2xl">
+        <div className="flex items-center gap-3">
+          <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-[#252423] shadow-[0_12px_28px_rgba(0,0,0,0.14)]">
+            <Users className="h-5 w-5 text-[#b0d64e]" />
+          </div>
+          <p className="text-[0.7rem] font-semibold uppercase tracking-[0.18em] text-[#7e8d49]">
+            {t.team.rostersTitle}
+          </p>
+        </div>
+        <h3 className="mt-4 text-card-title font-semibold text-gray-900">
+          {t.team.rostersTitle}
+        </h3>
+        <p className="mt-3 text-[0.98rem] leading-7 text-gray-600">
+          {t.team.rostersIntro}
+        </p>
       </div>
-    </section>
-  );
-};
+
+      <div className="mt-6 grid gap-5 lg:grid-cols-2">
+        {data.teamPanels.map((team) => (
+          <TeamPanel
+            key={team.id}
+            {...team}
+            roleLabels={data.roleLabels}
+            supportingImageAlt={team.supportingImage ? t.team.supportingImageCaption : ''}
+          />
+        ))}
+      </div>
+    </motion.div>
+  </>
+);
 
 const TeamSectionDesktop = ({
   t,
-  dentistCards,
-  roleLabels,
+  data,
 }: {
-  t: ReturnType<typeof useLanguage>['t'];
-  dentistCards: readonly {
-    name: string;
-    image: string | null;
-    label: string;
-  }[];
-  roleLabels: Record<RoleKey, string>;
+  t: TFunction;
+  data: TeamSectionData;
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -353,152 +466,99 @@ const TeamSectionDesktop = ({
     offset: ['start start', 'end end'],
   });
 
-  const heroOpacity = useTransform(scrollYProgress, [0, 0.34, 0.52], [1, 1, 0], { clamp: false });
-  const heroScale = useTransform(scrollYProgress, [0, 0.52], [1, 0.95]);
-  const heroTranslateY = useTransform(scrollYProgress, [0, 0.52], [0, -24]);
-
-  const revealOpacity = useTransform(scrollYProgress, [0.24, 0.45, 0.62], [0, 0, 1], { clamp: false });
-  const revealTranslateY = useTransform(scrollYProgress, [0.24, 0.62], [72, 0]);
+  const introTextOpacity = useTransform(scrollYProgress, [0, 0.08, 0.56, 0.72], [0, 1, 1, 0.28]);
+  const introTextY = useTransform(scrollYProgress, [0, 0.1, 0.72], [36, 0, -18]);
+  const imageOpacity = useTransform(scrollYProgress, [0.12, 0.34, 0.54, 0.66], [1, 1, 0.18, 0]);
+  const imageScale = useTransform(scrollYProgress, [0.12, 0.54, 0.66], [1, 0.97, 0.92]);
+  const imageY = useTransform(scrollYProgress, [0.1, 0.54, 0.66], [12, 0, -44]);
+  const contentOpacity = useTransform(scrollYProgress, [0.62, 0.82, 1], [0, 0.28, 1]);
+  const contentY = useTransform(scrollYProgress, [0.62, 0.82, 1], [96, 48, 0]);
+  const contentScale = useTransform(scrollYProgress, [0.62, 1], [0.98, 1]);
 
   return (
-    <section ref={containerRef} id="team" className="relative h-[330vh] scroll-mt-24 overflow-clip bg-[#fafbfa]">
-      <div className="sticky top-0 h-screen overflow-hidden">
-        {/* Initial Light Background for Hero Section */}
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,_rgba(232,238,214,0.6),_transparent_40%),radial-gradient(circle_at_bottom_left,_rgba(244,247,235,0.8),_transparent_40%)]" />
-        <div className="absolute inset-0 bg-white/40 backdrop-blur-[100px]" />
+    <section id="team" className="relative scroll-mt-24 overflow-clip bg-[#f7f7f1]">
+      <SectionBackdrop />
 
-        {/* Fading Dark Theme Background for Reveal Section */}
-        <motion.div
-          style={{ opacity: revealOpacity }}
-          className="absolute inset-0 z-15 bg-[#1a1a1a]"
-        >
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,_rgba(176,214,78,0.1),_transparent_40%),radial-gradient(circle_at_bottom_left,_rgba(176,214,78,0.05),_transparent_40%)]" />
-          <div className="absolute inset-0 bg-[#222222]/40 backdrop-blur-[100px]" />
-        </motion.div>
-
-        {/* Hero Section (Fades Out) */}
-        <motion.div
-          style={{ opacity: heroOpacity, scale: heroScale, y: heroTranslateY }}
-          className="relative z-10 flex h-full items-center justify-center px-6"
-        >
-          <div className="w-full max-w-5xl pt-24">
-            <div className="mx-auto max-w-3xl text-center">
-              <span className="inline-flex items-center gap-2 rounded-full bg-white/80 px-4 py-2 text-[0.7rem] uppercase tracking-[0.2em] text-[#7e8d49] shadow-sm border border-black/5 font-bold mb-6">
-                <Shield className="h-4 w-4" />
-                {t.team.featuredImageLabel}
-              </span>
-              <h2 className="text-4xl md:text-5xl lg:text-6xl font-heading font-bold text-gray-900 tracking-tight">{t.team.title}</h2>
-              <p className="mt-6 text-base md:text-lg leading-relaxed text-gray-600 max-w-2xl mx-auto font-medium">{t.team.subtitle}</p>
-            </div>
-
-            <div className="mx-auto mt-12 w-full max-w-[22rem] sm:max-w-[28rem] md:max-w-[32rem]">
-              <div className="overflow-hidden rounded-[2.5rem] border-4 border-white bg-white shadow-[0_24px_80px_rgba(126,141,73,0.15)] ring-1 ring-black/5">
-                <div className="relative aspect-[2/3]">
-                  <img
-                    src="/team-hands-reveal.png"
-                    alt={t.team.featuredImageLabel}
-                    className="h-full w-full object-cover object-center"
-                    loading="eager"
-                    decoding="async"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
-                </div>
-              </div>
-            </div>
+      <div ref={containerRef} className="relative h-[240vh]">
+        <div className="sticky top-0 flex h-[100dvh] items-center overflow-hidden">
+          <div className="container relative z-10 mx-auto px-4 sm:px-6">
+            <TeamIntro
+              t={t}
+              textMotionStyle={{ opacity: introTextOpacity, y: introTextY }}
+              imageMotionStyle={{ opacity: imageOpacity, scale: imageScale, y: imageY }}
+            />
           </div>
-        </motion.div>
+        </div>
+      </div>
 
-        {/* Revealed Dark Theme Cards (Fades In) */}
-        <motion.div
-          style={{ opacity: revealOpacity, y: revealTranslateY }}
-          className="absolute inset-0 z-20 overflow-hidden px-4 sm:px-8 lg:px-12 pointer-events-none flex flex-col justify-center"
-        >
-          <div className="container mx-auto max-w-[95rem] pointer-events-auto">
-            <div className="mx-auto flex flex-col">
-              <div className="grid gap-8 lg:grid-cols-[0.8fr_1.2fr] xl:grid-cols-[0.7fr_1.3fr] max-h-[85vh]">
-                {/* Dentists Column */}
-                <article className="flex flex-col overflow-hidden rounded-[2rem] border border-white/10 bg-[#2a2a2a]/80 shadow-[0_8px_40px_rgba(0,0,0,0.4)] backdrop-blur-xl ring-1 ring-white/5">
-                  <div className="border-b border-white/10 bg-gradient-to-br from-[#1a1a1a]/60 to-[#2a2a2a]/80 p-6 lg:p-8 shrink-0">
-                    <div className="flex items-center gap-4">
-                      <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white/10 shadow-sm ring-1 ring-white/10">
-                        <User className="h-6 w-6 text-[#b0d64e]" />
-                      </div>
-                      <div>
-                        <p className="text-[0.7rem] uppercase tracking-[0.2em] text-[#b0d64e] font-bold">
-                          {t.team.dentistsTitle}
-                        </p>
-                        <h3 className="text-2xl font-heading font-bold text-white mt-1">
-                          {t.team.dentistsTitle}
-                        </h3>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="grid gap-5 p-6 lg:p-8 overflow-y-auto min-h-0 custom-scrollbar">
-                    {dentistCards.map((dentist) => (
-                      <DentistCard
-                        key={dentist.name}
-                        name={dentist.name}
-                        image={dentist.image}
-                        label={dentist.label}
-                        roleLabel={t.team.dentistRole}
-                      />
-                    ))}
-                  </div>
-                </article>
-
-                {/* Clinical Teams Column */}
-                <article className="flex flex-col overflow-hidden rounded-[2rem] border border-white/10 bg-[#2a2a2a]/80 shadow-[0_8px_40px_rgba(0,0,0,0.4)] backdrop-blur-xl ring-1 ring-white/5">
-                  <div className="border-b border-white/10 bg-gradient-to-br from-[#1a1a1a]/60 to-[#2a2a2a]/80 p-6 lg:p-8 shrink-0">
-                    <div className="flex items-center gap-4">
-                      <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white/10 shadow-sm ring-1 ring-white/10">
-                        <Users className="h-6 w-6 text-[#b0d64e]" />
-                      </div>
-                      <div>
-                        <p className="text-[0.7rem] uppercase tracking-[0.2em] text-[#b0d64e] font-bold">
-                          {t.team.rostersTitle}
-                        </p>
-                        <h3 className="text-2xl font-heading font-bold text-white mt-1">
-                          {t.team.rostersTitle}
-                        </h3>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="grid gap-6 overflow-y-auto p-6 lg:p-8 xl:grid-cols-2 min-h-0 custom-scrollbar">
-                    <TeamPanel
-                      title={t.team.team1Title}
-                      description={t.team.team1Desc}
-                      leadName={clinicData.teams.team1.lead.name}
-                      leadImage={clinicData.teams.team1.lead.image}
-                      roleLabels={roleLabels}
-                      members={clinicData.teams.team1.roles}
-                    />
-
-                    <TeamPanel
-                      title={t.team.team2Title}
-                      description={t.team.team2Desc}
-                      leadName={clinicData.teams.team2.lead.name}
-                      leadImage={clinicData.teams.team2.lead.image}
-                      groupImage={clinicData.teams.team2.groupImage}
-                      roleLabels={roleLabels}
-                      members={clinicData.teams.team2.roles}
-                    />
-                  </div>
-                </article>
-              </div>
-
-              <div className="mx-auto mt-10 max-w-3xl space-y-2 text-center text-sm md:text-base text-gray-400 font-medium pb-6">
-                <p>{t.team.midText1}</p>
-                <p>
-                  {t.team.midText2}{' '}
-                  <span className="font-bold text-[#b0d64e]">{t.team.midText3}</span>
-                </p>
-              </div>
-            </div>
+      <motion.div
+        style={{ opacity: contentOpacity, y: contentY, scale: contentScale }}
+        className="relative z-20 -mt-[12vh] pb-24 md:pb-28"
+      >
+        <div className="container mx-auto px-4 sm:px-6">
+          <div className="mx-auto max-w-6xl">
+            <TeamCardsContent t={t} data={data} reducedMotion={false} />
           </div>
-        </motion.div>
+        </div>
+      </motion.div>
+    </section>
+  );
+};
+
+const TeamSectionMobile = ({
+  t,
+  data,
+  reducedMotion,
+}: {
+  t: TFunction;
+  data: TeamSectionData;
+  reducedMotion: boolean;
+}) => {
+  const introRef = useRef<HTMLDivElement>(null);
+
+  const { scrollYProgress } = useScroll({
+    target: introRef,
+    offset: ['start 75%', 'end 20%'],
+  });
+
+  const imageOpacity = useTransform(scrollYProgress, [0, 0.5, 1], [1, 1, reducedMotion ? 1 : 0.16]);
+  const imageScale = useTransform(scrollYProgress, [0, 1], [1, reducedMotion ? 1 : 0.96]);
+  const imageY = useTransform(scrollYProgress, [0, 1], [0, reducedMotion ? 0 : -18]);
+
+  return (
+    <section
+      id="team"
+      className="relative scroll-mt-24 overflow-hidden bg-[#f7f7f1] py-20 md:py-24"
+    >
+      <SectionBackdrop />
+
+      <div className="container relative z-10 mx-auto px-4 sm:px-6">
+        <div className="mx-auto max-w-6xl">
+          <div ref={introRef} className="mx-auto max-w-3xl text-center">
+            <TeamIntro
+              t={t}
+              imageMotionStyle={{ opacity: imageOpacity, scale: imageScale, y: imageY }}
+            />
+          </div>
+
+          <div className="mt-12">
+            <TeamCardsContent t={t} data={data} reducedMotion={reducedMotion} />
+          </div>
+        </div>
       </div>
     </section>
   );
+};
+
+export const TeamSection: React.FC = () => {
+  const { t } = useLanguage();
+  const data = getTeamSectionData(t);
+  const prefersReducedMotion = Boolean(useReducedMotion());
+  const isDesktop = useMediaQuery('(min-width: 768px)');
+
+  if (isDesktop && !prefersReducedMotion) {
+    return <TeamSectionDesktop t={t} data={data} />;
+  }
+
+  return <TeamSectionMobile t={t} data={data} reducedMotion={prefersReducedMotion} />;
 };

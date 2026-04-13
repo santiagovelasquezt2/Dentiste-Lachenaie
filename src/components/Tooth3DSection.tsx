@@ -103,6 +103,14 @@ export const Tooth3DSection: React.FC = () => {
             'radial-gradient(circle at 20% 15%, rgba(255,255,255,0.85), transparent 28%), radial-gradient(circle at 80% 0%, rgba(176,214,78,0.18), transparent 24%), linear-gradient(180deg, rgba(255,255,255,0.65), rgba(255,255,255,0.15))',
         }}
       />
+      <div
+        className="pointer-events-none absolute inset-x-0 bottom-0 h-24"
+        aria-hidden
+        style={{
+          background:
+            'linear-gradient(180deg, rgba(244,244,244,0) 0%, rgba(247,247,241,0.92) 100%)',
+        }}
+      />
 
       <div className="container relative z-10 mx-auto px-4 sm:px-6">
         <div className="grid items-center gap-10 md:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)] md:gap-14">
@@ -189,42 +197,6 @@ export const Tooth3DSection: React.FC = () => {
             <div className="absolute inset-0 rounded-[2rem] bg-[radial-gradient(circle_at_50%_40%,rgba(255,255,255,0.65),rgba(255,255,255,0.1)_55%,transparent_80%)]" />
             <div className="relative h-full w-full">
               <ToothCanvas />
-            </div>
-          </div>
-
-          <div className="relative mt-6 overflow-hidden bg-[#26231f] px-5 pb-5 pt-8 after:pointer-events-none after:absolute after:inset-x-0 after:bottom-0 after:h-2 after:content-[''] after:bg-[#f6f3ef] sm:px-6 md:px-8 lg:px-10">
-            <div className="pointer-events-none absolute inset-x-0 top-0 h-28" aria-hidden>
-              <svg
-                viewBox="0 0 1200 140"
-                preserveAspectRatio="none"
-                className="h-full w-full"
-              >
-                <path
-                  d="M 36 48 C 240 47, 430 47, 640 49 C 780 50, 900 51, 1006 56 C 1070 59, 1114 77, 1166 95"
-                  fill="none"
-                  stroke="#2FA56E"
-                  strokeWidth="3"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            </div>
-
-            <div className="flex min-h-[9rem] flex-col justify-end gap-4 pt-16 text-text-inverse sm:min-h-[10rem] md:min-h-[12rem]">
-              <div className="flex items-end justify-between gap-4">
-                <div className="text-[clamp(0.78rem,1vw,0.95rem)] font-semibold tracking-[-0.03em] text-white/95">
-                  Faster
-                </div>
-
-                <div className="mx-auto flex flex-col items-center text-center text-[clamp(0.72rem,0.95vw,0.88rem)] leading-tight text-white/72">
-                  <span className="font-medium">Modern Dentistry:</span>
-                  <span className="font-semibold text-white/92">Smarter</span>
-                </div>
-
-                <div className="text-[clamp(0.78rem,1vw,0.95rem)] font-semibold tracking-[-0.03em] text-white/95">
-                  Pain-Free
-                </div>
-              </div>
             </div>
           </div>
         </div>

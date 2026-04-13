@@ -75,7 +75,15 @@ export const GallerySection: React.FC = () => {
       .replace('{{total}}', String(total));
 
   return (
-    <section id="gallery" className="scroll-mt-24 overflow-hidden bg-bg-alt py-20 reveal-on-scroll md:py-32">
+    <section id="gallery" className="relative scroll-mt-24 overflow-hidden bg-bg-alt py-20 reveal-on-scroll md:py-32">
+      <div
+        className="pointer-events-none absolute inset-x-0 top-0 h-24"
+        aria-hidden
+        style={{
+          background:
+            'linear-gradient(180deg, rgba(247,247,241,0.95) 0%, rgba(244,244,244,0) 100%)',
+        }}
+      />
       <div className="container mx-auto px-4 sm:px-6">
         <h2 className="mb-12 text-center text-section-title font-heading font-semibold text-text md:mb-20">
           {t.gallery.title}
@@ -87,19 +95,19 @@ export const GallerySection: React.FC = () => {
               key={img.src}
               type="button"
               onClick={() => setActiveImageIndex(i)}
-              className={`group relative block h-full w-full rounded-3xl overflow-hidden shadow-lg text-left cursor-zoom-in focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-bg-alt ${img.span || ''}`}
+              className={`group relative block h-full w-full cursor-zoom-in overflow-hidden rounded-3xl text-left shadow-lg shadow-black/10 transition-[transform,box-shadow] duration-500 ease-[cubic-bezier(0.33,1,0.68,1)] motion-safe:hover:-translate-y-1.5 motion-safe:hover:shadow-2xl motion-safe:hover:shadow-black/18 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-bg-alt ${img.span || ''}`}
               aria-label={`${t.gallery.openFullScreen} ${img.alt}`}
             >
               <img
                 src={img.src}
                 alt={img.alt}
-                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                className="h-full w-full origin-center object-cover transition-transform duration-500 ease-[cubic-bezier(0.33,1,0.68,1)] motion-safe:group-hover:scale-[1.07]"
                 loading="lazy"
                 decoding="async"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/35 via-black/0 to-black/0 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
-              <div className="absolute bottom-4 left-4 right-4 flex items-end justify-between gap-3 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
-                <span className="rounded-full bg-white/90 px-3 py-1 text-xs font-nav text-text">
+              <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/45 via-black/10 to-transparent opacity-0 transition-opacity duration-500 ease-out group-hover:opacity-100" />
+              <div className="pointer-events-none absolute bottom-4 left-4 right-4 flex items-end justify-between gap-3 opacity-0 transition-[opacity,transform] duration-500 ease-[cubic-bezier(0.33,1,0.68,1)] motion-safe:translate-y-3 motion-safe:group-hover:translate-y-0 group-hover:opacity-100">
+                <span className="rounded-full bg-white/95 px-3 py-1.5 text-xs font-nav text-text shadow-md shadow-black/10 ring-1 ring-black/5 backdrop-blur-sm transition-[transform,box-shadow] duration-500 ease-[cubic-bezier(0.33,1,0.68,1)] motion-safe:group-hover:shadow-lg">
                   {t.gallery.openFullScreen}
                 </span>
               </div>

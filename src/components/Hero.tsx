@@ -1,11 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import {
-  motion,
-  useMotionValueEvent,
-  useReducedMotion,
-  useScroll,
-  type Variants,
-} from 'framer-motion';
+import { motion, useMotionValueEvent, useReducedMotion, useScroll } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
 import clinicExteriorHero from '@/DentalContent/Images/Ouside of the building/clinic-exterior-front-signage-01.jpg';
 import { useLanguage } from '../context/LanguageContext';
@@ -25,35 +19,12 @@ const REVEAL_FRACTION = 0.48;
 /** The split title should disappear much faster than the video reveal. */
 const TITLE_FADE_FRACTION = 0.16;
 const TITLE_FADE_EDGE_PCT = 12;
-
-// #region agent log
-const DEBUG_LOG_ENDPOINT = 'http://127.0.0.1:7573/ingest/20ff4847-cd1d-41af-aa0a-6e2f30cd5f25';
-const DEBUG_SESSION_ID = '0e348b';
-const emitDebugLog = (
-  hypothesisId: string,
-  location: string,
-  message: string,
-  data: Record<string, unknown>,
-  runId = 'run1',
-) => {
-  fetch(DEBUG_LOG_ENDPOINT, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'X-Debug-Session-Id': DEBUG_SESSION_ID,
-    },
-    body: JSON.stringify({
-      sessionId: DEBUG_SESSION_ID,
-      runId,
-      hypothesisId,
-      location,
-      message,
-      data,
-      timestamp: Date.now(),
-    }),
-  }).catch(() => {});
-};
-// #endregion
+/**
+ * White|dark boundary on the hero title (`90deg` gradient), as % of the heading box width.
+ * **50** = centered. **Higher** (e.g. 54–58) = split moves **right** (more white, less dark).
+ * **Lower** = split moves **left**.
+ */
+const HERO_TITLE_SPLIT_AT_PCT = 50.25;
 
 export const Hero: React.FC = () => {
   const { t } = useLanguage();
@@ -101,29 +72,6 @@ export const Hero: React.FC = () => {
     applyHeroScrollProgress(scrollYProgress.get());
   }, [applyHeroScrollProgress, scrollYProgress]);
 
-  const containerVariants: Variants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.12,
-        delayChildren: 0.18,
-      },
-    },
-  };
-
-  const itemVariants: Variants = {
-    hidden: { opacity: 0, y: 24 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.75,
-        ease: [0.16, 1, 0.3, 1] as const,
-      },
-    },
-  };
-
   /** Pan the 200vw strip as % of its own width: -25% = split, -50% = video only (no vw rounding drift). */
   const panPercent = 25 + revealProgress * 25;
   /** Start with the seam slightly right of center, then ease it back as the video takes over. */
@@ -138,30 +86,6 @@ export const Hero: React.FC = () => {
   const splitTitleMaskImage = `linear-gradient(90deg, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 1) ${titleFadeEdgePct}%, rgba(255, 255, 255, 0) ${titleRevealPct}%, rgba(255, 255, 255, 0) 100%)`;
   const splitTitleTranslateY = revealProgress * 28;
   const splitTitleScale = 1 - revealProgress * 0.05;
-
-  useEffect(() => {
-    if (typeof window === 'undefined') return;
-
-    emitDebugLog('H1', 'src/components/Hero.tsx:branch', 'Hero branch and overlay state', {
-      viewportWidth: window.innerWidth,
-      viewportHeight: window.innerHeight,
-      isDesktop,
-      prefersReducedMotion,
-      activeBranch: isDesktop ? 'desktop' : 'mobile',
-      photoOverlayPresent: Boolean(document.querySelector('[data-debug-hero-photo-overlay]')),
-    });
-  }, [isDesktop, prefersReducedMotion]);
-
-  useEffect(() => {
-    if (!isDesktop) return;
-
-    emitDebugLog('H2', 'src/components/Hero.tsx:revealProgress', 'Hero desktop scroll state', {
-      revealProgress,
-      panPercent,
-      splitOffsetPx,
-      seamNudgePx,
-    });
-  }, [isDesktop, panPercent, revealProgress, seamNudgePx, splitOffsetPx]);
 
   return (
     <section
@@ -179,55 +103,26 @@ export const Hero: React.FC = () => {
               }}
             >
               <motion.div className="relative flex h-full w-screen items-center overflow-hidden bg-[#112133] text-white">
-                <motion.img
-                  src={clinicExteriorHero}
-                  alt={t.hero.imageAlt}
-                  className="absolute inset-0 h-full w-full object-cover object-[56%_44%] sm:object-[60%_42%] lg:object-[32%_40%]"
+                <div className="absolute inset-0 overflow-hidden" aria-hidden>
+                  <motion.img
+                    src={clinicExteriorHero}
+                    alt=""
+                    decoding="async"
+                    fetchPriority="high"
+                    className="absolute left-1/2 top-1/2 h-[115%] w-[115%] max-w-none -translate-x-1/2 -translate-y-1/2 object-cover object-[52%_36%] contrast-[1.04] saturate-[0.92] sm:object-[54%_34%] md:object-[50%_35%] lg:object-[36%_32%] xl:object-[34%_30%]"
+                    style={{ willChange: 'transform' }}
+                    aria-hidden
+                  />
+                </div>
+                <div className="absolute inset-0 bg-gradient-to-r from-[#0f1720]/78 via-[#0f1720]/28 via-45% to-transparent to-100%" />
+                <div
+                  className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_85%_70%_at_58%_45%,transparent_20%,rgba(15,23,32,0.22)_100%)] mix-blend-multiply"
                   aria-hidden
                 />
                 <div
-                  data-debug-hero-photo-overlay
-                  className="absolute inset-0 bg-gradient-to-r from-[#0f1720]/72 via-[#0f1720]/30 to-transparent"
+                  className="pointer-events-none absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[#0f1720]/35"
+                  aria-hidden
                 />
-
-                <div className="relative z-10 flex h-full w-full items-start justify-start px-6 pb-20 pt-28 sm:px-10 sm:pt-32 md:px-12 md:pt-36 lg:px-16 lg:pt-40 xl:px-24">
-                  <motion.div
-                    className="max-w-md space-y-6 text-left"
-                    initial="hidden"
-                    animate="visible"
-                    variants={containerVariants}
-                    style={{ opacity: 1 - revealProgress * 0.35 }}
-                  >
-                    <motion.p variants={itemVariants} className="text-overline text-white/60">
-                      {t.hero.eyebrow}
-                    </motion.p>
-
-                    <motion.p variants={itemVariants} className="text-body-lg text-white/84">
-                      {t.hero.subheader}
-                    </motion.p>
-
-                    <motion.div
-                      variants={itemVariants}
-                      className="flex flex-wrap items-center justify-start gap-4"
-                    >
-                      <Button
-                        size="lg"
-                        pill
-                        onClick={() => {
-                          window.location.hash = '#appointment';
-                        }}
-                        className="bg-[#b0d64e] px-8 py-5 font-display text-lg font-normal tracking-[-0.02em] text-white normal-case shadow-lg shadow-[#b0d64e]/20 transition-all duration-300 hover:bg-[#9cbd42] sm:px-10 sm:text-xl lg:px-12 lg:py-7 lg:text-[1.35rem]"
-                      >
-                        {t.hero.cta}
-                      </Button>
-
-                      <div className="hero-caption-surface inline-flex items-center gap-2 rounded-full px-6 py-3 text-sm font-semibold text-white/85">
-                        <ArrowRight className="h-4 w-4 rotate-90" />
-                        Scroll to reveal video
-                      </div>
-                    </motion.div>
-                  </motion.div>
-                </div>
               </motion.div>
 
               <motion.div className="relative flex h-full w-screen items-center overflow-hidden bg-black text-white">
@@ -258,7 +153,16 @@ export const Hero: React.FC = () => {
                   transform: `translate3d(${splitOffsetPx}px, calc(-50% + ${splitTitleTranslateY}px), 0) scale(${splitTitleScale})`,
                 }}
               >
-                <h1 className="mx-auto block w-full max-w-[min(99.5vw,104rem)] bg-[linear-gradient(90deg,#ffffff_0_50%,#0f1720_50%_100%)] bg-clip-text py-[0.28em] text-center font-display text-[clamp(3.75rem,6.25vw,10.5rem)] leading-[1.06] tracking-[-0.055em] text-transparent [-webkit-background-clip:text] [-webkit-text-fill-color:transparent] [text-shadow:0_20px_50px_rgba(0,0,0,0.2)] [hyphens:none]">
+                <h1
+                  className="mx-auto block w-full max-w-[min(99.5vw,104rem)] py-[0.28em] text-center font-display text-[clamp(3.75rem,6.25vw,10.5rem)] leading-[1.06] tracking-[-0.055em] [text-shadow:0_20px_50px_rgba(0,0,0,0.2)] [hyphens:none]"
+                  style={{
+                    backgroundImage: `linear-gradient(90deg, #ffffff 0%, #ffffff ${HERO_TITLE_SPLIT_AT_PCT}%, #0f1720 ${HERO_TITLE_SPLIT_AT_PCT}%, #0f1720 100%)`,
+                    WebkitBackgroundClip: 'text',
+                    backgroundClip: 'text',
+                    color: 'transparent',
+                    WebkitTextFillColor: 'transparent',
+                  }}
+                >
                   <span className="block">{t.hero.clinicNameTop}</span>
                   <span className="block whitespace-nowrap">{t.hero.clinicNameBottom}</span>
                 </h1>

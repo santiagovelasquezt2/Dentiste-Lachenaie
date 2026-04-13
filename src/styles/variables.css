@@ -26,7 +26,7 @@
 
   /* Typography */
   --font-sans: 'Geist Variable', 'Geist', -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Segoe UI', sans-serif;
-  --font-heading: 'Geist Variable', 'Geist', sans-serif;
+  --font-heading: ui-serif, Georgia, Cambria, 'Times New Roman', Times, serif;
   --font-nav: var(--font-sans);
   --font-body: var(--font-sans);
   --font-mono: ui-monospace, SFMono-Regular, SF Mono, Menlo, Monaco, Consolas, monospace;

@@ -17,6 +17,16 @@ type TeamBucket = {
   secretaries: TeamMember[];
 };
 
+type DentistProfile = {
+  name: string;
+  role: string;
+  bio: string;
+  image: string | null;
+  featured: boolean;
+  status: 'active' | 'coming-soon';
+  teamId?: 'team1' | 'team2';
+};
+
 export const clinicData = {
   name: "Centre dentaire Vaillancourt St-Onge",
   phone: "(450) 582-2219",
@@ -40,20 +50,28 @@ export const clinicData = {
       role: "Dentist",
       bio: "A graduate of l'Université de Montréal and practicing since 1999, Dr Nathalie Vaillancourt has been at the clinic since its founding. She is surrounded by Yamina, Élizabeth and Anne-Sophie, dental hygienists; Audrey and Virginie, dental assistants; and Marie-Pier and Marjolaine, secretary-receptionists.",
       image: drNathalieVaillancourt,
+      featured: true,
+      status: "active",
+      teamId: "team1",
     },
     {
       name: "Dr Marie-Christine St-Onge",
       role: "Dentist",
       bio: "Graduate of l'Université Laval in 1998, Dre Marie-Christine St-Onge has been with the clinic since 2001. Her team includes Sylvie, Myrlène and Éveline, dental hygienists; Martine and Marie-Pier, dental assistants; and Nathalie and Diane, secretary-receptionists.",
       image: drMarieChristineStOnge,
+      featured: true,
+      status: "active",
+      teamId: "team2",
     },
     {
       name: "Dr Nadeige Moquin",
       role: "Dentist",
       bio: "Texte à venir",
       image: null,
+      featured: false,
+      status: "coming-soon",
     }
-  ],
+  ] satisfies DentistProfile[],
   teams: {
     team1: {
       lead: {
@@ -83,7 +101,7 @@ export const clinicData = {
         role: "Dentist",
         image: drMarieChristineStOnge,
       },
-      groupImage: teamDrStOngeGroupPhoto,
+      supportingImage: teamDrStOngeGroupPhoto,
       roles: {
         hygienists: [
           { name: "Sylvie", image: null },

@@ -4,7 +4,8 @@ import { useLanguage } from '../context/LanguageContext';
 import { useFocusTrap } from '../hooks/useFocusTrap';
 import { isHoursHash, scrollToHoursSection } from '../lib/scrollToHours';
 import { cn } from '../lib/utils';
-import { Menu, X } from 'lucide-react';
+import { clinicData } from '../content/clinic';
+import { Menu, X, ChevronDown, ExternalLink, Plus } from 'lucide-react';
 
 const logoSrc = `${import.meta.env.BASE_URL}assets/clinic-logo-primary.png`;
 
@@ -15,14 +16,31 @@ const langPillTransition = {
   mass: 0.7,
 };
 
+type NavPanel = 'menu' | 'phone' | null;
+
+const dropdownPanelClass =
+  'absolute left-0 top-full z-50 mt-2 min-w-[14rem] rounded-2xl border border-black/5 bg-white/95 py-2 shadow-[0_24px_60px_-24px_rgba(15,23,42,0.28)] backdrop-blur-xl';
+
 export const Nav: React.FC = () => {
   const { language, setLanguage, t } = useLanguage();
   const headerRef = useRef<HTMLElement>(null);
   const menuButtonRef = useRef<HTMLButtonElement>(null);
   const menuPanelRef = useRef<HTMLDivElement>(null);
   const firstMobileLinkRef = useRef<HTMLAnchorElement>(null);
+  const desktopDropdownRef = useRef<HTMLDivElement>(null);
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [openPanel, setOpenPanel] = useState<NavPanel>(null);
+
+  const patientFormStep = t.firstVisit.steps[0];
+  const patientFormHref =
+    patientFormStep.download != null
+      ? patientFormStep.download.href.startsWith('http')
+        ? patientFormStep.download.href
+        : `${import.meta.env.BASE_URL}${patientFormStep.download.href.replace(/^\//, '')}`
+      : '#first-visit-steps';
+
+  const telHref = `tel:${clinicData.phone.replace(/\D/g, '')}`;
 
   useEffect(() => {
     const handleScroll = () => {
@@ -62,6 +80,19 @@ export const Nav: React.FC = () => {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
+  useEffect(() => {
+    if (openPanel === null) return;
+
+    const handlePointerDown = (event: PointerEvent) => {
+      if (!desktopDropdownRef.current?.contains(event.target as Node)) {
+        setOpenPanel(null);
+      }
+    };
+
+    window.addEventListener('pointerdown', handlePointerDown);
+    return () => window.removeEventListener('pointerdown', handlePointerDown);
+  }, [openPanel]);
+
   useFocusTrap({
     active: isMenuOpen,
     containerRef: menuPanelRef,
@@ -86,8 +117,18 @@ export const Nav: React.FC = () => {
     { href: '#contact', label: t.nav.contact },
   ];
 
-  const navLinksOverImage = navLinks.slice(0, 3);
-  const navLinksOverLight = navLinks.slice(3);
+  const menuLinks = navLinks.filter((l) => l.href !== '#services');
+
+  const togglePanel = (panel: Exclude<NavPanel, null>) => {
+    setOpenPanel((p) => (p === panel ? null : panel));
+  };
+
+  const onLightChrome = isScrolled;
+  const emphasisClass = onLightChrome
+    ? 'text-gray-800'
+    : 'text-neutral-800 drop-shadow-sm lg:text-neutral-800';
+  const onImageEmphasisClass = onLightChrome ? 'text-gray-800' : 'text-white drop-shadow-sm';
+  const subtleOnImageClass = onLightChrome ? 'text-gray-600' : 'text-white/75';
 
   return (
     <header
@@ -96,64 +137,170 @@ export const Nav: React.FC = () => {
         'fixed top-0 left-0 w-full z-50 transition-all duration-500',
         isScrolled
           ? 'border-b border-white/30 bg-white/45 backdrop-blur-xl backdrop-saturate-150 py-4 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.55),0_8px_32px_-12px_rgba(15,23,42,0.12)]'
-          : 'bg-transparent py-5 sm:py-8'
+          : 'border-b border-white/10 bg-gradient-to-r from-white/92 via-white/55 via-[42%] to-black/22 py-5 backdrop-blur-[6px] sm:py-6'
       )}
     >
-      <div className="flex w-full items-center justify-between gap-4 px-4 sm:px-6 lg:grid lg:grid-cols-2 lg:items-center lg:justify-items-stretch lg:gap-x-6 xl:gap-x-10">
-        <div className="flex min-w-0 items-center gap-6 lg:gap-10">
+      <div
+        ref={desktopDropdownRef}
+        className="flex w-full items-center justify-between gap-3 px-4 sm:px-6 lg:gap-6"
+      >
+        <div className="flex min-w-0 flex-1 items-center gap-4 sm:gap-6">
           <motion.a
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             href="#hero"
             className="flex shrink-0 items-center"
-            onClick={() => setIsMenuOpen(false)}
+            onClick={() => {
+              setIsMenuOpen(false);
+              setOpenPanel(null);
+            }}
           >
             <img
               src={logoSrc}
               alt="Logo"
-              className={cn(
-                'h-10 w-auto sm:h-12 transition-[filter] duration-500',
-                !isScrolled && 'brightness-0 invert'
-              )}
+              className="h-10 w-auto sm:h-11 transition-opacity duration-500"
             />
           </motion.a>
 
-          <nav className="hidden min-w-0 items-center gap-8 lg:flex xl:gap-10" aria-label="Primary">
-            {navLinksOverImage.map((link) => (
-              <a
-                key={link.href}
-                href={link.href}
-                onClick={handleNavLinkClick(link.href)}
+          <div className="hidden items-center gap-5 lg:flex xl:gap-7">
+            <div className="relative">
+              <button
+                type="button"
+                aria-expanded={openPanel === 'menu'}
                 className={cn(
-                  'shrink-0 border-b border-transparent pb-1 text-sm font-bold tracking-wide transition-colors hover:text-[#b0d64e]',
-                  isScrolled ? 'text-gray-800' : 'text-white'
+                  'group inline-flex items-center gap-2 text-base font-semibold tracking-wide transition-colors hover:text-[#7e9c2f]',
+                  emphasisClass
                 )}
+                onClick={() => togglePanel('menu')}
               >
-                {link.label}
-              </a>
-            ))}
-          </nav>
+                {t.nav.menu}
+                <Menu
+                  className="size-4 origin-center opacity-80 transition-transform duration-200 ease-out motion-safe:group-hover:scale-110"
+                  strokeWidth={2}
+                  aria-hidden
+                />
+              </button>
+              <AnimatePresence>
+                {openPanel === 'menu' && (
+                  <motion.div
+                    initial={{ opacity: 0, y: -6 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -6 }}
+                    transition={{ duration: 0.15 }}
+                    className={dropdownPanelClass}
+                    role="menu"
+                  >
+                    {menuLinks.map((link) => (
+                      <a
+                        key={link.href}
+                        href={link.href}
+                        role="menuitem"
+                        onClick={(e) => {
+                          handleNavLinkClick(link.href)(e);
+                          setOpenPanel(null);
+                        }}
+                        className="block px-4 py-2.5 text-base font-bold text-gray-900 transition-colors hover:bg-[#f7faf2] hover:text-[#7e9c2f]"
+                      >
+                        {link.label}
+                      </a>
+                    ))}
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+
+            <a
+              href="#services"
+              onClick={() => setOpenPanel(null)}
+              className={cn(
+                'text-base font-semibold tracking-wide transition-colors hover:text-[#7e9c2f]',
+                emphasisClass
+              )}
+            >
+              {t.nav.services}
+            </a>
+          </div>
         </div>
 
-        <div className="flex shrink-0 items-center justify-end gap-4 sm:gap-6 lg:gap-8 xl:gap-10">
-          <nav className="hidden items-center justify-end gap-8 lg:flex xl:gap-10" aria-label="Secondary">
-            {navLinksOverLight.map((link) => (
-              <a
-                key={link.href}
-                href={link.href}
-                onClick={handleNavLinkClick(link.href)}
-                className="shrink-0 border-b border-transparent pb-1 text-sm font-bold tracking-wide text-gray-800 transition-colors hover:text-[#b0d64e]"
-              >
-                {link.label}
-              </a>
-            ))}
-          </nav>
+        <div className="hidden shrink-0 items-center justify-end gap-5 lg:flex xl:gap-7">
+          <a
+            href={patientFormHref}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={() => setOpenPanel(null)}
+            className={cn(
+              'group inline-flex items-center gap-2 text-base font-semibold tracking-wide transition-colors hover:text-[#b0d64e]',
+              onImageEmphasisClass
+            )}
+          >
+            {t.nav.patientForm}
+            <ExternalLink
+              className="size-3.5 origin-center opacity-90 transition-transform duration-200 ease-out motion-safe:group-hover:-translate-y-px motion-safe:group-hover:translate-x-px"
+              aria-hidden
+            />
+          </a>
+
+          <div className="relative">
+            <button
+              type="button"
+              aria-expanded={openPanel === 'phone'}
+              aria-haspopup="true"
+              className={cn(
+                'group flex items-center gap-1.5 text-left transition-opacity hover:opacity-90',
+                onImageEmphasisClass
+              )}
+              onClick={() => togglePanel('phone')}
+            >
+              <span className="flex flex-col leading-tight">
+                <span className="text-base font-semibold tracking-wide">{clinicData.phone}</span>
+                <span className={cn('text-sm font-medium', subtleOnImageClass)}>{t.hero.location}</span>
+              </span>
+              <ChevronDown
+                className="size-4 shrink-0 origin-center opacity-70 transition-transform duration-200 ease-out motion-safe:group-hover:translate-y-0.5"
+                aria-hidden
+              />
+            </button>
+            <AnimatePresence>
+              {openPanel === 'phone' && (
+                <motion.div
+                  initial={{ opacity: 0, y: -6 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -6 }}
+                  transition={{ duration: 0.15 }}
+                  className={cn(dropdownPanelClass, 'min-w-[16rem]')}
+                >
+                  <a
+                    href={telHref}
+                    className="block px-4 py-3 text-base font-bold text-gray-900 transition-colors hover:bg-[#f7faf2]"
+                    onClick={() => setOpenPanel(null)}
+                  >
+                    {clinicData.phone}
+                  </a>
+                  <p className="px-4 pb-3 text-sm text-gray-500">{t.hero.location}</p>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+
+          <a
+            href="#appointment"
+            onClick={() => setOpenPanel(null)}
+            className="group inline-flex items-center gap-2 rounded-full bg-accent px-5 py-2.5 text-base font-bold tracking-wide text-bg-dark shadow-sm transition-[transform,background-color,color,box-shadow] hover:scale-[1.02] hover:bg-white hover:shadow-md active:scale-[0.98]"
+          >
+            {t.nav.bookAppointment}
+            <Plus
+              className="size-4 origin-center opacity-80 transition-transform duration-200 ease-out motion-safe:group-hover:rotate-90"
+              strokeWidth={2.5}
+              aria-hidden
+            />
+          </a>
+
           <div
             className={cn(
               'relative inline-flex h-8 shrink-0 items-stretch rounded-full border p-0.5 shadow-sm backdrop-blur-sm sm:h-9',
               isScrolled
                 ? 'border-white/35 bg-white/55 shadow-sm backdrop-blur-md'
-                : 'border-gray-200/70 bg-white/75'
+                : 'border-white/40 bg-white/80'
             )}
             role="group"
             aria-label="Language"
@@ -171,10 +318,8 @@ export const Nav: React.FC = () => {
               type="button"
               aria-pressed={language === 'fr'}
               className={cn(
-                'relative z-10 min-w-[2.25rem] flex-1 rounded-full px-2.5 py-1.5 text-xs font-bold transition-colors duration-300 ease-out sm:min-w-[2.5rem] sm:px-3 sm:text-sm',
-                language === 'fr'
-                  ? 'text-white'
-                  : 'text-gray-600 hover:text-gray-900'
+                'relative z-10 min-w-[2.25rem] flex-1 rounded-full px-2.5 py-1.5 text-sm font-bold transition-colors duration-300 ease-out sm:min-w-[2.5rem] sm:px-3 sm:text-base',
+                language === 'fr' ? 'text-white' : 'text-gray-600 hover:text-gray-900'
               )}
               onClick={() => setLanguage('fr')}
             >
@@ -184,38 +329,96 @@ export const Nav: React.FC = () => {
               type="button"
               aria-pressed={language === 'en'}
               className={cn(
-                'relative z-10 min-w-[2.25rem] flex-1 rounded-full px-2.5 py-1.5 text-xs font-bold transition-colors duration-300 ease-out sm:min-w-[2.5rem] sm:px-3 sm:text-sm',
-                language === 'en'
-                  ? 'text-white'
-                  : 'text-gray-600 hover:text-gray-900'
+                'relative z-10 min-w-[2.25rem] flex-1 rounded-full px-2.5 py-1.5 text-sm font-bold transition-colors duration-300 ease-out sm:min-w-[2.5rem] sm:px-3 sm:text-base',
+                language === 'en' ? 'text-white' : 'text-gray-600 hover:text-gray-900'
               )}
               onClick={() => setLanguage('en')}
             >
               EN
             </button>
           </div>
+        </div>
 
-          <button 
+        <div className="flex shrink-0 items-center gap-2 sm:gap-3 lg:hidden">
+          <a
+            href="#appointment"
+            className="inline-flex max-w-[9.5rem] truncate rounded-full bg-accent px-3 py-2 text-sm font-bold text-bg-dark shadow-sm transition-colors hover:bg-accent-dark sm:max-w-none sm:px-4 sm:text-base"
+            onClick={() => setIsMenuOpen(false)}
+          >
+            {t.nav.bookAppointment}
+          </a>
+          <div
+            className={cn(
+              'relative inline-flex h-8 shrink-0 items-stretch rounded-full border p-0.5 shadow-sm backdrop-blur-sm',
+              isScrolled
+                ? 'border-white/35 bg-white/55 backdrop-blur-md'
+                : 'border-white/40 bg-white/80'
+            )}
+            role="group"
+            aria-label="Language"
+          >
+            <motion.div
+              aria-hidden
+              className="pointer-events-none absolute top-0.5 bottom-0.5 z-0 w-[calc(50%-0.125rem)] rounded-full bg-[#b0d64e] shadow-sm"
+              initial={false}
+              animate={{ left: language === 'fr' ? '0.125rem' : '50%' }}
+              transition={langPillTransition}
+            />
+            <button
+              type="button"
+              aria-pressed={language === 'fr'}
+              className={cn(
+                'relative z-10 min-w-[2rem] flex-1 rounded-full px-2 py-1 text-[0.65rem] font-bold sm:min-w-[2.25rem] sm:px-2.5 sm:text-xs',
+                language === 'fr' ? 'text-white' : 'text-gray-600'
+              )}
+              onClick={() => setLanguage('fr')}
+            >
+              FR
+            </button>
+            <button
+              type="button"
+              aria-pressed={language === 'en'}
+              className={cn(
+                'relative z-10 min-w-[2rem] flex-1 rounded-full px-2 py-1 text-[0.65rem] font-bold sm:min-w-[2.25rem] sm:px-2.5 sm:text-xs',
+                language === 'en' ? 'text-white' : 'text-gray-600'
+              )}
+              onClick={() => setLanguage('en')}
+            >
+              EN
+            </button>
+          </div>
+          <button
             ref={menuButtonRef}
             type="button"
             aria-expanded={isMenuOpen}
             aria-controls="mobile-nav-panel"
             aria-label={isMenuOpen ? 'Close navigation menu' : 'Open navigation menu'}
             className={cn(
-              'lg:hidden rounded-full border border-transparent p-2.5 transition-colors',
+              'group rounded-full border border-transparent p-2.5 transition-colors',
               isScrolled ? 'text-gray-800' : 'text-white drop-shadow-sm'
             )}
             onClick={() => setIsMenuOpen(!isMenuOpen)}
           >
-            {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
+            {isMenuOpen ? (
+              <X
+                size={24}
+                className="origin-center transition-transform duration-200 ease-out motion-safe:group-hover:rotate-90"
+                aria-hidden
+              />
+            ) : (
+              <Menu
+                size={24}
+                className="origin-center transition-transform duration-200 ease-out motion-safe:group-hover:scale-110"
+                aria-hidden
+              />
+            )}
           </button>
         </div>
       </div>
 
-      {/* Mobile Menu Panel */}
       <AnimatePresence>
         {isMenuOpen && (
-          <motion.div 
+          <motion.div
             id="mobile-nav-panel"
             ref={menuPanelRef}
             role="dialog"
@@ -228,20 +431,62 @@ export const Nav: React.FC = () => {
             className="absolute inset-x-0 top-full border-t border-black/5 bg-white/95 px-4 pb-6 pt-4 shadow-[0_24px_60px_-24px_rgba(15,23,42,0.28)] backdrop-blur-xl lg:hidden"
           >
             <div className="mx-auto flex max-h-[calc(100svh-6rem)] w-full max-w-2xl flex-col gap-2 overflow-y-auto rounded-[1.5rem] bg-white px-1 py-1">
-              {navLinks.map((link, index) => (
-                <a
-                  ref={index === 0 ? firstMobileLinkRef : undefined}
-                  key={link.href}
-                  href={link.href}
-                  onClick={(e) => {
-                    handleNavLinkClick(link.href)(e);
-                    setIsMenuOpen(false);
-                  }}
-                  className="rounded-2xl border border-transparent px-4 py-3 text-base font-bold text-gray-900 transition-colors hover:border-[#b0d64e]/20 hover:bg-[#f7faf2] hover:text-[#7e9c2f]"
-                >
-                  {link.label}
-                </a>
-              ))}
+              <a
+                ref={firstMobileLinkRef}
+                href={patientFormHref}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() => setIsMenuOpen(false)}
+                className="group flex items-center justify-between rounded-2xl border border-transparent px-4 py-3 text-base font-bold text-gray-900 transition-colors hover:border-[#b0d64e]/20 hover:bg-[#f7faf2] hover:text-[#7e9c2f]"
+              >
+                {t.nav.patientForm}
+                <ExternalLink
+                  className="size-4 origin-center opacity-60 transition-transform duration-200 ease-out motion-safe:group-hover:-translate-y-px motion-safe:group-hover:translate-x-px"
+                  aria-hidden
+                />
+              </a>
+              <a
+                href={telHref}
+                onClick={() => setIsMenuOpen(false)}
+                className="rounded-2xl border border-transparent px-4 py-3 text-base font-bold text-gray-900 transition-colors hover:border-[#b0d64e]/20 hover:bg-[#f7faf2]"
+              >
+                <span className="block">{clinicData.phone}</span>
+                <span className="text-base font-semibold text-gray-500">{t.hero.location}</span>
+              </a>
+              <a
+                href="#appointment"
+                onClick={() => setIsMenuOpen(false)}
+                className="group inline-flex items-center justify-center gap-2 rounded-2xl bg-accent px-4 py-3 text-base font-bold text-bg-dark transition-colors hover:bg-accent-dark"
+              >
+                {t.nav.bookAppointment}
+                <Plus
+                  className="size-4 origin-center transition-transform duration-200 ease-out motion-safe:group-hover:rotate-90"
+                  aria-hidden
+                />
+              </a>
+              <div className="my-1 border-t border-black/5" />
+              <a
+                href="#services"
+                onClick={() => setIsMenuOpen(false)}
+                className="rounded-2xl border border-transparent px-4 py-3 text-base font-bold text-gray-900 transition-colors hover:border-[#b0d64e]/20 hover:bg-[#f7faf2] hover:text-[#7e9c2f]"
+              >
+                {t.nav.services}
+              </a>
+              {navLinks
+                .filter((l) => l.href !== '#services')
+                .map((link) => (
+                  <a
+                    key={link.href}
+                    href={link.href}
+                    onClick={(e) => {
+                      handleNavLinkClick(link.href)(e);
+                      setIsMenuOpen(false);
+                    }}
+                    className="rounded-2xl border border-transparent px-4 py-3 text-base font-bold text-gray-900 transition-colors hover:border-[#b0d64e]/20 hover:bg-[#f7faf2] hover:text-[#7e9c2f]"
+                  >
+                    {link.label}
+                  </a>
+                ))}
             </div>
           </motion.div>
         )}

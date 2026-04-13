@@ -6,7 +6,7 @@ import { useMediaQuery } from '../hooks/useMediaQuery';
 import about01 from '@/DentalContent/Images/About/about-01-best-smile.png';
 import about02 from '@/DentalContent/Images/About/about-02.png';
 import about03 from '@/DentalContent/Images/About/about-03.png';
-import about04 from '@/DentalContent/Images/About/about-04.png';
+import about04 from '@/DentalContent/Images/About/about-04.jpg';
 import about05 from '@/DentalContent/Images/About/about-05.png';
 import about06 from '@/DentalContent/Images/About/about-06.png';
 import about07 from '@/DentalContent/Images/About/about-07-dentist-with-patient.png';
@@ -23,7 +23,7 @@ const images: AboutImage[] = [
   { src: about01, intrinsicW: 975, intrinsicH: 1300 },
   { src: about02, intrinsicW: 425, intrinsicH: 650 },
   { src: about03, intrinsicW: 648, intrinsicH: 926 },
-  { src: about04, intrinsicW: 743, intrinsicH: 926 },
+  { src: about04, intrinsicW: 2316, intrinsicH: 3088 },
   { src: about05, intrinsicW: 891, intrinsicH: 926 },
   { src: about06, intrinsicW: 736, intrinsicH: 926 },
   { src: about07, intrinsicW: 971, intrinsicH: 1300 },

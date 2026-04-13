@@ -344,7 +344,7 @@
 
 @theme inline {
   --font-sans: 'Geist Variable', 'Geist', -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Segoe UI', sans-serif;
-  --font-heading: var(--font-sans);
+  --font-heading: ui-serif, Georgia, Cambria, 'Times New Roman', Times, serif;
   --font-nav: var(--font-sans);
   --font-body: var(--font-sans);
   --color-sidebar-ring: var(--sidebar-ring);
