@@ -148,38 +148,79 @@ const TeamIntro = ({
   t,
   imageMotionStyle,
   textMotionStyle,
+  eyebrowMotionStyle,
+  frameMotionStyle,
+  ambientMotionStyle,
+  handoffMotionStyle,
+  desktop = false,
 }: {
   t: TFunction;
   imageMotionStyle?: Record<string, unknown>;
   textMotionStyle?: Record<string, unknown>;
+  eyebrowMotionStyle?: Record<string, unknown>;
+  frameMotionStyle?: Record<string, unknown>;
+  ambientMotionStyle?: Record<string, unknown>;
+  handoffMotionStyle?: Record<string, unknown>;
+  desktop?: boolean;
 }) => (
-  <div className="mx-auto flex w-full max-w-4xl flex-col items-center text-center">
-    <motion.div style={textMotionStyle} className="w-full">
-      <h2 className="text-section-title font-semibold tracking-tight text-gray-900">
+  <div className="mx-auto flex w-full max-w-5xl flex-col items-center text-center">
+    <motion.div
+      style={ambientMotionStyle}
+      className="pointer-events-none absolute left-1/2 top-[12%] h-56 w-56 -translate-x-1/2 rounded-full bg-[radial-gradient(circle,rgba(176,214,78,0.16),rgba(176,214,78,0.04)_38%,transparent_72%)] blur-3xl"
+    />
+
+    <motion.div style={textMotionStyle} className="relative z-10 w-full">
+      <motion.p
+        style={eyebrowMotionStyle}
+        className="text-overline mx-auto mb-5 inline-flex items-center gap-3 rounded-full border border-[#d0d6bc] bg-white/82 px-4 py-2 text-[#52632c] shadow-[0_12px_30px_rgba(126,141,73,0.08)] backdrop-blur-sm"
+      >
+        <span className="h-1.5 w-1.5 rounded-full bg-[#b0d64e]" />
+        {t.team.title}
+      </motion.p>
+
+      <h2 className="mx-auto max-w-[11ch] text-section-title font-semibold tracking-tight text-[#1f281d]">
         {t.team.title}
       </h2>
-      <p className="mx-auto mt-5 max-w-2xl text-[1.02rem] leading-7 text-gray-600 md:text-lg">
+      <p className="mx-auto mt-6 max-w-[42rem] text-balance text-[1.02rem] leading-7 text-[#394539] md:text-[1.15rem] md:leading-8">
         {t.team.subtitle}
       </p>
     </motion.div>
 
     <motion.div
-      style={imageMotionStyle}
-      className="mx-auto mt-10 w-full max-w-[20rem] md:mt-12 md:max-w-[22rem]"
+      style={frameMotionStyle}
+      className="relative z-10 mx-auto mt-12 w-full max-w-[21rem] md:mt-14 md:max-w-[24rem]"
     >
-      <div className="overflow-hidden rounded-[2rem] border-4 border-white bg-white shadow-[0_24px_80px_rgba(126,141,73,0.15)] ring-1 ring-black/5">
-        <div className="relative aspect-[2/3]">
+      <div className="absolute -inset-4 rounded-[2.4rem] bg-[linear-gradient(180deg,rgba(255,255,255,0.62),rgba(233,237,221,0.14))] opacity-70 blur-2xl" />
+      <motion.div
+        style={imageMotionStyle}
+        className="group relative overflow-hidden rounded-[2.15rem] border border-white/90 bg-white p-3 shadow-[0_30px_100px_rgba(126,141,73,0.16)] ring-1 ring-black/5 transition-transform duration-500 ease-out will-change-transform hover:-translate-y-1"
+      >
+        <div className="pointer-events-none absolute inset-x-6 top-3 h-px bg-gradient-to-r from-transparent via-white to-transparent opacity-80" />
+        <div className="relative aspect-[2/3] overflow-hidden rounded-[1.6rem] bg-[#dfe5d0]">
           <img
             src="/team-hands-reveal.png"
             alt={t.team.featuredImageLabel}
-            className="h-full w-full object-cover object-center"
+            className="h-full w-full object-cover object-center transition-transform duration-700 ease-out group-hover:scale-[1.03]"
             loading="eager"
             decoding="async"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/18 via-transparent to-transparent" />
+          <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.08),transparent_24%,transparent_64%,rgba(16,24,15,0.14))]" />
+          <div className="absolute inset-x-[14%] top-4 h-20 rounded-full bg-white/14 blur-2xl" />
         </div>
-      </div>
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-[#eef1e5]/70 via-[#eef1e51a] to-transparent" />
+      </motion.div>
     </motion.div>
+
+    {desktop ? (
+      <motion.div
+        style={handoffMotionStyle}
+        className="pointer-events-none relative z-10 mt-10 flex items-center gap-4 text-[#617236]"
+      >
+        <div className="h-px w-20 bg-gradient-to-r from-transparent via-[#b0d64e] to-transparent" />
+        <span className="h-2 w-2 rounded-full bg-[#b0d64e]/80" />
+        <div className="h-px w-20 bg-gradient-to-r from-transparent via-[#b0d64e] to-transparent" />
+      </motion.div>
+    ) : null}
   </div>
 );
 
@@ -466,14 +507,23 @@ const TeamSectionDesktop = ({
     offset: ['start start', 'end end'],
   });
 
-  const introTextOpacity = useTransform(scrollYProgress, [0, 0.08, 0.56, 0.72], [0, 1, 1, 0.28]);
-  const introTextY = useTransform(scrollYProgress, [0, 0.1, 0.72], [36, 0, -18]);
-  const imageOpacity = useTransform(scrollYProgress, [0.12, 0.34, 0.54, 0.66], [1, 1, 0.18, 0]);
-  const imageScale = useTransform(scrollYProgress, [0.12, 0.54, 0.66], [1, 0.97, 0.92]);
-  const imageY = useTransform(scrollYProgress, [0.1, 0.54, 0.66], [12, 0, -44]);
-  const contentOpacity = useTransform(scrollYProgress, [0.62, 0.82, 1], [0, 0.28, 1]);
-  const contentY = useTransform(scrollYProgress, [0.62, 0.82, 1], [96, 48, 0]);
-  const contentScale = useTransform(scrollYProgress, [0.62, 1], [0.98, 1]);
+  const introTextOpacity = useTransform(scrollYProgress, [0, 0.5, 0.68], [1, 1, 0.24]);
+  const introTextY = useTransform(scrollYProgress, [0, 0.5, 0.68], [0, 0, -36]);
+  const introTextScale = useTransform(scrollYProgress, [0, 0.54, 0.68], [1, 1, 0.975]);
+  const eyebrowOpacity = useTransform(scrollYProgress, [0, 0.46, 0.64], [1, 1, 0.4]);
+  const eyebrowY = useTransform(scrollYProgress, [0, 0.48, 0.64], [0, 0, -8]);
+  const ambientOpacity = useTransform(scrollYProgress, [0, 0.18, 0.58, 0.72], [0.42, 0.55, 0.36, 0.12]);
+  const ambientScale = useTransform(scrollYProgress, [0, 0.6, 0.72], [1, 1.06, 1.12]);
+  const imageOpacity = useTransform(scrollYProgress, [0, 0.54, 0.72], [1, 1, 0.1]);
+  const imageScale = useTransform(scrollYProgress, [0, 0.54, 0.72], [1, 1.02, 1.07]);
+  const imageY = useTransform(scrollYProgress, [0, 0.56, 0.72], [0, -12, -72]);
+  const imageRotate = useTransform(scrollYProgress, [0, 0.54], [0, 1.25]);
+  const imageBorderOpacity = useTransform(scrollYProgress, [0, 0.58, 0.72], [1, 1, 0.45]);
+  const handoffOpacity = useTransform(scrollYProgress, [0.5, 0.62, 0.72], [0, 0.95, 0]);
+  const handoffY = useTransform(scrollYProgress, [0.5, 0.62, 0.72], [18, 0, -20]);
+  const contentOpacity = useTransform(scrollYProgress, [0.56, 0.76, 0.92, 1], [0, 0.22, 0.88, 1]);
+  const contentY = useTransform(scrollYProgress, [0.56, 0.82, 1], [132, 44, 0]);
+  const contentScale = useTransform(scrollYProgress, [0.56, 0.82, 1], [0.965, 0.99, 1]);
 
   return (
     <section id="team" className="relative scroll-mt-24 overflow-clip bg-[#f7f7f1]">
@@ -481,11 +531,25 @@ const TeamSectionDesktop = ({
 
       <div ref={containerRef} className="relative h-[240vh]">
         <div className="sticky top-0 flex h-[100dvh] items-center overflow-hidden">
+          <motion.div
+            style={{ opacity: ambientOpacity, scale: ambientScale }}
+            className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_26%,rgba(240,244,227,0.95),transparent_34%),radial-gradient(circle_at_20%_50%,rgba(176,214,78,0.12),transparent_28%),radial-gradient(circle_at_80%_42%,rgba(126,141,73,0.12),transparent_24%)]"
+          />
           <div className="container relative z-10 mx-auto px-4 sm:px-6">
             <TeamIntro
               t={t}
-              textMotionStyle={{ opacity: introTextOpacity, y: introTextY }}
-              imageMotionStyle={{ opacity: imageOpacity, scale: imageScale, y: imageY }}
+              desktop
+              ambientMotionStyle={{ opacity: ambientOpacity, scale: ambientScale }}
+              eyebrowMotionStyle={{ opacity: eyebrowOpacity, y: eyebrowY }}
+              textMotionStyle={{ opacity: introTextOpacity, y: introTextY, scale: introTextScale }}
+              frameMotionStyle={{ opacity: imageBorderOpacity }}
+              imageMotionStyle={{
+                opacity: imageOpacity,
+                scale: imageScale,
+                y: imageY,
+                rotate: imageRotate,
+              }}
+              handoffMotionStyle={{ opacity: handoffOpacity, y: handoffY }}
             />
           </div>
         </div>
