@@ -29,7 +29,7 @@ export const AppointmentForm: React.FC = () => {
     <section id="appointment" className="scroll-mt-24 bg-white py-20 md:py-32">
       <div className="container mx-auto max-w-3xl px-4 sm:px-6">
         <div className="mb-12 text-center md:mb-16">
-          <h2 className="text-section-title font-bold text-text mb-4">
+          <h2 className="mb-4 font-display text-[clamp(2.35rem,5vw,4.1rem)] font-normal leading-[1.12] tracking-[-0.055em] text-text">
             {t.appointment.title}
           </h2>
           <p className="text-body-lg text-text-light">

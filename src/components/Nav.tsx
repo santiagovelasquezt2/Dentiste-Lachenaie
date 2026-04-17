@@ -5,7 +5,7 @@ import { useFocusTrap } from '../hooks/useFocusTrap';
 import { isHoursHash, scrollToHoursSection } from '../lib/scrollToHours';
 import { cn } from '../lib/utils';
 import { clinicData } from '../content/clinic';
-import { Menu, X, ChevronDown, ExternalLink, Plus } from 'lucide-react';
+import { Menu, X, ExternalLink, Phone, Plus } from 'lucide-react';
 
 const logoSrc = `${import.meta.env.BASE_URL}assets/clinic-logo-primary.png`;
 
@@ -16,7 +16,7 @@ const langPillTransition = {
   mass: 0.7,
 };
 
-type NavPanel = 'menu' | 'phone' | null;
+type NavPanel = 'menu' | null;
 
 const dropdownPanelClass =
   'absolute left-0 top-full z-50 mt-2 min-w-[14rem] rounded-2xl border border-black/5 bg-white/95 py-2 shadow-[0_24px_60px_-24px_rgba(15,23,42,0.28)] backdrop-blur-xl';
@@ -123,12 +123,8 @@ export const Nav: React.FC = () => {
     setOpenPanel((p) => (p === panel ? null : panel));
   };
 
-  const onLightChrome = isScrolled;
-  const emphasisClass = onLightChrome
-    ? 'text-gray-800'
-    : 'text-neutral-800 drop-shadow-sm lg:text-neutral-800';
-  const onImageEmphasisClass = onLightChrome ? 'text-gray-800' : 'text-white drop-shadow-sm';
-  const subtleOnImageClass = onLightChrome ? 'text-gray-600' : 'text-white/75';
+  const navEmphasisClass = 'text-gray-800';
+  const navSubtleClass = 'text-gray-600';
 
   return (
     <header
@@ -136,8 +132,8 @@ export const Nav: React.FC = () => {
       className={cn(
         'fixed top-0 left-0 w-full z-50 transition-all duration-500',
         isScrolled
-          ? 'border-b border-white/30 bg-white/45 backdrop-blur-xl backdrop-saturate-150 py-4 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.55),0_8px_32px_-12px_rgba(15,23,42,0.12)]'
-          : 'border-b border-white/10 bg-gradient-to-r from-white/92 via-white/55 via-[42%] to-black/22 py-5 backdrop-blur-[6px] sm:py-6'
+          ? 'border-b border-white/25 bg-white/28 backdrop-blur-xl backdrop-saturate-150 py-4 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.45),0_8px_32px_-12px_rgba(15,23,42,0.1)]'
+          : 'border-b border-white/[0.08] bg-gradient-to-r from-white/68 via-white/36 via-[42%] to-black/14 py-5 backdrop-blur-[8px] sm:py-6'
       )}
     >
       <div
@@ -169,7 +165,7 @@ export const Nav: React.FC = () => {
                 aria-expanded={openPanel === 'menu'}
                 className={cn(
                   'group inline-flex items-center gap-2 text-base font-semibold tracking-wide transition-colors hover:text-[#7e9c2f]',
-                  emphasisClass
+                  navEmphasisClass
                 )}
                 onClick={() => togglePanel('menu')}
               >
@@ -214,7 +210,7 @@ export const Nav: React.FC = () => {
               onClick={() => setOpenPanel(null)}
               className={cn(
                 'text-base font-semibold tracking-wide transition-colors hover:text-[#7e9c2f]',
-                emphasisClass
+                navEmphasisClass
               )}
             >
               {t.nav.services}
@@ -230,7 +226,7 @@ export const Nav: React.FC = () => {
             onClick={() => setOpenPanel(null)}
             className={cn(
               'group inline-flex items-center gap-2 text-base font-semibold tracking-wide transition-colors hover:text-[#b0d64e]',
-              onImageEmphasisClass
+              navEmphasisClass
             )}
           >
             {t.nav.patientForm}
@@ -240,47 +236,24 @@ export const Nav: React.FC = () => {
             />
           </a>
 
-          <div className="relative">
-            <button
-              type="button"
-              aria-expanded={openPanel === 'phone'}
-              aria-haspopup="true"
-              className={cn(
-                'group flex items-center gap-1.5 text-left transition-opacity hover:opacity-90',
-                onImageEmphasisClass
-              )}
-              onClick={() => togglePanel('phone')}
-            >
-              <span className="flex flex-col leading-tight">
-                <span className="text-base font-semibold tracking-wide">{clinicData.phone}</span>
-                <span className={cn('text-sm font-medium', subtleOnImageClass)}>{t.hero.location}</span>
-              </span>
-              <ChevronDown
-                className="size-4 shrink-0 origin-center opacity-70 transition-transform duration-200 ease-out motion-safe:group-hover:translate-y-0.5"
-                aria-hidden
-              />
-            </button>
-            <AnimatePresence>
-              {openPanel === 'phone' && (
-                <motion.div
-                  initial={{ opacity: 0, y: -6 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -6 }}
-                  transition={{ duration: 0.15 }}
-                  className={cn(dropdownPanelClass, 'min-w-[16rem]')}
-                >
-                  <a
-                    href={telHref}
-                    className="block px-4 py-3 text-base font-bold text-gray-900 transition-colors hover:bg-[#f7faf2]"
-                    onClick={() => setOpenPanel(null)}
-                  >
-                    {clinicData.phone}
-                  </a>
-                  <p className="px-4 pb-3 text-sm text-gray-500">{t.hero.location}</p>
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </div>
+          <a
+            href={telHref}
+            onClick={() => setOpenPanel(null)}
+            className={cn(
+              'group inline-flex items-center gap-1.5 text-left transition-opacity hover:opacity-90',
+              navEmphasisClass
+            )}
+          >
+            <span className="flex flex-col leading-tight">
+              <span className="text-base font-semibold tracking-wide">{clinicData.phone}</span>
+              <span className={cn('text-sm font-medium', navSubtleClass)}>{t.hero.location}</span>
+            </span>
+            <Phone
+              className="size-4 shrink-0 origin-center opacity-80 transition-transform duration-200 ease-out motion-safe:group-hover:scale-110"
+              strokeWidth={2}
+              aria-hidden
+            />
+          </a>
 
           <a
             href="#appointment"
@@ -393,10 +366,7 @@ export const Nav: React.FC = () => {
             aria-expanded={isMenuOpen}
             aria-controls="mobile-nav-panel"
             aria-label={isMenuOpen ? 'Close navigation menu' : 'Open navigation menu'}
-            className={cn(
-              'group rounded-full border border-transparent p-2.5 transition-colors',
-              isScrolled ? 'text-gray-800' : 'text-white drop-shadow-sm'
-            )}
+            className="group rounded-full border border-transparent p-2.5 text-gray-800 transition-colors"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
           >
             {isMenuOpen ? (

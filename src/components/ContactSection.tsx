@@ -77,7 +77,9 @@ export const ContactSection: React.FC = () => {
 
             {/* ── Contact info ──────────────────────────────────────────── */}
             <div>
-              <h2 className="mb-10 text-section-title font-heading font-semibold text-white md:mb-12">{t.contact.title}</h2>
+              <h2 className="mb-10 font-display text-[clamp(2.35rem,5vw,4.1rem)] font-normal leading-[1.12] tracking-[-0.055em] text-white md:mb-12">
+                {t.contact.title}
+              </h2>
 
               <div className="flex flex-col gap-10">
                 {/* PHONE */}

@@ -85,29 +85,33 @@ export const GallerySection: React.FC = () => {
         }}
       />
       <div className="container mx-auto px-4 sm:px-6">
-        <h2 className="mb-12 text-center text-section-title font-heading font-semibold text-text md:mb-20">
+        <h2 className="mb-12 text-center font-display text-[clamp(3.1625rem,14.375vw,13.225rem)] font-normal leading-[1.12] tracking-[-0.055em] text-text md:mb-20">
           {t.gallery.title}
         </h2>
 
-        <div className="grid grid-cols-1 gap-4 auto-rows-[220px] sm:gap-6 sm:auto-rows-[260px] md:grid-cols-3 md:auto-rows-[300px]">
+        <div className="grid grid-cols-1 gap-4 auto-rows-[124px] sm:gap-6 sm:auto-rows-[146px] md:grid-cols-3 md:auto-rows-[170px]">
           {images.map((img, i) => (
             <button
               key={img.src}
               type="button"
               onClick={() => setActiveImageIndex(i)}
-              className={`group relative block h-full w-full cursor-zoom-in overflow-hidden rounded-3xl text-left shadow-lg shadow-black/10 transition-[transform,box-shadow] duration-500 ease-[cubic-bezier(0.33,1,0.68,1)] motion-safe:hover:-translate-y-1.5 motion-safe:hover:shadow-2xl motion-safe:hover:shadow-black/18 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-bg-alt ${img.span || ''}`}
+              className={`group relative block h-full w-full cursor-zoom-in overflow-hidden rounded-3xl text-left shadow-lg shadow-black/10 transition-all duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] motion-safe:hover:-translate-y-1 motion-safe:hover:shadow-2xl motion-safe:hover:shadow-black/16 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-bg-alt ${img.span || ''}`}
               aria-label={`${t.gallery.openFullScreen} ${img.alt}`}
             >
               <img
                 src={img.src}
                 alt={img.alt}
-                className="h-full w-full origin-center object-cover transition-transform duration-500 ease-[cubic-bezier(0.33,1,0.68,1)] motion-safe:group-hover:scale-[1.07]"
+                className="h-full w-full origin-center object-cover transition-transform duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] motion-safe:will-change-transform motion-safe:group-hover:scale-[1.045] motion-safe:transform-gpu"
                 loading="lazy"
                 decoding="async"
               />
-              <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/45 via-black/10 to-transparent opacity-0 transition-opacity duration-500 ease-out group-hover:opacity-100" />
-              <div className="pointer-events-none absolute bottom-4 left-4 right-4 flex items-end justify-between gap-3 opacity-0 transition-[opacity,transform] duration-500 ease-[cubic-bezier(0.33,1,0.68,1)] motion-safe:translate-y-3 motion-safe:group-hover:translate-y-0 group-hover:opacity-100">
-                <span className="rounded-full bg-white/95 px-3 py-1.5 text-xs font-nav text-text shadow-md shadow-black/10 ring-1 ring-black/5 backdrop-blur-sm transition-[transform,box-shadow] duration-500 ease-[cubic-bezier(0.33,1,0.68,1)] motion-safe:group-hover:shadow-lg">
+              <div
+                aria-hidden
+                className="pointer-events-none absolute inset-[10px] rounded-[1.35rem] border border-[#b0d64e]/0 shadow-[0_0_0_1px_rgba(176,214,78,0),0_0_0_8px_rgba(176,214,78,0),0_0_28px_rgba(176,214,78,0)] transition-[border-color,box-shadow,opacity,transform] duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] motion-safe:opacity-0 motion-safe:group-hover:opacity-100 motion-safe:group-hover:scale-[0.995] motion-safe:group-hover:border-[#b0d64e]/65 motion-safe:group-hover:shadow-[0_0_0_1px_rgba(176,214,78,0.28),0_0_0_8px_rgba(176,214,78,0.08),0_0_28px_rgba(176,214,78,0.18)]"
+              />
+              <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/45 via-black/10 to-transparent opacity-0 transition-opacity duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:opacity-100" />
+              <div className="pointer-events-none absolute bottom-4 left-4 right-4 flex items-end justify-between gap-3 opacity-0 transition-[opacity,transform] duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] motion-safe:translate-y-4 motion-safe:transform-gpu motion-safe:group-hover:translate-y-0 group-hover:opacity-100">
+                <span className="rounded-full bg-white/95 px-3 py-1.5 text-xs font-nav text-text shadow-md shadow-black/10 ring-1 ring-black/5 backdrop-blur-sm transition-[transform,box-shadow] duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] motion-safe:group-hover:shadow-lg">
                   {t.gallery.openFullScreen}
                 </span>
               </div>

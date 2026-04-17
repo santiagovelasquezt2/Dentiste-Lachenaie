@@ -194,9 +194,9 @@ const IntroBlock = ({ t }: { t: ReturnType<typeof useLanguage>['t'] }) => {
 const ProcedureTitle = ({ t }: { t: ReturnType<typeof useLanguage>['t'] }) => {
   return (
     <div className="text-center">
-      <h2 className="text-[2.3rem] font-light tracking-tight text-[#17352D] sm:text-[2.9rem] lg:text-[3.35rem]">
+      <h2 className="font-display text-[2.3rem] font-normal leading-[1.12] tracking-[-0.055em] text-[#17352D] sm:text-[2.9rem] lg:text-[3.35rem]">
         <span className="text-[#17352D]/55">{t.firstVisit.procedure.prefix}</span>{' '}
-        <span className="font-normal text-[#17352D]">{t.firstVisit.procedure.suffix}</span>
+        <span className="text-[#17352D]">{t.firstVisit.procedure.suffix}</span>
       </h2>
     </div>
   );

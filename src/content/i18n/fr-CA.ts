@@ -25,6 +25,7 @@ export const fr = {
     cta: "Prendre rendez-vous",
     location: "Terrebonne, QC",
     imageAlt: "Façade de la clinique dentaire avec enseigne",
+    slogan: "Des sourires qui durent",
   },
   about: {
     title: "Nous changeons l'expérience et vous aidons à retrouver votre confiance",
@@ -76,6 +77,8 @@ export const fr = {
   },
   team: {
     title: "Rencontrez les membres de notre équipe",
+    slogan:
+      "Créant des sourires\nqui sont autant beaux\nqu'ils sont en bonne santé",
     subtitle: "Des équipes souriantes et enthousiastes avec une compétence professionnelle inégalée et une écoute attentive à vos besoins.",
     trustEyebrow: "Pourquoi les familles nous font confiance",
     trustTitle: "Une équipe stable, des recommandations réfléchies et une expérience clinique apaisante.",
@@ -108,6 +111,8 @@ export const fr = {
     comingSoonTitle: "Une nouvelle dentiste se joint à nous",
     comingSoonBody: "Dre Nadeige Moquin sera ajoutée à cette section dès que ses photos de profil seront prêtes.",
     supportingImageCaption: "Moment d'équipe en clinique",
+    bubblesPrefix: "Notre objectif est",
+    bubblesReveal: "d'offrir des soins dentaires et esthétiques de calibre mondial grâce à des techniques avancées, des traitements personnalisés et un niveau de service qui valorise chaque patient.",
   },
   gallery: {
     title: "Notre clinique",
@@ -224,8 +229,8 @@ export const fr = {
     credit: "Conçu et propulsé par Calytek",
   },
   tooth3d: {
-    title: "Technologie de pointe pour votre sourire",
-    body: "Nous utilisons les dernières innovations en dentisterie numérique pour obtenir des résultats précis, durables et esthétiques.",
+    titleLine1: "Technologie de pointe",
+    titleLine2: "pour votre sourire",
     pause: "Mettre le diaporama en pause",
     resume: "Reprendre le diaporama",
     previewUnavailable: "Aperçu 3D indisponible",

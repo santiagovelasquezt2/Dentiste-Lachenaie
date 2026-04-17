@@ -105,7 +105,7 @@ const TextBlock = ({
       <div className="mb-6 text-text">
         <CheckSquare className="h-10 w-10 stroke-[1.5]" />
       </div>
-      <h3 className="mb-6 text-title text-text">
+      <h3 className="mb-6 font-display text-[clamp(1.75rem,3vw,2.7rem)] font-normal leading-[1.12] tracking-[-0.055em] text-text">
         {firstWord} <span className="font-bold text-accent">{restOfTitle}</span>
       </h3>
       <div className="space-y-4 text-body-lg text-text-light">{content}</div>
@@ -129,7 +129,7 @@ const MobileTextBlock = ({
       <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-2xl bg-[#eff4e5] text-text">
         <CheckSquare className="h-6 w-6 stroke-[1.75]" />
       </div>
-      <h3 className="mb-4 text-3xl font-semibold leading-[1.02] tracking-[-0.05em] text-text">
+      <h3 className="mb-4 font-display text-3xl font-normal leading-[1.12] tracking-[-0.055em] text-text">
         {firstWord} <span className="font-bold text-accent">{restOfTitle}</span>
       </h3>
       <div className="space-y-4 text-base leading-relaxed text-text-light">{content}</div>
@@ -152,7 +152,7 @@ const AboutSectionMobile = ({ t }: { t: ReturnType<typeof useLanguage>['t'] }) =
   return (
     <section id="about" className="relative scroll-mt-24 overflow-hidden bg-[#E8EDE3] py-20">
       <div className="absolute inset-x-0 top-12 flex justify-center px-4" aria-hidden>
-        <span className="select-none whitespace-nowrap font-heading text-[3.6rem] font-semibold tracking-[-0.08em] [word-spacing:0.35em] text-black/8">
+        <span className="select-none whitespace-nowrap font-display text-[3.6rem] font-normal leading-[1.12] tracking-[-0.055em] [word-spacing:0.35em] text-black/8">
           {t.about.since}
         </span>
       </div>
@@ -208,7 +208,7 @@ const AboutSectionDesktop = ({ t }: { t: ReturnType<typeof useLanguage>['t'] }) 
     <section ref={containerRef} id="about" className="relative h-[350vh] scroll-mt-24 bg-[#E8EDE3]">
       <div className="sticky top-0 flex h-screen w-full justify-center overflow-hidden">
         <div className="pointer-events-none absolute inset-0 z-0 flex items-center justify-center">
-          <span className="select-none whitespace-nowrap font-heading text-[clamp(4.5rem,11vw,10rem)] font-semibold tracking-[-0.07em] [word-spacing:0.35em] text-black/10">
+          <span className="select-none whitespace-nowrap font-display text-[clamp(4.5rem,11vw,10rem)] font-normal leading-[1.12] tracking-[-0.055em] [word-spacing:0.35em] text-black/10">
             {t.about.since}
           </span>
         </div>

@@ -25,6 +25,7 @@ export const en = {
     cta: "Book an appointment",
     location: "Terrebonne, QC",
     imageAlt: "Dental clinic facade with signage",
+    slogan: "Creating Smiles That Last",
   },
   about: {
     title: "We change the experience and help you regain confidence",
@@ -76,6 +77,8 @@ export const en = {
   },
   team: {
     title: "Meet the Members of Our Team",
+    slogan:
+      "Creating smiles that are\nas healthy as they are\nbeautiful",
     subtitle: "Smiling and enthusiastic teams with unparalleled professional competence and attentiveness to your needs.",
     trustEyebrow: "Why families trust us",
     trustTitle: "A steady team, thoughtful recommendations, and a calm clinical experience.",
@@ -108,6 +111,8 @@ export const en = {
     comingSoonTitle: "Welcoming a new dentist",
     comingSoonBody: "Dr. Nadeige Moquin will be added to this section once profile photography is ready.",
     supportingImageCaption: "Clinical team moment",
+    bubblesPrefix: "Our goal is",
+    bubblesReveal: "to deliver world-class dental and aesthetic care through advanced techniques, customized treatments, and a level of service that makes every patient feel valued.",
   },
   gallery: {
     title: "Our Clinic",
@@ -224,8 +229,8 @@ export const en = {
     credit: "Designed and powered by Calytek",
   },
   tooth3d: {
-    title: "Cutting-edge technology for your smile",
-    body: "We use the latest innovations in digital dentistry to deliver precise, durable, and aesthetic results.",
+    titleLine1: "Cutting-edge technology",
+    titleLine2: "for your smile",
     pause: "Pause slideshow",
     resume: "Resume slideshow",
     previewUnavailable: "3D preview unavailable",

@@ -9,6 +9,7 @@ import { isHoursHash, scrollToHoursSection } from './lib/scrollToHours';
 import { LanguageProvider } from './context/LanguageContext';
 import { Nav } from './components/Nav';
 import { Hero } from './components/Hero';
+import { TeamBubbles } from './components/TeamBubbles';
 import { AboutSection } from './components/AboutSection';
 import { ServicesSection } from './components/ServicesSection';
 import { Tooth3DSection } from './components/Tooth3DSection';
@@ -47,6 +48,7 @@ export default function App() {
         <Nav />
         <main>
           <Hero />
+          <TeamBubbles />
           <AboutSection />
           <ServicesSection />
           <Tooth3DSection />

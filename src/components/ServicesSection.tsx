@@ -278,10 +278,10 @@ export const ServicesSection: React.FC = () => {
           : 'sticky top-0 flex h-screen w-full flex-col justify-center overflow-hidden'
       )}>
         <div className={cn(
-          'container mx-auto mb-12',
-          isMobile ? 'px-0 mb-10' : 'px-6'
+          'mx-auto mb-12 w-full max-w-none',
+          isMobile ? 'mb-10 px-0' : 'px-6 md:px-[10vw]'
         )}>
-          <h2 className="text-section-title font-heading font-semibold text-bg-inverse">
+          <h2 className="font-display w-full text-[clamp(3.1625rem,14.375vw,13.225rem)] font-normal leading-[0.86] tracking-[-0.06em] text-bg-inverse">
             {t.services.title}
           </h2>
         </div>

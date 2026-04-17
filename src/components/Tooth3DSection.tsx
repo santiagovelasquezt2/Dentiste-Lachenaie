@@ -9,6 +9,9 @@ const VISIBILITY_THRESHOLD = 0.4;
 export const Tooth3DSection: React.FC = () => {
   const { t } = useLanguage();
   const sectionRef = useRef<HTMLElement>(null);
+  const gridRef = useRef<HTMLDivElement>(null);
+  const carouselRef = useRef<HTMLDivElement>(null);
+  const toothRef = useRef<HTMLDivElement>(null);
   const [activeIndex, setActiveIndex] = useState(0);
   const [indicatorCycle, setIndicatorCycle] = useState(0);
   const [isPlaying, setIsPlaying] = useState(true);
@@ -93,7 +96,7 @@ export const Tooth3DSection: React.FC = () => {
     <section
       ref={sectionRef}
       id="tooth-3d"
-      className="relative overflow-hidden bg-bg-alt/70 py-14 md:py-14"
+      className="relative overflow-hidden bg-bg-alt/70 py-10 md:py-10"
     >
       <div
         className="pointer-events-none absolute inset-0 opacity-45"
@@ -113,18 +116,19 @@ export const Tooth3DSection: React.FC = () => {
       />
 
       <div className="container relative z-10 mx-auto px-4 sm:px-6">
-        <div className="grid items-center gap-10 md:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)] md:gap-14">
-          <div className="mx-auto w-full max-w-[620px] md:mx-0">
-            <h2 className="text-section-title font-bold text-text">
-              {t.tooth3d.title}
-            </h2>
-            <p className="mt-4 max-w-[42rem] text-base leading-relaxed text-text-light md:text-lg">
-              {t.tooth3d.body}
-            </p>
+        <div
+          ref={gridRef}
+          className="grid gap-8 md:grid-cols-2 md:items-center md:gap-x-10 md:gap-y-10"
+        >
+          <h2 className="mx-auto w-full text-center font-display text-[clamp(2.2rem,9.6vw,8.8rem)] font-normal leading-[0.96] tracking-[-0.06em] text-text md:col-span-2 md:mx-0 md:w-fit md:justify-self-end md:text-right">
+            <span className="block whitespace-nowrap">{t.tooth3d.titleLine1}</span>
+            <span className="block mt-[0.14em]">{t.tooth3d.titleLine2}</span>
+          </h2>
 
-            <div className="mt-8 w-full max-w-[500px]">
-              <div className="rounded-[1.6rem] bg-[#cfcfcf] p-3 shadow-[0_18px_50px_rgba(0,0,0,0.12)] ring-1 ring-black/5">
-                <div className="relative aspect-[4/5] w-full overflow-hidden rounded-[1.2rem] bg-[#bfbfbf]">
+          <div className="mx-auto flex w-full max-w-[24rem] justify-center md:mx-0 md:max-w-none md:justify-self-end">
+            <div ref={carouselRef} className="w-full max-w-[24rem]">
+              <div className="rounded-[0.95rem] bg-[#cfcfcf] p-2.5 shadow-[0_12px_28px_rgba(0,0,0,0.11)] ring-1 ring-black/5 md:p-3">
+                <div className="relative aspect-[4/5] w-full overflow-hidden rounded-[0.7rem] bg-[#bfbfbf] md:rounded-[0.8rem]">
                   {displayImages.map((image, index) => (
                     <img
                       key={image.src}
@@ -144,20 +148,20 @@ export const Tooth3DSection: React.FC = () => {
                     aria-hidden
                   />
                 </div>
-              </div>
+                </div>
 
-              <div className="mt-4 flex w-full flex-wrap items-center justify-center gap-3">
+              <div className="mt-3 flex w-full flex-wrap items-center justify-center gap-1.5 md:mt-3.5 md:gap-2">
                 <button
                   type="button"
                   onClick={() => setIsPlaying((current) => !current)}
-                  className="flex h-10 w-10 items-center justify-center rounded-full bg-bg-teams text-text-inverse shadow-[0_12px_24px_rgba(0,0,0,0.28)] transition-transform duration-300 hover:scale-105 active:scale-95"
+                  className="flex h-9 w-9 items-center justify-center rounded-full bg-bg-teams text-text-inverse shadow-[0_6px_12px_rgba(0,0,0,0.22)] transition-transform duration-300 hover:scale-105 active:scale-95 md:h-10 md:w-10"
                   aria-label={isPlaying ? t.tooth3d.pause : t.tooth3d.resume}
                 >
-                  {isPlaying && !prefersReducedMotion ? <Pause className="h-4 w-4" /> : <Play className="h-4 w-4 translate-x-[1px]" />}
+                  {isPlaying && !prefersReducedMotion ? <Pause className="h-[0.95rem] w-[0.95rem] md:h-[1.05rem] md:w-[1.05rem]" /> : <Play className="h-[0.95rem] w-[0.95rem] translate-x-[1px] md:h-[1.05rem] md:w-[1.05rem]" />}
                 </button>
 
-                <div className="flex min-h-11 items-center rounded-full bg-bg-teams px-4 py-3 shadow-[0_12px_24px_rgba(0,0,0,0.28)]">
-                  <div className="flex flex-wrap items-center justify-center gap-2.5">
+                <div className="flex min-h-9 items-center rounded-full bg-bg-teams px-3 py-1.5 shadow-[0_6px_12px_rgba(0,0,0,0.22)] md:min-h-10 md:px-3.5 md:py-2">
+                  <div className="flex flex-wrap items-center justify-center gap-1 md:gap-1.5">
                     {displayImages.map((image, index) => {
                       const isActive = indicatorStates[index];
                       const indicatorKey = isActive ? `${image.src}-${indicatorCycle}` : image.src;
@@ -173,8 +177,8 @@ export const Tooth3DSection: React.FC = () => {
                           }}
                           aria-label={t.tooth3d.selectImage.replace('{index}', String(index + 1))}
                           aria-current={isActive}
-                          className={`relative h-2 overflow-hidden rounded-full bg-white/25 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
-                            isActive ? 'w-7' : 'w-2 hover:bg-white/45'
+                          className={`relative h-1.5 overflow-hidden rounded-full bg-white/25 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+                            isActive ? 'w-5' : 'w-1.5 hover:bg-white/45'
                           }`}
                         >
                           {isActive && (
@@ -193,9 +197,9 @@ export const Tooth3DSection: React.FC = () => {
             </div>
           </div>
 
-          <div className="relative mx-auto h-[240px] w-full max-w-[560px] sm:h-[340px] md:h-[520px]">
-            <div className="absolute inset-0 rounded-[2rem] bg-[radial-gradient(circle_at_50%_40%,rgba(255,255,255,0.65),rgba(255,255,255,0.1)_55%,transparent_80%)]" />
-            <div className="relative h-full w-full">
+          <div ref={toothRef} className="relative mx-auto aspect-[4/5] w-full max-w-[24rem] md:mx-0 md:justify-self-start">
+            <div className="absolute inset-0 rounded-[1rem] bg-[radial-gradient(circle_at_50%_40%,rgba(255,255,255,0.7),rgba(255,255,255,0.18)_56%,transparent_82%)]" />
+            <div className="relative h-full w-full rounded-[1rem] border border-white/30 bg-white/15 shadow-[0_12px_28px_rgba(0,0,0,0.07)] backdrop-blur-[1px]">
               <ToothCanvas />
             </div>
           </div>
