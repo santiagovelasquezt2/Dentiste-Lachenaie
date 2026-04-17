@@ -20,7 +20,7 @@ const DESKTOP_QUERY = '(min-width: 768px)';
 /** Horizontal nudge of seam + title; keep 0 for a centered 50/50 split at rest. */
 const INITIAL_SPLIT_OFFSET_PX = 0;
 /** Pin height: extra viewport scroll while the hero is sticky. */
-const HERO_PIN_VH = 380;
+const HERO_PIN_VH = 180;
 /**
  * Share of that pin range used for the horizontal reveal (0→1). The remainder is scroll spent
  * only on the full-bleed video (no document "moving on") before the pin releases.
@@ -35,19 +35,19 @@ const TITLE_FADE_EDGE_PCT = 12;
  */
 const HERO_TITLE_SPLIT_AT_PCT = 50;
 /**
- * scrollYProgress value at which the title is fully gone (opacity 0, mask collapsed).
- * Derived from TITLE_FADE_FRACTION × REVEAL_FRACTION so both gates fire at the same moment.
+ * scrollYProgress value where the slogan becomes visible.
+ * Kept a touch earlier so it starts moving before the hero reveal feels too far along.
  */
-const SLOGAN_ENTRY_SCROLL = TITLE_FADE_FRACTION * REVEAL_FRACTION;
+const SLOGAN_ENTRY_SCROLL = 0;
 /**
  * Starting translateX: pushes the text's left edge just past the container's right clip boundary
  * so the very first character enters from the right edge as scroll begins.
  */
-const SLOGAN_START_X_VW = 100;
+const SLOGAN_START_X_VW = 55;
 /** End translateX: continues sliding left through the remainder of the hero pin range. */
 const SLOGAN_END_X_VW = -60;
-/** The slogan finishes its slide exactly as the pinned hero releases. */
-const SLOGAN_EXIT_SCROLL = 1;
+/** The slogan finishes its slide well before the pinned hero releases. */
+const SLOGAN_EXIT_SCROLL = 0.6;
 const heroSloganBaseClass =
   'font-display whitespace-nowrap font-normal tracking-[-0.055em] text-black drop-shadow-[0_2px_20px_rgba(255,255,255,0.65)]';
 const heroSloganDesktopClass =
@@ -62,18 +62,20 @@ export const Hero: React.FC = () => {
   const isDesktop = useMediaQuery(DESKTOP_QUERY);
 
   /**
-   * Only track sectionProgress in React state — used only for the slogan
-   * visibility gate (changes at discrete thresholds, not every frame).
+   * Boolean gate for slogan aria-hidden — only flips at the hero-end threshold,
+   * so React re-renders at most twice per hero traversal (not every frame).
    */
-  const [sectionProgress, setSectionProgress] = useState(0);
+  const [sloganVisible, setSloganVisible] = useState(true);
 
   const { scrollYProgress } = useScroll({
     target: sectionRef,
     offset: ['start start', 'end start'],
   });
 
-  /** Single scroll listener — only for the discrete gate checks. */
-  useMotionValueEvent(scrollYProgress, 'change', setSectionProgress);
+  useMotionValueEvent(scrollYProgress, 'change', (latest) => {
+    const visible = latest < 0.985;
+    setSloganVisible((prev) => (prev === visible ? prev : visible));
+  });
 
   useEffect(() => {
     if (!isDesktop) return;
@@ -121,15 +123,11 @@ export const Hero: React.FC = () => {
     return `translate3d(${offset}px, calc(-50% + ${translateY}px), 0) scale(${scale})`;
   });
 
-  const sloganOpacity = useTransform(scrollYProgress, (latest) => {
+  /** Fade-in for overlay words — synced with slogan entry, eases in over a small scroll window. */
+  const overlayWordsOpacity = useTransform(scrollYProgress, (latest) => {
     if (prefersReducedMotion) return 1;
-    return latest >= SLOGAN_ENTRY_SCROLL ? 1 : 0;
+    return Math.min(1, Math.max(0, (latest - SLOGAN_ENTRY_SCROLL) / 0.06));
   });
-
-  // ── Gate logic (React state — only changes at scroll thresholds) ───────────
-
-  const stillInHeroSection = sectionProgress < 0.985;
-  const sloganVisible = stillInHeroSection && sectionProgress >= SLOGAN_ENTRY_SCROLL;
 
   return (
     <section
@@ -177,6 +175,21 @@ export const Hero: React.FC = () => {
                   preload="metadata"
                   className="absolute inset-0 h-full w-full object-cover object-center"
                 />
+                <motion.div
+                  className="pointer-events-none absolute inset-x-0 bottom-0 z-[17] grid grid-cols-3 gap-2 px-5 pb-5 sm:px-8 sm:pb-6 md:px-10 md:pb-8 lg:px-12 lg:pb-10"
+                  aria-hidden
+                  style={{ opacity: overlayWordsOpacity }}
+                >
+                  <span className="self-end text-left font-display text-xs font-normal tracking-[-0.055em] text-black sm:text-sm md:text-base">
+                    {t.hero.overlayPersonalized}
+                  </span>
+                  <span className="self-end text-center font-display text-xs font-normal tracking-[-0.055em] text-black sm:text-sm md:text-base">
+                    {t.hero.overlayQuality}
+                  </span>
+                  <span className="self-end text-right font-display text-xs font-normal tracking-[-0.055em] text-black sm:text-sm md:text-base">
+                    {t.hero.overlayExcellence}
+                  </span>
+                </motion.div>
                 <div className="pointer-events-none absolute inset-0 z-[18] flex items-center justify-start overflow-hidden px-5 sm:px-8 md:px-10 lg:px-12">
                   <HeroSlidingSlogan
                     ariaHidden={!sloganVisible}
@@ -188,7 +201,6 @@ export const Hero: React.FC = () => {
                     prefersReducedMotion={prefersReducedMotion}
                     scrollYProgress={scrollYProgress}
                     slogan={t.hero.slogan}
-                    style={{ opacity: sloganOpacity }}
                   />
                 </div>
               </motion.div>
@@ -206,6 +218,8 @@ export const Hero: React.FC = () => {
                   maskSize: '100% 100%',
                   WebkitMaskSize: '100% 100%',
                   transform: splitTitleTransform,
+                  willChange: 'transform, opacity, mask-image',
+                  backfaceVisibility: 'hidden',
                 }}
               >
                 <h1
@@ -247,6 +261,20 @@ export const Hero: React.FC = () => {
                 preload="metadata"
                 className="aspect-video w-full object-contain object-center"
               />
+              <div
+                className="pointer-events-none absolute inset-x-0 bottom-0 z-[1] grid grid-cols-3 gap-2 px-5 pb-4 sm:px-8 sm:pb-5"
+                aria-hidden
+              >
+                <span className="self-end text-left font-display text-[0.6875rem] font-normal tracking-[-0.055em] text-black sm:text-xs">
+                  {t.hero.overlayPersonalized}
+                </span>
+                <span className="self-end text-center font-display text-[0.6875rem] font-normal tracking-[-0.055em] text-black sm:text-xs">
+                  {t.hero.overlayQuality}
+                </span>
+                <span className="self-end text-right font-display text-[0.6875rem] font-normal tracking-[-0.055em] text-black sm:text-xs">
+                  {t.hero.overlayExcellence}
+                </span>
+              </div>
               <div className="pointer-events-none absolute inset-0 z-[2] flex items-center justify-start overflow-hidden px-5 py-4 sm:px-8 sm:py-5">
                 <HeroSlidingSlogan
                   ariaHidden={!sloganVisible}
@@ -258,7 +286,6 @@ export const Hero: React.FC = () => {
                   prefersReducedMotion={prefersReducedMotion}
                   scrollYProgress={scrollYProgress}
                   slogan={t.hero.slogan}
-                  style={{ opacity: sloganOpacity }}
                 />
               </div>
             </div>
@@ -307,11 +334,8 @@ const HeroSlidingSlogan: React.FC<HeroTeleprompterSloganProps> = ({
   const normalizedSlogan = normalizeSlogan(slogan);
   const transform = useTransform(scrollYProgress, (latest) => {
     if (prefersReducedMotion) return 'translate3d(0vw, 0, 0)';
-    // Keep the slogan moving until the hero finishes pinning, then let the
-    // page continue scrolling down as the text exits the video frame.
-    const slideProgress = clamp01(
-      (latest - SLOGAN_ENTRY_SCROLL) / (SLOGAN_EXIT_SCROLL - SLOGAN_ENTRY_SCROLL),
-    );
+    const slideProgress =
+      (latest - SLOGAN_ENTRY_SCROLL) / (SLOGAN_EXIT_SCROLL - SLOGAN_ENTRY_SCROLL);
     const translateX = mix(SLOGAN_START_X_VW, SLOGAN_END_X_VW, slideProgress);
     return `translate3d(${translateX}vw, 0, 0)`;
   });
@@ -324,16 +348,14 @@ const HeroSlidingSlogan: React.FC<HeroTeleprompterSloganProps> = ({
       style={{
         ...style,
         transform,
+        willChange: 'transform',
+        backfaceVisibility: 'hidden',
       }}
     >
       <span aria-hidden="true">{normalizedSlogan}</span>
     </motion.h2>
   );
 };
-
-function clamp01(value: number): number {
-  return Math.max(0, Math.min(1, value));
-}
 
 function normalizeSlogan(slogan: string): string {
   return slogan

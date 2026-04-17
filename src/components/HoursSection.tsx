@@ -5,6 +5,8 @@ import { useLanguage } from '../context/LanguageContext';
 import { clinicData } from '../content/clinic';
 import { useMediaQuery } from '../hooks/useMediaQuery';
 import { HoursContourPattern } from './HoursContourPattern';
+import { cn } from '../lib/utils';
+import { SECTION_HEADING_CLASS } from '../lib/sectionHeading';
 
 const lerp = (start: number, end: number, progress: number) => start + (end - start) * progress;
 
@@ -43,7 +45,7 @@ const HoursSectionMobile = ({ t }: { t: ReturnType<typeof useLanguage>['t'] }) =
         <div className="mx-auto max-w-3xl overflow-hidden rounded-[2rem] bg-white text-[#17352D] shadow-[0_24px_70px_rgba(2,33,24,0.14)] ring-1 ring-black/5">
           <div className="bg-[linear-gradient(135deg,rgba(196,228,109,0.98),rgba(176,214,78,0.98)_42%,rgba(140,176,55,1))] px-6 py-10 text-[#17352D]">
             <p className="text-nav text-[#17352D]/60">{t.hours.scheduleLabel}</p>
-            <h2 className="mt-4 font-display text-[clamp(2.35rem,5vw,4.1rem)] font-normal leading-[1.12] tracking-[-0.055em] text-[#17352D]">
+            <h2 className={cn('mt-4 text-[#17352D]', SECTION_HEADING_CLASS)}>
               {t.hours.cardTitle}
             </h2>
             <p className="mt-4 text-base leading-relaxed text-[#17352D]/78">{t.hours.description}</p>
@@ -240,7 +242,7 @@ const HoursSectionDesktop = ({ t }: { t: ReturnType<typeof useLanguage>['t'] }) 
           style={{ opacity: hoursOverlayOpacity }}
           className="pointer-events-none absolute inset-0 z-[25] flex items-center justify-center px-6 sm:px-10"
         >
-          <h2 ref={overlayTitleRef} className="text-center font-display text-[clamp(3.1625rem,14.375vw,13.225rem)] font-normal leading-[0.86] tracking-[-0.06em] text-black">
+          <h2 ref={overlayTitleRef} className={cn('text-center text-black', SECTION_HEADING_CLASS)}>
             {t.hours.overlayTitle}
           </h2>
         </motion.div>
@@ -264,7 +266,7 @@ const HoursSectionDesktop = ({ t }: { t: ReturnType<typeof useLanguage>['t'] }) 
 
                 <div className="relative z-10 max-w-md">
                   <p className="text-nav text-[#17352D]/55">{t.hours.scheduleLabel}</p>
-                  <h3 className="mt-5 font-display text-[clamp(2.35rem,5vw,4.1rem)] font-normal leading-[1.12] tracking-[-0.055em] text-[#17352D]">
+                  <h3 className={cn('mt-5 text-[#17352D]', SECTION_HEADING_CLASS)}>
                     {t.hours.cardTitle}
                   </h3>
                   <p className="mt-6 text-base leading-relaxed text-[#17352D]/72 md:text-lg">

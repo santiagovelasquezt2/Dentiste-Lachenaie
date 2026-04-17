@@ -26,6 +26,9 @@ export const fr = {
     location: "Terrebonne, QC",
     imageAlt: "Façade de la clinique dentaire avec enseigne",
     slogan: "Des sourires qui durent",
+    overlayPersonalized: "personnalisé",
+    overlayQuality: "qualité",
+    overlayExcellence: "excellence",
   },
   about: {
     title: "Nous changeons l'expérience et vous aidons à retrouver votre confiance",
@@ -64,6 +67,12 @@ export const fr = {
     bookAppointment: "Prendre rendez-vous",
     whatToExpect: "Ce que vous obtenez",
     closeDialog: "Fermer la fenêtre",
+    quotes: [
+      { text: "J'ai retrouvé un sourire que je ne savais pas avoir", author: "Mathis" },
+      { text: "Ma fille me demande maintenant quand on retourne chez le dentiste", author: "Isabelle" },
+      { text: "Honnêtement, leur équipe est hors du commun", author: "Jérémie" },
+      { text: "Je ne pourrais pas recommander un meilleur dentiste, ils sont vraiment bons — 20/10", author: "Marie-José" },
+    ],
     items: {
       orthodontics: "Orthodontie",
       prevention: "Prévention et Hygiène",
@@ -76,6 +85,7 @@ export const fr = {
     }
   },
   team: {
+    sectionHeading: "L'Équipe",
     title: "Rencontrez les membres de notre équipe",
     slogan:
       "Créant des sourires\nqui sont autant beaux\nqu'ils sont en bonne santé",
@@ -101,9 +111,7 @@ export const fr = {
     team2Title: "L'équipe de Dre Marie-Christine St-Onge",
     team2Desc: "Une équipe multidisciplinaire expérimentée qui rend chaque rendez-vous structuré, attentif et rassurant.",
     dentist1Bio: "En pratique depuis 1999, Dre Nathalie Vaillancourt fait partie de la clinique depuis sa fondation et se distingue par une approche attentive et durable.",
-    dentist1Meta: "En pratique depuis 1999",
     dentist2Bio: "Diplômée de l'Université Laval, Dre Marie-Christine St-Onge est à la clinique depuis 2001 et apporte continuité et expérience à chaque plan de traitement.",
-    dentist2Meta: "À la clinique depuis 2001",
     hygienists: "Nos hygiénistes dentaires",
     assistants: "Nos assistantes dentaires",
     secretaries: "Nos secrétaires-réceptionnistes",
@@ -113,6 +121,7 @@ export const fr = {
     supportingImageCaption: "Moment d'équipe en clinique",
     bubblesPrefix: "Notre objectif est",
     bubblesReveal: "d'offrir des soins dentaires et esthétiques de calibre mondial grâce à des techniques avancées, des traitements personnalisés et un niveau de service qui valorise chaque patient.",
+    hereForYou: "Ici pour vous",
   },
   gallery: {
     title: "Notre clinique",

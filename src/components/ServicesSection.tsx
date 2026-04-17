@@ -5,6 +5,7 @@ import { clinicData } from '../content/clinic';
 import { useFocusTrap } from '../hooks/useFocusTrap';
 import { useMediaQuery } from '../hooks/useMediaQuery';
 import { cn } from '../lib/utils';
+import { SECTION_HEADING_CLASS } from '../lib/sectionHeading';
 import { ArrowRight, ChevronRight, X } from 'lucide-react';
 
 /** Bump `?v=` when swapping icons so browsers pick up new assignments (SVG URLs are easy to cache). */
@@ -190,11 +191,28 @@ const serviceDetails: Record<Language, Record<ServiceId, {
   },
 };
 
+/**
+ * Vertical placements for each quote (centered in viewport for visibility).
+ * Quote 0 (Mathis) and Quote 3 (Marie-José) are aligned horizontally at 48%.
+ */
+const QUOTE_POSITIONS = ['13%', '80%', '13%', '80%'];
+
+/** Progress window [start, end] within 0–1 when each quote crosses the screen */
+const QUOTE_WINDOWS: [number, number][] = [
+  [0.04, 0.38],
+  [0.22, 0.56],
+  [0.44, 0.78],
+  [0.60, 0.94],
+];
+
+const QUOTE_CARD_W = 340;
+
 export const ServicesSection: React.FC = () => {
   const { t, language } = useLanguage();
   const isMobile = useMediaQuery('(max-width: 1023px)');
   const containerRef = useRef<HTMLDivElement>(null);
   const horizontalRef = useRef<HTMLDivElement>(null);
+  const quoteRefs = useRef<(HTMLDivElement | null)[]>([]);
   const dialogRef = useRef<HTMLDivElement>(null);
   const closeButtonRef = useRef<HTMLButtonElement>(null);
   const [activeService, setActiveService] = useState<ServiceId | null>(null);
@@ -233,6 +251,15 @@ export const ServicesSection: React.FC = () => {
 
       const scrollWidth = horizontal.scrollWidth - window.innerWidth;
       horizontal.style.transform = `translateX(${-progress * scrollWidth}px)`;
+
+      // Drive quote cards: each flies in from right and exits left
+      QUOTE_WINDOWS.forEach(([start, end], i) => {
+        const el = quoteRefs.current[i];
+        if (!el) return;
+        const local = Math.max(0, Math.min(1, (progress - start) / (end - start)));
+        const tx = (1 - local) * window.innerWidth - local * QUOTE_CARD_W;
+        el.style.transform = `translateX(${tx}px)`;
+      });
     };
 
     handleScroll();
@@ -281,7 +308,7 @@ export const ServicesSection: React.FC = () => {
           'mx-auto mb-12 w-full max-w-none',
           isMobile ? 'mb-10 px-0' : 'px-6 md:px-[10vw]'
         )}>
-          <h2 className="font-display w-full text-[clamp(3.1625rem,14.375vw,13.225rem)] font-normal leading-[0.86] tracking-[-0.06em] text-bg-inverse">
+          <h2 className={cn('w-full text-bg-inverse', SECTION_HEADING_CLASS)}>
             {t.services.title}
           </h2>
         </div>
@@ -291,8 +318,8 @@ export const ServicesSection: React.FC = () => {
           className={cn(
             'transition-transform duration-100 ease-out',
             isMobile
-              ? 'grid gap-4'
-              : 'flex gap-8 px-6 md:px-[10vw]'
+              ? 'grid gap-[calc(1rem*0.765)]'
+              : 'flex gap-[calc(2rem*0.765)] px-6 md:px-[10vw]'
           )}
         >
           {clinicData.services.map((service) => (
@@ -301,30 +328,52 @@ export const ServicesSection: React.FC = () => {
               type="button"
               onClick={() => setActiveService(service.id as ServiceId)}
               className={cn(
-                'group flex flex-col gap-6 rounded-2xl bg-white p-6 text-left shadow-xl transition-transform duration-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-4 md:p-12',
-                isMobile ? 'w-full' : 'w-[300px] flex-shrink-0 md:w-[400px] hover:scale-[1.02]'
+                'group flex flex-col gap-[calc(1.5rem*0.765)] rounded-[calc(1rem*0.765)] bg-white p-[calc(1.5rem*0.765)] text-left shadow-xl transition-transform duration-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-[calc(0.25rem*0.765)] md:p-[calc(3rem*0.765)]',
+                isMobile ? 'w-full' : 'w-[calc(300px*0.765)] flex-shrink-0 md:w-[calc(400px*0.765)] hover:scale-[1.02]'
               )}
             >
-              <div className="w-16 h-16 bg-accent/20 rounded-2xl flex items-center justify-center text-accent group-hover:bg-accent group-hover:text-bg-dark transition-colors duration-300">
-                <ServiceIcon id={service.id as ServiceId} className="h-8 w-8" />
+              <div className="w-[calc(4rem*0.765)] h-[calc(4rem*0.765)] bg-accent/20 rounded-[calc(1rem*0.765)] flex items-center justify-center text-accent group-hover:bg-accent group-hover:text-bg-dark transition-colors duration-300">
+                <ServiceIcon id={service.id as ServiceId} className="h-[calc(2rem*0.765)] w-[calc(2rem*0.765)]" />
               </div>
-              <h3 className="text-card-title md:text-3xl font-heading font-semibold text-text group-hover:text-accent transition-colors">
+              <h3 className="text-[clamp(calc(1.35rem*0.765),calc(2.1vw*0.765),calc(1.8rem*0.765))] md:text-[calc(1.875rem*0.765)] font-heading font-semibold leading-[1.08] tracking-[-0.04em] text-text group-hover:text-accent transition-colors">
                 {t.services.items[service.id as keyof typeof t.services.items]}
               </h3>
-              <p className="text-base leading-relaxed text-text-light">
+              <p className="text-[calc(1rem*0.765)] leading-relaxed text-text-light">
                 {t.services.cardTeaser}
               </p>
-              <div className="mt-auto pt-8 border-t border-bg-alt flex items-center justify-between">
-                <span className="text-nav text-accent/90">
+              <div className="mt-auto pt-[calc(2rem*0.765)] border-t border-bg-alt flex items-center justify-between">
+                <span className="font-nav text-[calc(0.72rem*0.765)] uppercase leading-none tracking-[0.18em] text-accent/90">
                   {t.services.learnMore}
                 </span>
-                <div className="w-10 h-10 border border-accent rounded-full flex items-center justify-center group-hover:bg-accent group-hover:text-bg-dark transition-all">
-                  <ChevronRight className="w-5 h-5" />
+                <div className="w-[calc(2.5rem*0.765)] h-[calc(2.5rem*0.765)] border border-accent rounded-full flex items-center justify-center group-hover:bg-accent group-hover:text-bg-dark transition-all">
+                  <ChevronRight className="w-[calc(1.25rem*0.765)] h-[calc(1.25rem*0.765)]" />
                 </div>
               </div>
             </button>
           ))}
         </div>
+
+        {/* Scroll-driven floating quotes — desktop only, over bare background */}
+        {!isMobile && (t.services.quotes as { text: string; author: string }[]).map((q, i) => (
+          <div
+            key={i}
+            ref={(el) => { quoteRefs.current[i] = el; }}
+            aria-hidden="true"
+            className="pointer-events-none absolute z-10 will-change-transform"
+            style={{
+              top: QUOTE_POSITIONS[i],
+              width: QUOTE_CARD_W,
+              transform: `translateX(${window.innerWidth}px)`,
+            }}
+          >
+            <p className="font-heading text-[1.15rem] font-semibold leading-snug tracking-[-0.02em] text-white">
+              &ldquo;{q.text}&rdquo;
+            </p>
+            <p className="mt-2 font-nav text-[0.68rem] uppercase tracking-[0.18em] text-white/50">
+              — {q.author}
+            </p>
+          </div>
+        ))}
       </div>
 
       <AnimatePresence>

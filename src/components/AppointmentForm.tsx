@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { useLanguage } from '../context/LanguageContext';
 import { Button } from './Button';
+import { cn } from '../lib/utils';
+import { SECTION_HEADING_CLASS } from '../lib/sectionHeading';
 
 export const AppointmentForm: React.FC = () => {
   const { t } = useLanguage();
@@ -29,7 +31,7 @@ export const AppointmentForm: React.FC = () => {
     <section id="appointment" className="scroll-mt-24 bg-white py-20 md:py-32">
       <div className="container mx-auto max-w-3xl px-4 sm:px-6">
         <div className="mb-12 text-center md:mb-16">
-          <h2 className="mb-4 font-display text-[clamp(2.35rem,5vw,4.1rem)] font-normal leading-[1.12] tracking-[-0.055em] text-text">
+          <h2 className={cn('mb-4 text-text', SECTION_HEADING_CLASS)}>
             {t.appointment.title}
           </h2>
           <p className="text-body-lg text-text-light">

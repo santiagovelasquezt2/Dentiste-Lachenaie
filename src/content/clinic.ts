@@ -66,9 +66,9 @@ export const clinicData = {
     {
       name: "Dr Nadeige Moquin",
       role: "Dentist",
-      bio: "Texte à venir",
+      bio: "Dr Nadeige Moquin will join this section once profile photography is ready.",
       image: null,
-      featured: false,
+      featured: true,
       status: "coming-soon",
     }
   ] satisfies DentistProfile[],

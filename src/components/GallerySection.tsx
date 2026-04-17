@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { ChevronLeft, ChevronRight, X } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 import { useFocusTrap } from '../hooks/useFocusTrap';
+import { cn } from '../lib/utils';
+import { SECTION_HEADING_CLASS } from '../lib/sectionHeading';
 import clinicExterior from '@/DentalContent/Images/Ouside of the building/clinic-exterior-front-signage-01.jpg';
 import clinicReception from '@/DentalContent/Images/Inside of the practice/clinic-reception-01.jpg';
 import clinicWaitingRoom1 from '@/DentalContent/Images/Inside of the practice/clinic-waiting-room-01.jpg';
@@ -85,7 +87,7 @@ export const GallerySection: React.FC = () => {
         }}
       />
       <div className="container mx-auto px-4 sm:px-6">
-        <h2 className="mb-12 text-center font-display text-[clamp(3.1625rem,14.375vw,13.225rem)] font-normal leading-[1.12] tracking-[-0.055em] text-text md:mb-20">
+        <h2 className={cn('mb-12 text-center text-text md:mb-20', SECTION_HEADING_CLASS)}>
           {t.gallery.title}
         </h2>
 
@@ -104,10 +106,6 @@ export const GallerySection: React.FC = () => {
                 className="h-full w-full origin-center object-cover transition-transform duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] motion-safe:will-change-transform motion-safe:group-hover:scale-[1.045] motion-safe:transform-gpu"
                 loading="lazy"
                 decoding="async"
-              />
-              <div
-                aria-hidden
-                className="pointer-events-none absolute inset-[10px] rounded-[1.35rem] border border-[#b0d64e]/0 shadow-[0_0_0_1px_rgba(176,214,78,0),0_0_0_8px_rgba(176,214,78,0),0_0_28px_rgba(176,214,78,0)] transition-[border-color,box-shadow,opacity,transform] duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] motion-safe:opacity-0 motion-safe:group-hover:opacity-100 motion-safe:group-hover:scale-[0.995] motion-safe:group-hover:border-[#b0d64e]/65 motion-safe:group-hover:shadow-[0_0_0_1px_rgba(176,214,78,0.28),0_0_0_8px_rgba(176,214,78,0.08),0_0_28px_rgba(176,214,78,0.18)]"
               />
               <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/45 via-black/10 to-transparent opacity-0 transition-opacity duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:opacity-100" />
               <div className="pointer-events-none absolute bottom-4 left-4 right-4 flex items-end justify-between gap-3 opacity-0 transition-[opacity,transform] duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] motion-safe:translate-y-4 motion-safe:transform-gpu motion-safe:group-hover:translate-y-0 group-hover:opacity-100">

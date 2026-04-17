@@ -14,11 +14,13 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     overflow-x: clip;
+    overscroll-behavior: none;
   }
   body {
     @apply font-body antialiased bg-background text-foreground;
     scroll-behavior: smooth;
     overflow-x: clip;
+    overscroll-behavior: none;
   }
   h1, h2, h3, h4, h5, h6 {
     @apply font-heading;

@@ -26,6 +26,9 @@ export const en = {
     location: "Terrebonne, QC",
     imageAlt: "Dental clinic facade with signage",
     slogan: "Creating Smiles That Last",
+    overlayPersonalized: "personalized",
+    overlayQuality: "quality",
+    overlayExcellence: "excellence",
   },
   about: {
     title: "We change the experience and help you regain confidence",
@@ -64,6 +67,12 @@ export const en = {
     bookAppointment: "Book appointment",
     whatToExpect: "What to expect",
     closeDialog: "Close dialog",
+    quotes: [
+      { text: "I found a smile I didn't know I had", author: "Mathis" },
+      { text: "Now my daughter asks me when's the next time we're going to the dentist", author: "Isabelle" },
+      { text: "Honestly their team is out of this world", author: "Jérémie" },
+      { text: "I couldn't recommend a better dentist, they're that good — 20/10", author: "Marie-José" },
+    ],
     items: {
       orthodontics: "Orthodontics",
       prevention: "Prevention and Hygiene",
@@ -76,6 +85,7 @@ export const en = {
     }
   },
   team: {
+    sectionHeading: "The Team",
     title: "Meet the Members of Our Team",
     slogan:
       "Creating smiles that are\nas healthy as they are\nbeautiful",
@@ -101,9 +111,7 @@ export const en = {
     team2Title: "Dr. Marie-Christine St-Onge's Team",
     team2Desc: "An experienced multidisciplinary team that helps each appointment feel organized, attentive, and reassuring.",
     dentist1Bio: "Practicing since 1999, Dr. Nathalie Vaillancourt has been part of the clinic since its foundation and is known for careful, relationship-driven care.",
-    dentist1Meta: "Practicing since 1999",
     dentist2Bio: "A Université Laval graduate, Dr. Marie-Christine St-Onge has been with the clinic since 2001 and brings continuity and experience to every treatment plan.",
-    dentist2Meta: "With the clinic since 2001",
     hygienists: "Our dental hygienists",
     assistants: "Our dental assistants",
     secretaries: "Our secretary-receptionists",
@@ -113,6 +121,7 @@ export const en = {
     supportingImageCaption: "Clinical team moment",
     bubblesPrefix: "Our goal is",
     bubblesReveal: "to deliver world-class dental and aesthetic care through advanced techniques, customized treatments, and a level of service that makes every patient feel valued.",
+    hereForYou: "Here for you",
   },
   gallery: {
     title: "Our Clinic",

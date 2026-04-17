@@ -99,7 +99,7 @@ export const TeamBubbles: React.FC = () => {
       ref={sectionRef}
       className="relative isolate z-10 bg-white px-6 pb-20 pt-[clamp(16rem,48vh,34rem)] md:px-12 md:pb-32 md:pt-[clamp(20rem,54vh,42rem)] lg:px-24 lg:pt-[clamp(22rem,58vh,48rem)]"
     >
-      <div className="mx-auto max-w-[1400px]">
+      <div className="relative z-10 mx-auto max-w-[1400px]">
         <div className="flex flex-col items-start gap-6 lg:flex-row lg:gap-8 xl:gap-12">
           <div className="flex shrink-0 items-start gap-4 sm:gap-6">
             <span className="text-section-title font-normal! text-text">{t.team.bubblesPrefix}</span>
@@ -135,6 +135,11 @@ export const TeamBubbles: React.FC = () => {
           )}
         </div>
       </div>
+      <p
+        className="pointer-events-none absolute inset-x-0 bottom-0 z-0 m-0 flex justify-center px-6 pb-3 text-center font-display text-xs font-normal leading-none tracking-[-0.055em] text-black sm:text-sm md:px-12 md:pb-4 md:text-base lg:px-24"
+      >
+        {t.team.hereForYou}
+      </p>
     </section>
   );
 };

@@ -38,20 +38,23 @@ const AboutImageFrame = ({
   alt,
   side,
   objectFit = 'contain',
+  sizeScale = 1,
 }: {
   image: AboutImage;
   alt: string;
   side: 'start' | 'end';
   /** `cover` fills the frame (no letter/pillarboxing); may crop. */
   objectFit?: 'contain' | 'cover';
+  /** Linear scale for displayed width (e.g. 0.75 for 25% smaller). */
+  sizeScale?: number;
 }) => {
-  const widthPx = equalAreaWidthPx(image.intrinsicW, image.intrinsicH);
+  const widthPx = Math.round(equalAreaWidthPx(image.intrinsicW, image.intrinsicH) * sizeScale);
 
   return (
     <div
       className={`overflow-hidden rounded-2xl bg-black/[0.03] shadow-2xl ${side === 'start' ? 'self-start' : 'self-end'}`}
       style={{
-        width: `min(${widthPx}px, 88vw)`,
+        width: `min(${widthPx}px, ${88 * sizeScale}vw)`,
         aspectRatio: `${image.intrinsicW} / ${image.intrinsicH}`,
       }}
     >
@@ -89,26 +92,39 @@ const TextBlock = ({
   title,
   content,
   isLeft,
+  sizeScale = 1,
 }: {
   title: string;
   content: React.ReactNode;
   isLeft?: boolean;
+  sizeScale?: number;
 }) => {
   const words = title.split(' ');
   const firstWord = words[0];
   const restOfTitle = words.slice(1).join(' ');
+  const compact = sizeScale < 1;
 
   return (
     <div
-      className={`w-[90%] bg-white/90 p-8 shadow-xl backdrop-blur-md md:w-[65%] md:p-12 ${isLeft ? 'self-start' : 'self-end'} rounded-3xl`}
+      className={`w-[90%] overflow-hidden rounded-3xl border-0 bg-white/90 shadow-xl ring-0 backdrop-blur-md md:w-[65%] ${compact ? 'p-6 md:p-9' : 'p-8 md:p-12'} ${isLeft ? 'self-start' : 'self-end'}`}
     >
-      <div className="mb-6 text-text">
-        <CheckSquare className="h-10 w-10 stroke-[1.5]" />
+      <div className={`text-text ${compact ? 'mb-[1.125rem]' : 'mb-6'}`}>
+        <CheckSquare className={`stroke-[1.5] ${compact ? 'h-[1.875rem] w-[1.875rem]' : 'h-10 w-10'}`} />
       </div>
-      <h3 className="mb-6 font-display text-[clamp(1.75rem,3vw,2.7rem)] font-normal leading-[1.12] tracking-[-0.055em] text-text">
+      <h3
+        className={`font-display font-normal leading-[1.12] tracking-[-0.055em] text-text ${compact ? 'mb-[1.125rem] text-[clamp(1.3125rem,2.25vw,2.025rem)]' : 'mb-6 text-[clamp(1.75rem,3vw,2.7rem)]'}`}
+      >
         {firstWord} <span className="font-bold text-accent">{restOfTitle}</span>
       </h3>
-      <div className="space-y-4 text-body-lg text-text-light">{content}</div>
+      <div
+        className={
+          compact
+            ? 'space-y-3 font-body text-[clamp(0.75rem,0.9vw,0.84rem)] leading-[1.68] tracking-[-0.015em] text-text-light'
+            : 'space-y-4 text-body-lg text-text-light'
+        }
+      >
+        {content}
+      </div>
     </div>
   );
 };
@@ -125,7 +141,7 @@ const MobileTextBlock = ({
   const restOfTitle = words.slice(1).join(' ');
 
   return (
-    <article className="rounded-[2rem] border border-black/5 bg-white/92 p-6 shadow-[0_20px_60px_rgba(21,33,24,0.08)] backdrop-blur-md">
+    <article className="overflow-hidden rounded-[2rem] border border-black/5 bg-white/92 p-6 shadow-[0_20px_60px_rgba(21,33,24,0.08)] ring-0 backdrop-blur-md">
       <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-2xl bg-[#eff4e5] text-text">
         <CheckSquare className="h-6 w-6 stroke-[1.75]" />
       </div>
@@ -204,29 +220,46 @@ const AboutSectionDesktop = ({ t }: { t: ReturnType<typeof useLanguage>['t'] }) 
   });
 
   const y = useTransform(scrollYProgress, [0, 1], ['0%', '-100%']);
+  const desktopScale = 0.75;
   return (
-    <section ref={containerRef} id="about" className="relative h-[350vh] scroll-mt-24 bg-[#E8EDE3]">
+    <section ref={containerRef} id="about" className="relative h-[262.5vh] scroll-mt-24 bg-[#E8EDE3]">
       <div className="sticky top-0 flex h-screen w-full justify-center overflow-hidden">
         <div className="pointer-events-none absolute inset-0 z-0 flex items-center justify-center">
-          <span className="select-none whitespace-nowrap font-display text-[clamp(4.5rem,11vw,10rem)] font-normal leading-[1.12] tracking-[-0.055em] [word-spacing:0.35em] text-black/10">
+          <span className="select-none whitespace-nowrap font-display text-[clamp(3.375rem,8.25vw,7.5rem)] font-normal leading-[1.12] tracking-[-0.055em] [word-spacing:0.35em] text-black/10">
             {t.about.since}
           </span>
         </div>
 
         <motion.div
           style={{ y }}
-          className="absolute top-full z-10 flex w-full max-w-5xl flex-col gap-24 px-6 pb-[100vh] pt-[10vh]"
+          className="absolute top-full z-10 flex w-full max-w-3xl flex-col gap-18 px-[1.125rem] pb-[75vh] pt-[3vh]"
         >
-          <AboutImageFrame image={images[0]} alt={t.about.images.patientSmile} side="start" />
+          <AboutImageFrame
+            image={images[0]}
+            alt={t.about.images.patientSmile}
+            side="start"
+            sizeScale={desktopScale}
+          />
 
           <TextBlock
             title={t.about.goal.title}
             content={<p>{formatText(t.about.goal.desc)}</p>}
             isLeft={false}
+            sizeScale={desktopScale}
           />
 
-          <AboutImageFrame image={images[1]} alt={t.about.images.dentalPractice} side="end" />
-          <AboutImageFrame image={images[2]} alt={t.about.images.dentalCare} side="start" />
+          <AboutImageFrame
+            image={images[1]}
+            alt={t.about.images.dentalPractice}
+            side="end"
+            sizeScale={desktopScale}
+          />
+          <AboutImageFrame
+            image={images[2]}
+            alt={t.about.images.dentalCare}
+            side="start"
+            sizeScale={desktopScale}
+          />
 
           <TextBlock
             title={t.about.commitment.title}
@@ -237,14 +270,16 @@ const AboutSectionDesktop = ({ t }: { t: ReturnType<typeof useLanguage>['t'] }) 
               </>
             }
             isLeft={true}
+            sizeScale={desktopScale}
           />
 
-          <AboutImageFrame image={images[3]} alt={t.about.images.clinic} side="end" />
+          <AboutImageFrame image={images[3]} alt={t.about.images.clinic} side="end" sizeScale={desktopScale} />
           <AboutImageFrame
             image={images[4]}
             alt={t.about.images.treatment}
             side="start"
             objectFit="cover"
+            sizeScale={desktopScale}
           />
 
           <TextBlock
@@ -256,10 +291,16 @@ const AboutSectionDesktop = ({ t }: { t: ReturnType<typeof useLanguage>['t'] }) 
               </>
             }
             isLeft={false}
+            sizeScale={desktopScale}
           />
 
-          <AboutImageFrame image={images[5]} alt={t.about.images.dentalTeam} side="end" />
-          <AboutImageFrame image={images[6]} alt={t.about.images.dentistWithPatient} side="start" />
+          <AboutImageFrame image={images[5]} alt={t.about.images.dentalTeam} side="end" sizeScale={desktopScale} />
+          <AboutImageFrame
+            image={images[6]}
+            alt={t.about.images.dentistWithPatient}
+            side="start"
+            sizeScale={desktopScale}
+          />
         </motion.div>
       </div>
     </section>
