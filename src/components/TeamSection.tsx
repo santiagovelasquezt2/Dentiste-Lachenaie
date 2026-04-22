@@ -191,10 +191,45 @@ const StaffGroup = ({
     <h4 className="mb-[0.85rem] text-center font-heading text-[clamp(1.02rem,1.53vw,1.3175rem)] leading-[1.1] tracking-[-0.04em] text-[#20251d]">
       {heading}
     </h4>
-    <div className="grid grid-cols-2 gap-[0.6375rem] sm:grid-cols-3">
+    <div
+      className={cn(
+        'grid gap-[0.6375rem]',
+        members.length === 2
+          ? 'mx-auto w-full max-w-[18.75rem] grid-cols-2'
+          : 'grid-cols-2 sm:grid-cols-3'
+      )}
+    >
       {members.map((member) => (
         <StaffCard key={member.name} member={member} palette={palette} t={t} />
       ))}
+    </div>
+  </div>
+);
+
+const TeamSpotlight = ({
+  heading,
+  image,
+  alt,
+}: {
+  heading: string;
+  image: string;
+  alt: string;
+}) => (
+  <div className="flex flex-col gap-[0.85rem]">
+    <h4 className="text-center font-heading text-[clamp(1.02rem,1.53vw,1.3175rem)] leading-[1.1] tracking-[-0.04em] text-[#20251d]">
+      {heading}
+    </h4>
+    <div className="group relative overflow-hidden rounded-[1.2rem] border border-[#dbe1ce] bg-[linear-gradient(180deg,rgba(249,250,246,0.98),rgba(235,238,229,0.96))] p-[0.35rem] shadow-[0_12px_32px_rgba(77,95,36,0.08)] ring-1 ring-black/5 transition-[background-color,border-color,box-shadow] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:border-[#5f7f1f]/90 hover:shadow-[0_14px_36px_rgba(53,79,16,0.16)]">
+      <div className="absolute -inset-px rounded-[1.2rem] bg-gradient-to-br from-[#eef5db] via-white to-[#dde7c3] opacity-80 transition-opacity duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:opacity-0" />
+      <div className="relative overflow-hidden rounded-[1rem] bg-[linear-gradient(180deg,#f4f6ef_0%,#d7ddca_100%)]">
+        <img
+          src={image}
+          alt={alt}
+          className="aspect-[4/3] h-auto w-full object-cover object-center transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] motion-safe:will-change-transform motion-safe:group-hover:scale-[1.03]"
+          loading="lazy"
+          decoding="async"
+        />
+      </div>
     </div>
   </div>
 );
@@ -344,7 +379,11 @@ export const TeamSection: React.FC = () => {
         <div className="mx-auto w-full max-w-[1054px]">
           <div className="grid w-full gap-[1.7rem] lg:grid-cols-2">
             <TeamRoster teamId="team1" palette={cardPalette[0]} t={t} />
-            <TeamRoster teamId="team2" palette={cardPalette[1]} t={t} />
+            <TeamSpotlight
+              heading={t.team.sectionHeading}
+              image={clinicData.teams.team2.supportingImage}
+              alt={t.team.supportingImageCaption}
+            />
           </div>
         </div>
       </div>
