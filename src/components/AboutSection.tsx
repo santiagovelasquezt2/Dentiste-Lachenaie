@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { CheckSquare } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
@@ -49,13 +49,19 @@ const AboutImageFrame = ({
   sizeScale?: number;
 }) => {
   const widthPx = Math.round(equalAreaWidthPx(image.intrinsicW, image.intrinsicH) * sizeScale);
+  const isAnimatedDesktopAsset = sizeScale < 1;
 
   return (
     <div
-      className={`overflow-hidden rounded-2xl bg-black/[0.03] shadow-2xl ${side === 'start' ? 'self-start' : 'self-end'}`}
+      className={`overflow-hidden rounded-2xl bg-black/[0.03] ring-1 ring-black/5 ${
+        isAnimatedDesktopAsset
+          ? 'shadow-[0_18px_42px_rgba(46,63,28,0.12)]'
+          : 'shadow-[0_24px_56px_rgba(21,33,24,0.12)]'
+      } ${side === 'start' ? 'self-start' : 'self-end'}`}
       style={{
         width: `min(${widthPx}px, ${88 * sizeScale}vw)`,
         aspectRatio: `${image.intrinsicW} / ${image.intrinsicH}`,
+        contain: isAnimatedDesktopAsset ? 'paint' : undefined,
       }}
     >
       <img
@@ -65,8 +71,8 @@ const AboutImageFrame = ({
         height={image.intrinsicH}
         className={
           objectFit === 'cover'
-            ? 'h-full w-full object-cover object-center'
-            : 'h-full w-full object-contain'
+            ? 'h-full w-full select-none object-cover object-center'
+            : 'h-full w-full select-none object-contain'
         }
         decoding="async"
       />
@@ -106,7 +112,12 @@ const TextBlock = ({
 
   return (
     <div
-      className={`w-[90%] overflow-hidden rounded-3xl border-0 bg-white/90 shadow-xl ring-0 backdrop-blur-md md:w-[65%] ${compact ? 'p-6 md:p-9' : 'p-8 md:p-12'} ${isLeft ? 'self-start' : 'self-end'}`}
+      className={`w-[90%] overflow-hidden rounded-3xl md:w-[65%] ${
+        compact
+          ? 'border border-black/5 bg-white/96 shadow-[0_16px_40px_rgba(46,63,28,0.12)]'
+          : 'border-0 bg-white/90 shadow-xl backdrop-blur-md'
+      } ${compact ? 'p-6 md:p-9' : 'p-8 md:p-12'} ${isLeft ? 'self-start' : 'self-end'}`}
+      style={{ contain: compact ? 'paint' : undefined }}
     >
       <div className={`text-text ${compact ? 'mb-[1.125rem]' : 'mb-6'}`}>
         <CheckSquare className={`stroke-[1.5] ${compact ? 'h-[1.875rem] w-[1.875rem]' : 'h-10 w-10'}`} />
@@ -213,17 +224,48 @@ const AboutSectionMobile = ({ t }: { t: ReturnType<typeof useLanguage>['t'] }) =
 
 const AboutSectionDesktop = ({ t }: { t: ReturnType<typeof useLanguage>['t'] }) => {
   const containerRef = useRef<HTMLDivElement>(null);
+  const stackRef = useRef<HTMLDivElement>(null);
+  const [travelDistance, setTravelDistance] = useState(0);
 
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ['start start', 'end end'],
   });
 
-  const y = useTransform(scrollYProgress, [0, 1], ['0%', '-100%']);
+  useEffect(() => {
+    const updateTravelDistance = () => {
+      const stackHeight = stackRef.current?.offsetHeight ?? 0;
+      const viewportHeight = window.innerHeight;
+
+      setTravelDistance(stackHeight + viewportHeight);
+    };
+
+    updateTravelDistance();
+
+    const resizeObserver = typeof ResizeObserver !== 'undefined'
+      ? new ResizeObserver(() => updateTravelDistance())
+      : null;
+
+    if (stackRef.current && resizeObserver) {
+      resizeObserver.observe(stackRef.current);
+    }
+
+    window.addEventListener('resize', updateTravelDistance);
+
+    return () => {
+      resizeObserver?.disconnect();
+      window.removeEventListener('resize', updateTravelDistance);
+    };
+  }, []);
+
+  const y = useTransform(scrollYProgress, [0, 1], [0, -travelDistance]);
   const desktopScale = 0.75;
   return (
-    <section ref={containerRef} id="about" className="relative h-[262.5vh] scroll-mt-24 bg-[#E8EDE3]">
-      <div className="sticky top-0 flex h-screen w-full justify-center overflow-hidden">
+    <section ref={containerRef} id="about" className="relative h-[400vh] scroll-mt-24 bg-[#E8EDE3]">
+      <div className="sticky top-0 flex h-screen w-full justify-center overflow-clip">
+        {/* Top edge: blends from TeamBubbles (white) into the sage bg */}
+        <div className="pointer-events-none absolute inset-x-0 top-0 z-20 h-28 bg-gradient-to-b from-white to-transparent" />
+
         <div className="pointer-events-none absolute inset-0 z-0 flex items-center justify-center">
           <span className="select-none whitespace-nowrap font-display text-[clamp(3.375rem,8.25vw,7.5rem)] font-normal leading-[1.12] tracking-[-0.055em] [word-spacing:0.35em] text-black/10">
             {t.about.since}
@@ -231,8 +273,9 @@ const AboutSectionDesktop = ({ t }: { t: ReturnType<typeof useLanguage>['t'] }) 
         </div>
 
         <motion.div
-          style={{ y }}
-          className="absolute top-full z-10 flex w-full max-w-3xl flex-col gap-18 px-[1.125rem] pb-[75vh] pt-[3vh]"
+          ref={stackRef}
+          style={{ y, willChange: 'transform', backfaceVisibility: 'hidden' }}
+          className="absolute top-full z-10 flex w-full max-w-3xl flex-col gap-14 px-[1.125rem] pb-[35vh] pt-[3vh]"
         >
           <AboutImageFrame
             image={images[0]}

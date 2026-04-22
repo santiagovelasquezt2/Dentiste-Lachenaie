@@ -5,7 +5,7 @@ import { useFocusTrap } from '../hooks/useFocusTrap';
 import { isHoursHash, scrollToHoursSection } from '../lib/scrollToHours';
 import { cn } from '../lib/utils';
 import { clinicData } from '../content/clinic';
-import { Menu, X, ExternalLink, Phone, Plus } from 'lucide-react';
+import { Menu, X, ExternalLink, Phone, Mail, Plus, ChevronDown } from 'lucide-react';
 
 const logoSrc = `${import.meta.env.BASE_URL}assets/clinic-logo-primary.png`;
 
@@ -16,7 +16,7 @@ const langPillTransition = {
   mass: 0.7,
 };
 
-type NavPanel = 'menu' | null;
+type NavPanel = 'menu' | 'contact' | null;
 
 const dropdownPanelClass =
   'absolute left-0 top-full z-50 mt-2 min-w-[14rem] rounded-2xl border border-black/5 bg-white/95 py-2 shadow-[0_24px_60px_-24px_rgba(15,23,42,0.28)] backdrop-blur-xl';
@@ -41,6 +41,7 @@ export const Nav: React.FC = () => {
       : '#first-visit-steps';
 
   const telHref = `tel:${clinicData.phone.replace(/\D/g, '')}`;
+  const emailHref = `mailto:${clinicData.email}`;
 
   useEffect(() => {
     const handleScroll = () => {
@@ -73,6 +74,7 @@ export const Nav: React.FC = () => {
     const handleResize = () => {
       if (window.innerWidth >= 1024) {
         setIsMenuOpen(false);
+        setOpenPanel(null);
       }
     };
 
@@ -91,6 +93,19 @@ export const Nav: React.FC = () => {
 
     window.addEventListener('pointerdown', handlePointerDown);
     return () => window.removeEventListener('pointerdown', handlePointerDown);
+  }, [openPanel]);
+
+  useEffect(() => {
+    if (openPanel === null) return;
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        setOpenPanel(null);
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
   }, [openPanel]);
 
   useFocusTrap({
@@ -124,7 +139,6 @@ export const Nav: React.FC = () => {
   };
 
   const navEmphasisClass = 'text-gray-800';
-  const navSubtleClass = 'text-gray-600';
 
   return (
     <header
@@ -236,24 +250,81 @@ export const Nav: React.FC = () => {
             />
           </a>
 
-          <a
-            href={telHref}
-            onClick={() => setOpenPanel(null)}
-            className={cn(
-              'group inline-flex items-center gap-1.5 text-left transition-opacity hover:opacity-90',
-              navEmphasisClass
-            )}
-          >
-            <span className="flex flex-col leading-tight">
-              <span className="text-base font-semibold tracking-wide">{clinicData.phone}</span>
-              <span className={cn('text-sm font-medium', navSubtleClass)}>{t.hero.location}</span>
-            </span>
-            <Phone
-              className="size-4 shrink-0 origin-center opacity-80 transition-transform duration-200 ease-out motion-safe:group-hover:scale-110"
-              strokeWidth={2}
-              aria-hidden
-            />
-          </a>
+          <div className="relative">
+            <button
+              type="button"
+              aria-haspopup="menu"
+              aria-expanded={openPanel === 'contact'}
+              aria-label={t.nav.contact}
+              className={cn(
+                'group inline-flex items-center gap-3 rounded-full border border-transparent bg-white/0 px-3 py-2 text-left transition-colors hover:border-black/5 hover:bg-white/60 hover:text-[#7e9c2f]',
+                navEmphasisClass
+              )}
+              onClick={() => togglePanel('contact')}
+            >
+              <span className="text-base font-semibold tracking-wide">{t.nav.contact}</span>
+              <span className="flex flex-col items-center justify-center leading-none text-gray-800 transition-transform duration-200 ease-out group-hover:translate-x-1 group-hover:text-[#7e9c2f]">
+                <Phone className="size-4 transition-transform duration-200 ease-out group-hover:-translate-y-0.5 group-hover:rotate-[-8deg]" strokeWidth={2} aria-hidden />
+                <Mail className="size-4 transition-transform duration-200 ease-out group-hover:translate-y-0.5 group-hover:rotate-[8deg]" strokeWidth={2} aria-hidden />
+              </span>
+              <ChevronDown
+                className="size-4 shrink-0 opacity-70 transition-transform duration-200 ease-out motion-safe:group-hover:translate-y-[1px]"
+                strokeWidth={2}
+                aria-hidden
+              />
+            </button>
+
+            <AnimatePresence>
+              {openPanel === 'contact' && (
+                <motion.div
+                  initial={{ opacity: 0, y: -6 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -6 }}
+                  transition={{ duration: 0.15 }}
+                  className="absolute right-0 top-full z-50 mt-2 w-[18rem] overflow-hidden rounded-3xl border border-black/5 bg-white/95 p-2 shadow-[0_24px_60px_-24px_rgba(15,23,42,0.28)] backdrop-blur-xl"
+                  role="menu"
+                  aria-label={t.nav.contact}
+                >
+                  <a
+                    href={telHref}
+                    role="menuitem"
+                    onClick={() => setOpenPanel(null)}
+                    className="flex items-center gap-3 rounded-2xl px-4 py-3 text-left transition-colors hover:bg-[#f7faf2] hover:text-[#7e9c2f]"
+                  >
+                    <span className="flex size-10 shrink-0 items-center justify-center rounded-2xl bg-[#f2f7e3] text-[#7e9c2f]">
+                      <Phone className="size-4" aria-hidden />
+                    </span>
+                    <span className="min-w-0">
+                      <span className="block text-[0.68rem] uppercase tracking-[0.22em] text-gray-500">
+                        {t.contact.phoneLabel}
+                      </span>
+                      <span className="block truncate text-base font-semibold text-gray-900">
+                        {clinicData.phone}
+                      </span>
+                    </span>
+                  </a>
+                  <a
+                    href={emailHref}
+                    role="menuitem"
+                    onClick={() => setOpenPanel(null)}
+                    className="flex items-center gap-3 rounded-2xl px-4 py-3 text-left transition-colors hover:bg-[#f7faf2] hover:text-[#7e9c2f]"
+                  >
+                    <span className="flex size-10 shrink-0 items-center justify-center rounded-2xl bg-[#f2f7e3] text-[#7e9c2f]">
+                      <Mail className="size-4" aria-hidden />
+                    </span>
+                    <span className="min-w-0">
+                      <span className="block text-[0.68rem] uppercase tracking-[0.22em] text-gray-500">
+                        {t.contact.emailLabel}
+                      </span>
+                      <span className="block truncate text-base font-semibold text-gray-900">
+                        {clinicData.email}
+                      </span>
+                    </span>
+                  </a>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
 
           <a
             href="#appointment"

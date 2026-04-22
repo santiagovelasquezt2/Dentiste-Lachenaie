@@ -14,6 +14,11 @@ export const AppointmentForm: React.FC = () => {
     reason: '',
   });
 
+  const fieldBaseClass =
+    'text-body bg-bg-alt border border-transparent outline-none transition-[background-color,border-color,box-shadow] duration-200 ease-out placeholder:text-text-light/60 focus:border-brand-lime focus:ring-2 focus:ring-brand-lime/35 hover:border-brand-lime';
+  const pillFieldClass = cn(fieldBaseClass, 'rounded-full px-6 py-4');
+  const textareaFieldClass = cn(fieldBaseClass, 'resize-none rounded-3xl px-6 py-4');
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const subject = `${t.appointment.subjectPrefix}: ${formData.name}`;
@@ -47,7 +52,7 @@ export const AppointmentForm: React.FC = () => {
                 required
                 type="text"
                 placeholder={t.appointment.placeholderName}
-                className="text-body bg-bg-alt rounded-full border-none px-6 py-4 placeholder:text-text-light/60 focus:ring-2 focus:ring-accent outline-none transition-all"
+                className={pillFieldClass}
                 value={formData.name}
                 onChange={(e) => setFormData({...formData, name: e.target.value})}
               />
@@ -58,7 +63,7 @@ export const AppointmentForm: React.FC = () => {
                 required
                 type="email"
                 placeholder={t.appointment.placeholderEmail}
-                className="text-body bg-bg-alt rounded-full border-none px-6 py-4 placeholder:text-text-light/60 focus:ring-2 focus:ring-accent outline-none transition-all"
+                className={pillFieldClass}
                 value={formData.email}
                 onChange={(e) => setFormData({...formData, email: e.target.value})}
               />
@@ -73,7 +78,7 @@ export const AppointmentForm: React.FC = () => {
                 type="tel"
                 inputMode="tel"
                 placeholder={t.appointment.placeholderPhone}
-                className="text-body bg-bg-alt rounded-full border-none px-6 py-4 placeholder:text-text-light/60 focus:ring-2 focus:ring-accent outline-none transition-all"
+                className={pillFieldClass}
                 value={formData.phone}
                 onChange={(e) => setFormData({...formData, phone: e.target.value})}
               />
@@ -83,7 +88,7 @@ export const AppointmentForm: React.FC = () => {
               <input 
                 required
                 type="date"
-                className="text-body bg-bg-alt rounded-full border-none px-6 py-4 focus:ring-2 focus:ring-accent outline-none transition-all"
+                className={pillFieldClass}
                 value={formData.date}
                 onChange={(e) => setFormData({...formData, date: e.target.value})}
               />
@@ -95,7 +100,7 @@ export const AppointmentForm: React.FC = () => {
             <textarea 
               rows={4}
               placeholder={t.appointment.placeholderReason}
-              className="text-body bg-bg-alt resize-none rounded-3xl border-none px-6 py-4 placeholder:text-text-light/60 focus:ring-2 focus:ring-accent outline-none transition-all"
+              className={textareaFieldClass}
               value={formData.reason}
               onChange={(e) => setFormData({...formData, reason: e.target.value})}
             />

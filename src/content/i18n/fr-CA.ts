@@ -104,7 +104,7 @@ export const fr = {
     rostersTitle: "Équipes cliniques",
     rostersIntro: "Chaque dentiste est appuyée par une équipe dédiée en hygiène, en assistance et à la réception.",
     dentistRole: "Dentiste",
-    leadDentistLabel: "Dentiste responsable",
+    leadDentistLabel: "Dentiste Fondatrice",
     teamSummaryLabel: "Équipe de soins de {{count}} personnes",
     team1Title: "L'équipe de Dre Nathalie Vaillancourt",
     team1Desc: "Une équipe de confiance qui soutient la prévention, le confort au fauteuil et un accueil fluide à la réception.",
@@ -157,20 +157,20 @@ export const fr = {
   },
   firstVisit: {
     title: "Votre première visite",
-    eyebrow: "Nous vous invitons à remplir le formulaire de première visite afin d'aider à accélérer le processus de votre première visite.",
     intro: {
       prefix: "Afin de vous offrir le service le plus professionnel possible et de nous assurer que vous receviez le meilleur traitement dentaire, nous avons besoin ",
       emphasis: "d'un historique détaillé de votre santé générale et dentaire",
       suffix: ". Pour cela, nous avons besoin de quelques renseignements importants sur votre santé, vos antécédents dentaires et les médicaments que vous prenez peut-être.",
     },
     followup: "Pour accélérer le déroulement de votre première visite, nous vous suggérons de télécharger et de remplir le formulaire de première visite. Vous pouvez le remplir à l'avance, dans le confort de votre domicile ou au travail, avec toutes vos informations à portée de main.",
+    downloadCta: "Télécharger le PDF",
     procedure: {
       prefix: "Procédure",
       suffix: "à suivre",
     },
     steps: [
       {
-        text: "Téléchargez le formulaire (format PDF) en cliquant sur cette icône :",
+        text: "Téléchargez le formulaire (format PDF) en cliquant sur le bouton ci-dessous :",
         download: {
           href: "/assets/formulaire-premiere-visite.pdf",
           label: "Télécharger le formulaire de première visite en PDF",
@@ -196,7 +196,7 @@ export const fr = {
     cancellation: "Politique d'annulation : Veuillez nous aviser 48 heures à l'avance pour tout changement.",
   },
   appointment: {
-    title: "Demander un rendez-vous",
+    title: "Prendre un Rendez-vous",
     intro: "Remplissez le formulaire ci-dessous et nous vous répondrons sous peu.",
     name: "Nom complet",
     email: "Courriel",
@@ -240,9 +240,14 @@ export const fr = {
   tooth3d: {
     titleLine1: "Technologie de pointe",
     titleLine2: "pour votre sourire",
+    intro: "Un aperçu des outils, de la planification et de l’attention qui rendent chaque rendez-vous plus précis et plus confortable.",
     pause: "Mettre le diaporama en pause",
     resume: "Reprendre le diaporama",
     previewUnavailable: "Aperçu 3D indisponible",
+    story: {
+      lead: "Les soins dentaires modernes devraient être clairs, rassurants et bien guidés dès la première étape.",
+      body: "Grâce à l’imagerie numérique, à une planification réfléchie et à une équipe axée sur la précision, nous utilisons des technologies avancées pour rendre votre expérience plus confortable, plus transparente et adaptée à votre sourire.",
+    },
     images: {
       modelAndTool: "Mains gantées de vert tenant un modèle dentaire et un outil",
       instruments: "Mains gantées de vert présentant deux instruments dentaires",

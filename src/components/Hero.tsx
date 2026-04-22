@@ -9,7 +9,7 @@ import {
   useTransform,
 } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
-import clinicExteriorHero from '@/DentalContent/Images/Ouside of the building/clinic-exterior-front-signage-01.jpg';
+import clinicExteriorHero from '@/DentalContent/Images/Ouside of the building/clinic-exterior-front-signage-hero.png';
 import { useLanguage } from '../context/LanguageContext';
 import { useMediaQuery } from '../hooks/useMediaQuery';
 import { cn } from '../lib/utils';

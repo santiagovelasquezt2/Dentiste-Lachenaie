@@ -200,16 +200,6 @@
   }
 
   /* Scroll-driven animations */
-  @keyframes grow-progress {
-    from { transform: scaleX(0); }
-    to { transform: scaleX(1); }
-  }
-
-  #scroll-progress {
-    animation: grow-progress auto linear;
-    animation-timeline: scroll(root);
-  }
-
   @keyframes fade-in-up {
     from {
       opacity: 0;

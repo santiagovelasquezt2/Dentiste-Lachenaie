@@ -91,7 +91,7 @@ export const GallerySection: React.FC = () => {
           {t.gallery.title}
         </h2>
 
-        <div className="grid grid-cols-1 gap-4 auto-rows-[124px] sm:gap-6 sm:auto-rows-[146px] md:grid-cols-3 md:auto-rows-[170px]">
+        <div className="grid grid-cols-1 gap-4 auto-rows-[136px] sm:gap-6 sm:auto-rows-[160px] md:grid-cols-3 md:auto-rows-[188px]">
           {images.map((img, i) => (
             <button
               key={img.src}

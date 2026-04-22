@@ -157,20 +157,20 @@ export const en = {
   },
   firstVisit: {
     title: "Your First Visit",
-    eyebrow: "We invite you to fill out a first-visit form to help speed up the process of your first visit.",
     intro: {
       prefix: "To provide you with the most professional service possible, and to ensure you receive the best dental treatment, we require ",
       emphasis: "a detailed history of your general and dental health",
       suffix: ". For this, we need a few important details about your health, dental history, and any medications you may be taking.",
     },
     followup: "To speed up the process of your first visit, we suggest you download and fill out the first-visit form. You can fill the form out in advance in the comfort of your own home or at work with all of your information at hand.",
+    downloadCta: "Download PDF",
     procedure: {
       prefix: "Procedure",
       suffix: "to follow",
     },
     steps: [
       {
-        text: "Download the form (PDF format) by clicking on this icon:",
+        text: "Download the form (PDF format) by clicking the button below:",
         download: {
           href: "/assets/formulaire-premiere-visite.pdf",
           label: "Download the first-visit form PDF",
@@ -240,9 +240,14 @@ export const en = {
   tooth3d: {
     titleLine1: "Cutting-edge technology",
     titleLine2: "for your smile",
+    intro: "A closer look at the tools, planning, and care that help make every appointment more precise and more comfortable.",
     pause: "Pause slideshow",
     resume: "Resume slideshow",
     previewUnavailable: "3D preview unavailable",
+    story: {
+      lead: "Modern dental care should feel clear, calm, and confidently guided from the very first step.",
+      body: "With digital imaging, thoughtful treatment planning, and a team focused on precision, we use advanced technology to make your experience more comfortable, more transparent, and tailored to your smile.",
+    },
     images: {
       modelAndTool: "Green-gloved hands holding a dental model and tool",
       instruments: "Green-gloved hands presenting two dental instruments",

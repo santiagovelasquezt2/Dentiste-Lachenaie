@@ -185,15 +185,33 @@ const HoursSectionDesktop = ({ t }: { t: ReturnType<typeof useLanguage>['t'] }) 
   const hoursOverlayOpacity = useTransform(scrollYProgress, [0, 0.38, 0.46, 1], [1, 1, 0, 0], { clamp: false });
 
   const contentOpacity = useTransform(scrollYProgress, (v) => {
-    if (v < 0.58) return 0;
+    if (v < 0.54) return 0;
     if (v >= 0.68) return 1;
-    return (v - 0.58) / 0.1;
+    return (v - 0.54) / 0.14;
   });
   const contentPointerEvents = useTransform(scrollYProgress, (v) => (v >= 0.64 ? 'auto' : 'none'));
   const cardBorderOpacity = useTransform(scrollYProgress, (v) => {
-    if (v < 0.6) return 0;
-    if (v >= 0.68) return 1;
-    return (v - 0.6) / 0.08;
+    if (v < 0.58) return 0;
+    if (v >= 0.7) return 1;
+    return (v - 0.58) / 0.12;
+  });
+  const cardEnterY = useTransform(scrollYProgress, (v) => {
+    const enterDistance = Math.min(viewportSize.height * 0.08, 88);
+
+    if (v <= 0.52) return enterDistance;
+    if (v >= 0.72) return 0;
+    return lerp(enterDistance, 0, (v - 0.52) / 0.2);
+  });
+  const cardEnterScale = useTransform(scrollYProgress, (v) => {
+    if (v <= 0.52) return 0.965;
+    if (v >= 0.72) return 1;
+    return lerp(0.965, 1, (v - 0.52) / 0.2);
+  });
+  const cardEnterBlur = useTransform(scrollYProgress, (v) => {
+    if (v <= 0.52) return 'blur(10px)';
+    if (v >= 0.72) return 'blur(0px)';
+    const blur = lerp(10, 0, (v - 0.52) / 0.2);
+    return `blur(${blur.toFixed(2)}px)`;
   });
   const days = [
     { key: 'monday', label: t.hours.monday },
@@ -252,7 +270,13 @@ const HoursSectionDesktop = ({ t }: { t: ReturnType<typeof useLanguage>['t'] }) 
           className="pointer-events-none absolute inset-0 z-30 flex items-center justify-center px-4 sm:px-6 md:px-10"
         >
           <motion.div
-            style={{ pointerEvents: contentPointerEvents as any }}
+            style={{
+              pointerEvents: contentPointerEvents as any,
+              y: cardEnterY,
+              scale: cardEnterScale,
+              filter: cardEnterBlur,
+              willChange: 'transform, opacity, filter',
+            }}
             className="relative w-full max-w-5xl overflow-hidden rounded-[2rem] bg-white text-[#17352D] shadow-[0_24px_70px_rgba(2,33,24,0.14)] ring-1 ring-black/5 lg:rounded-[2.5rem]"
           >
             <motion.div

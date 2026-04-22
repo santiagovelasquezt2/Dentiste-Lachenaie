@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useLanguage } from '../context/LanguageContext';
 import { clinicData } from '../content/clinic';
@@ -24,6 +24,42 @@ const serviceIconSrc = {
 } as const;
 
 type ServiceId = keyof typeof serviceIconSrc;
+const SERVICE_ORDER = clinicData.services.map((service) => service.id as ServiceId);
+
+const serviceModalImageSrc: Partial<Record<ServiceId, { src: string; alt: string }>> = {
+  orthodontics: {
+    src: '/assets/services/orthodontics-smile.jpg',
+    alt: 'Smiling patient with braces',
+  },
+  prevention: {
+    src: '/assets/services/prevention-hygiene.jpg',
+    alt: 'Dental hygiene and preventive care',
+  },
+  pediatric: {
+    src: '/assets/services/pediatric-children.jpg',
+    alt: 'Children brushing their teeth',
+  },
+  restoration: {
+    src: '/assets/services/restoration-tools.jpg',
+    alt: 'Dental instruments for restorative treatment',
+  },
+  implants: {
+    src: '/assets/services/implants-bridges.jpg',
+    alt: 'Dental implant and bridge restoration',
+  },
+  emergency: {
+    src: '/assets/services/emergency-tools.jpg',
+    alt: 'Dental emergency tools and broken teeth model',
+  },
+  surgery: {
+    src: '/assets/services/surgery-tools.jpg',
+    alt: 'Dental surgery instruments',
+  },
+  cosmetic: {
+    src: '/assets/services/cosmetic-aesthetic-tools.jpg',
+    alt: 'Cosmetic dental instruments and aligner model',
+  },
+};
 
 function ServiceIcon({ id, className }: { id: ServiceId; className?: string }) {
   return (
@@ -216,12 +252,42 @@ export const ServicesSection: React.FC = () => {
   const dialogRef = useRef<HTMLDivElement>(null);
   const closeButtonRef = useRef<HTMLButtonElement>(null);
   const [activeService, setActiveService] = useState<ServiceId | null>(null);
+  const isDialogOpen = activeService !== null;
+
+  const closeActiveService = useCallback(() => {
+    setActiveService(null);
+  }, []);
+
+  const moveActiveService = useCallback((direction: 1 | -1) => {
+    setActiveService((currentService) => {
+      if (!currentService) return currentService;
+
+      const currentIndex = SERVICE_ORDER.indexOf(currentService);
+      if (currentIndex === -1) return currentService;
+
+      const nextIndex =
+        (currentIndex + direction + SERVICE_ORDER.length) % SERVICE_ORDER.length;
+
+      return SERVICE_ORDER[nextIndex];
+    });
+  }, []);
+
+  const openService = useCallback(
+    (serviceId: ServiceId, trigger: HTMLButtonElement | null) => {
+      trigger?.blur();
+      setActiveService(serviceId);
+    },
+    []
+  );
 
   const activeServiceData = useMemo(() => {
     if (!activeService) return null;
+    const image = serviceModalImageSrc[activeService] ?? null;
+
     return {
       title: t.services.items[activeService],
       icon: <ServiceIcon id={activeService} className="h-7 w-7 md:h-8 md:w-8" />,
+      image,
       ...serviceDetails[language as Language][activeService],
     };
   }, [activeService, language, t.services.items]);
@@ -273,22 +339,69 @@ export const ServicesSection: React.FC = () => {
   }, [isMobile]);
 
   useEffect(() => {
-    if (!activeService) return;
+    if (!isDialogOpen) return;
 
-    const previousOverflow = document.body.style.overflow;
-    document.body.style.overflow = 'hidden';
+    const scrollY = window.scrollY;
+    const { style: bodyStyle } = document.body;
+    const { style: htmlStyle } = document.documentElement;
+    const previousStyles = {
+      bodyOverflow: bodyStyle.overflow,
+      bodyPosition: bodyStyle.position,
+      bodyTop: bodyStyle.top,
+      bodyLeft: bodyStyle.left,
+      bodyRight: bodyStyle.right,
+      bodyWidth: bodyStyle.width,
+      bodyPaddingRight: bodyStyle.paddingRight,
+      htmlOverflow: htmlStyle.overflow,
+    };
+    const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
+
+    htmlStyle.overflow = 'hidden';
+    bodyStyle.overflow = 'hidden';
+    bodyStyle.position = 'fixed';
+    bodyStyle.top = `-${scrollY}px`;
+    bodyStyle.left = '0';
+    bodyStyle.right = '0';
+    bodyStyle.width = '100%';
+
+    if (scrollbarWidth > 0) {
+      bodyStyle.paddingRight = `${scrollbarWidth}px`;
+    }
 
     return () => {
-      document.body.style.overflow = previousOverflow;
+      bodyStyle.overflow = previousStyles.bodyOverflow;
+      bodyStyle.position = previousStyles.bodyPosition;
+      bodyStyle.top = previousStyles.bodyTop;
+      bodyStyle.left = previousStyles.bodyLeft;
+      bodyStyle.right = previousStyles.bodyRight;
+      bodyStyle.width = previousStyles.bodyWidth;
+      bodyStyle.paddingRight = previousStyles.bodyPaddingRight;
+      htmlStyle.overflow = previousStyles.htmlOverflow;
+      window.scrollTo(0, scrollY);
     };
-  }, [activeService]);
+  }, [isDialogOpen]);
 
   useFocusTrap({
-    active: activeService !== null,
+    active: isDialogOpen,
     containerRef: dialogRef,
     initialFocusRef: closeButtonRef,
-    onEscape: () => setActiveService(null),
+    onEscape: closeActiveService,
   });
+
+  const handleDialogKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
+    if (!isDialogOpen) return;
+
+    if (event.key === 'ArrowLeft' || event.key === 'ArrowUp') {
+      event.preventDefault();
+      moveActiveService(-1);
+      return;
+    }
+
+    if (event.key === 'ArrowRight' || event.key === 'ArrowDown') {
+      event.preventDefault();
+      moveActiveService(1);
+    }
+  };
 
   return (
     <section 
@@ -302,7 +415,8 @@ export const ServicesSection: React.FC = () => {
       <div className={cn(
         isMobile
           ? 'container mx-auto px-4 sm:px-6'
-          : 'sticky top-0 flex h-screen w-full flex-col justify-center overflow-hidden'
+          : 'sticky top-0 flex h-screen w-full flex-col justify-center overflow-hidden',
+        isDialogOpen && 'pointer-events-none select-none'
       )}>
         <div className={cn(
           'mx-auto mb-12 w-full max-w-none',
@@ -326,10 +440,19 @@ export const ServicesSection: React.FC = () => {
             <button 
               key={service.id}
               type="button"
-              onClick={() => setActiveService(service.id as ServiceId)}
+              onClick={(event) =>
+                openService(service.id as ServiceId, event.currentTarget)
+              }
               className={cn(
-                'group flex flex-col gap-[calc(1.5rem*0.765)] rounded-[calc(1rem*0.765)] bg-white p-[calc(1.5rem*0.765)] text-left shadow-xl transition-transform duration-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-[calc(0.25rem*0.765)] md:p-[calc(3rem*0.765)]',
-                isMobile ? 'w-full' : 'w-[calc(300px*0.765)] flex-shrink-0 md:w-[calc(400px*0.765)] hover:scale-[1.02]'
+                'group flex flex-col gap-[calc(1.5rem*0.765)] rounded-[calc(1rem*0.765)] bg-white p-[calc(1.5rem*0.765)] text-left shadow-xl transition-[transform,box-shadow,opacity] duration-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-[calc(0.25rem*0.765)] md:p-[calc(3rem*0.765)]',
+                isMobile
+                  ? 'w-full'
+                  : 'w-[calc(300px*0.765)] flex-shrink-0 md:w-[calc(400px*0.765)]',
+                !isDialogOpen && !isMobile && 'hover:scale-[1.02]',
+                isDialogOpen &&
+                  (service.id === activeService
+                    ? 'opacity-35 shadow-none'
+                    : 'opacity-55 shadow-lg')
               )}
             >
               <div className="w-[calc(4rem*0.765)] h-[calc(4rem*0.765)] bg-accent/20 rounded-[calc(1rem*0.765)] flex items-center justify-center text-accent group-hover:bg-accent group-hover:text-bg-dark transition-colors duration-300">
@@ -379,11 +502,12 @@ export const ServicesSection: React.FC = () => {
       <AnimatePresence>
         {activeServiceData && (
           <motion.div
-            className="fixed inset-0 z-50 flex items-start justify-center overflow-hidden bg-black/55 px-4 py-4 backdrop-blur-md sm:items-center sm:py-6"
+            className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto overscroll-contain bg-[rgba(12,16,13,0.78)] px-4 py-4 sm:items-center sm:py-6"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            onClick={() => setActiveService(null)}
+            transition={{ duration: 0.22, ease: 'easeOut' }}
+            onClick={closeActiveService}
           >
             <motion.div
               ref={dialogRef}
@@ -392,70 +516,81 @@ export const ServicesSection: React.FC = () => {
               aria-labelledby="service-modal-title"
               aria-describedby="service-modal-description"
               tabIndex={-1}
-              className="relative flex max-h-[calc(100svh-2rem)] w-full max-w-2xl flex-col overflow-hidden rounded-[1.75rem] bg-white shadow-[0_30px_80px_rgba(0,0,0,0.28)] sm:rounded-[2rem]"
-              initial={{ opacity: 0, scale: 0.92, y: 28 }}
+              className="relative flex max-h-[calc(100svh-2rem)] w-full max-w-5xl flex-col overflow-hidden rounded-[1.75rem] bg-white shadow-[0_30px_80px_rgba(0,0,0,0.28)] sm:rounded-[2rem]"
+              initial={{ opacity: 0, scale: 0.965, y: 18 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.96, y: 18 }}
-              transition={{ type: 'spring', stiffness: 240, damping: 24 }}
+              exit={{ opacity: 0, scale: 0.985, y: 12 }}
+              transition={{ type: 'spring', stiffness: 280, damping: 30, mass: 0.9 }}
               onClick={(event) => event.stopPropagation()}
+              onKeyDown={handleDialogKeyDown}
             >
               <div className="absolute inset-x-0 top-0 h-2 bg-gradient-to-r from-accent via-[#c9d9af] to-[#f6c56a]" />
 
-              <div className="relative flex flex-col">
+              <div className="relative flex min-h-0 flex-col">
                 <button
                   ref={closeButtonRef}
                   type="button"
-                  onClick={() => setActiveService(null)}
+                  onClick={closeActiveService}
                   className="absolute right-4 top-4 flex h-11 w-11 items-center justify-center rounded-full border border-bg-alt text-text-light transition-colors hover:bg-bg-alt focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
                   aria-label={t.services.closeDialog}
                 >
                   <X className="h-5 w-5" />
                 </button>
 
-                <div className="flex items-start gap-4 px-5 pt-5 pr-14 sm:px-6 sm:pt-6 md:px-10 md:pt-10">
-                  <div className="flex items-start gap-4">
-                    <div className="w-14 h-14 rounded-2xl bg-accent/15 text-accent flex items-center justify-center shrink-0">
-                      {activeServiceData.icon}
-                    </div>
-                    <div>
-                      <p className="mb-2 text-nav text-accent/90">
-                        {activeServiceData.eyebrow}
-                      </p>
-                      <h3 id="service-modal-title" className="text-3xl md:text-4xl font-heading font-semibold leading-tight tracking-tight text-text">
-                        {activeServiceData.title}
-                      </h3>
-                    </div>
-                  </div>
-                </div>
+                <div className="grid min-h-0 md:grid-cols-[1.08fr_0.92fr]">
+                  <div className="relative min-h-[24rem] overflow-hidden bg-[#eef4e5] md:min-h-0 md:border-r md:border-black/5">
+                    {activeServiceData.image ? (
+                      <img
+                        src={activeServiceData.image.src}
+                        alt={activeServiceData.image.alt}
+                        className="absolute inset-0 h-full w-full object-cover object-center"
+                      />
+                    ) : (
+                      <div className="flex h-full items-center justify-center p-10">
+                        {activeServiceData.icon}
+                      </div>
+                    )}
 
-                <div className="mt-8 overflow-y-auto px-5 pb-5 sm:px-6 sm:pb-6 md:grid md:grid-cols-[1.2fr_0.8fr] md:gap-8 md:px-10 md:pb-10">
-                  <div className="space-y-6">
-                    <p id="service-modal-description" className="text-base md:text-lg text-text-light leading-relaxed">
-                      {activeServiceData.description}
-                    </p>
-                    <div className="flex flex-wrap gap-3">
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/38 via-black/8 to-transparent" />
+
+                    <div className="absolute inset-x-0 bottom-0 p-5 sm:p-6">
                       <a
                         href="#appointment"
-                        onClick={() => setActiveService(null)}
-                        className="inline-flex items-center justify-center rounded-full bg-accent px-6 py-3 text-sm font-nav uppercase tracking-[0.15em] text-bg-dark transition-transform hover:scale-[1.02]"
+                        onClick={closeActiveService}
+                        className="inline-flex w-full items-center justify-center rounded-full bg-[#b0d64e] px-6 py-3 text-sm font-nav uppercase tracking-[0.15em] text-bg-dark shadow-[0_12px_32px_rgba(0,0,0,0.2)] transition-transform hover:scale-[1.01] hover:bg-[#a3c945]"
                       >
                         {t.services.bookAppointment}
                       </a>
                     </div>
                   </div>
 
-                  <div className="mt-6 rounded-[1.5rem] bg-bg-alt p-6 md:mt-0">
-                    <p className="mb-4 text-nav text-text/60">
-                      {t.services.whatToExpect}
-                    </p>
-                    <ul className="space-y-4">
-                      {activeServiceData.highlights.map((highlight) => (
-                        <li key={highlight} className="flex gap-3 text-sm md:text-base text-text-light leading-relaxed">
-                          <ArrowRight className="w-5 h-5 text-accent shrink-0 mt-0.5" />
-                          <span>{highlight}</span>
-                        </li>
-                      ))}
-                    </ul>
+                  <div className="min-h-0 overflow-y-auto overscroll-contain bg-white px-5 pb-6 pt-16 sm:px-6 sm:pb-8 sm:pt-16 md:px-8 md:pb-8 md:pt-20">
+                    <div className="max-w-xl">
+                      <p className="mb-3 text-nav text-accent/90">
+                        {activeServiceData.eyebrow}
+                      </p>
+                      <h3 id="service-modal-title" className="text-3xl font-heading font-semibold leading-tight tracking-tight text-text md:text-4xl">
+                        {activeServiceData.title}
+                      </h3>
+
+                      <p id="service-modal-description" className="mt-5 text-base leading-relaxed text-text-light md:text-lg">
+                        {activeServiceData.description}
+                      </p>
+
+                      <div className="mt-8 rounded-[1.5rem] bg-bg-alt p-6">
+                        <p className="mb-4 text-nav text-text/60">
+                          {t.services.whatToExpect}
+                        </p>
+                        <ul className="space-y-4">
+                          {activeServiceData.highlights.map((highlight) => (
+                            <li key={highlight} className="flex gap-3 text-sm leading-relaxed text-text-light md:text-base">
+                              <ArrowRight className="mt-0.5 h-5 w-5 shrink-0 text-accent" />
+                              <span>{highlight}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>

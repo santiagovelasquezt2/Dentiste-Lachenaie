@@ -1,5 +1,5 @@
-import React from 'react';
-import { motion, useReducedMotion } from 'framer-motion';
+import React, { useRef } from 'react';
+import { motion, useMotionTemplate, useReducedMotion, useScroll, useSpring, useTransform } from 'framer-motion';
 import { cn } from '../lib/utils';
 import { useLanguage } from '../context/LanguageContext';
 import { clinicData } from '../content/clinic';
@@ -7,28 +7,6 @@ type TFunction = ReturnType<typeof useLanguage>['t'];
 type Dentist = (typeof clinicData.dentists)[number];
 
 const featuredDentists = clinicData.dentists.filter((dentist) => dentist.featured);
-
-const sectionMotion = {
-  hidden: { opacity: 0, y: 36 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 0.8,
-      ease: [0.22, 1, 0.36, 1] as const,
-      staggerChildren: 0.12,
-    },
-  },
-};
-
-const itemMotion = {
-  hidden: { opacity: 0, y: 28 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.72, ease: [0.22, 1, 0.36, 1] as const },
-  },
-};
 
 const cardPalette = [
   {
@@ -56,10 +34,9 @@ const getDentistBio = (t: TFunction, dentist: Dentist) => {
 
 const TeamBackdrop = () => (
   <>
-    <div className="absolute inset-0 bg-[#f7f7f1]" />
-    <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(226,235,202,0.92),transparent_36%),radial-gradient(circle_at_top_right,rgba(255,255,255,0.96),transparent_34%),radial-gradient(circle_at_bottom_center,rgba(223,231,209,0.78),transparent_48%)]" />
-    <div className="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-white/75 to-transparent" />
-    <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-[#ecefe5] to-transparent" />
+    <div className="absolute inset-0 bg-white" />
+    <div className="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-white/80 to-transparent" />
+    <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-white to-transparent" />
   </>
 );
 
@@ -67,15 +44,12 @@ const TeamCard = ({
   dentist,
   palette,
   t,
-  reduceMotion,
 }: {
   dentist: Dentist;
   palette: (typeof cardPalette)[number];
   t: TFunction;
-  reduceMotion: boolean;
 }) => (
-  <motion.article
-    variants={reduceMotion ? undefined : itemMotion}
+  <article
     className={`group relative overflow-hidden rounded-[1.445rem] border p-[0.53125rem] shadow-[0_20.4px_57.8px_rgba(77,95,36,0.1)] ring-1 ring-black/5 transition-[background-color,border-color,box-shadow] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] hover:border-[#5f7f1f]/90 hover:shadow-[0_23.8px_61.2px_rgba(53,79,16,0.18)] md:p-[0.6375rem] ${palette.shell}`}
   >
     <div className={`absolute -inset-px rounded-[1.445rem] bg-gradient-to-br ${palette.glow} opacity-80 transition-opacity duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:opacity-0`} />
@@ -86,7 +60,7 @@ const TeamCard = ({
       <div className="flex items-start justify-between gap-[0.6375rem]">
         <div className="min-w-0">
           <p className="text-[0.527rem] font-medium uppercase tracking-[0.221em] text-[#75815c] transition-colors duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:text-[#446016]">
-            {t.team.leadDentistLabel}
+            {dentist.status === 'coming-soon' ? t.team.dentistRole : t.team.leadDentistLabel}
           </p>
           <h3
             className={cn(
@@ -153,53 +127,227 @@ const TeamCard = ({
         <div className="hidden h-px min-w-[3.4rem] flex-1 bg-gradient-to-r from-[#c7d39d] via-[#92a65c] to-transparent opacity-80 transition-opacity duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:opacity-100 lg:block" />
       </div>
     </div>
-  </motion.article>
+  </article>
 );
+
+type StaffMember = { name: string; image: string | null };
+
+const StaffCard = ({
+  member,
+  palette,
+  t,
+}: {
+  member: StaffMember;
+  palette: (typeof cardPalette)[number];
+  t: TFunction;
+}) => (
+  <article
+    className={`group relative overflow-hidden rounded-[1.02rem] border p-[0.34rem] shadow-[0_12px_32px_rgba(77,95,36,0.08)] ring-1 ring-black/5 transition-[background-color,border-color,box-shadow] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:border-[#5f7f1f]/90 hover:shadow-[0_14px_36px_rgba(53,79,16,0.16)] ${palette.shell}`}
+  >
+    <div className={`absolute -inset-px rounded-[1.02rem] bg-gradient-to-br ${palette.glow} opacity-80 transition-opacity duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:opacity-0`} />
+    <div className="absolute inset-x-[0.85rem] top-0 h-px bg-gradient-to-r from-transparent via-white to-transparent opacity-90" />
+
+    <div className="relative flex flex-col rounded-[0.76rem] bg-[#fcfcf8]/90 p-[0.425rem] transition-colors duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:bg-[#e8f2d7]">
+      <div
+        className={`relative overflow-hidden rounded-[0.595rem] ${palette.portrait} aspect-square ring-1 ring-black/5`}
+      >
+        <div className={`absolute inset-x-0 bottom-0 h-[2.55rem] bg-gradient-to-t ${palette.accent} opacity-90 transition-opacity duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:opacity-100 group-hover:saturate-150`} />
+        {member.image ? (
+          <img
+            src={member.image}
+            alt={member.name}
+            className="absolute inset-0 h-full w-full object-cover object-[50%_22%]"
+            loading="lazy"
+            decoding="async"
+          />
+        ) : (
+          <div className="absolute inset-0 flex items-center justify-center bg-[linear-gradient(180deg,rgba(248,249,243,0.85),rgba(228,232,219,0.95))]">
+            <p className="px-2 text-center font-heading text-[0.78rem] leading-[1.02rem] tracking-[-0.04em] text-[#334018] transition-colors duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:text-[#10170f]">
+              {t.team.comingSoon}
+            </p>
+          </div>
+        )}
+        <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.12),transparent_24%,transparent_65%,rgba(19,26,17,0.16))]" />
+      </div>
+      <p className="mt-[0.425rem] text-center font-heading text-[0.85rem] leading-[1.1] tracking-[-0.03em] text-[#20251d] transition-colors duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:text-[#10170f]">
+        {member.name}
+      </p>
+    </div>
+  </article>
+);
+
+const StaffGroup = ({
+  heading,
+  members,
+  palette,
+  t,
+}: {
+  heading: string;
+  members: StaffMember[];
+  palette: (typeof cardPalette)[number];
+  t: TFunction;
+}) => (
+  <div>
+    <h4 className="mb-[0.85rem] text-center font-heading text-[clamp(1.02rem,1.53vw,1.3175rem)] leading-[1.1] tracking-[-0.04em] text-[#20251d]">
+      {heading}
+    </h4>
+    <div className="grid grid-cols-2 gap-[0.6375rem] sm:grid-cols-3">
+      {members.map((member) => (
+        <StaffCard key={member.name} member={member} palette={palette} t={t} />
+      ))}
+    </div>
+  </div>
+);
+
+const TeamRoster = ({
+  teamId,
+  palette,
+  t,
+}: {
+  teamId: 'team1' | 'team2';
+  palette: (typeof cardPalette)[number];
+  t: TFunction;
+}) => {
+  const team = clinicData.teams[teamId];
+  return (
+    <div className="flex flex-col gap-[1.7rem]">
+      <StaffGroup heading={t.team.hygienists} members={team.roles.hygienists} palette={palette} t={t} />
+      <StaffGroup heading={t.team.assistants} members={team.roles.assistants} palette={palette} t={t} />
+      <StaffGroup heading={t.team.secretaries} members={team.roles.secretaries} palette={palette} t={t} />
+    </div>
+  );
+};
 
 export const TeamSection: React.FC = () => {
   const { t } = useLanguage();
   const prefersReducedMotion = Boolean(useReducedMotion());
+  const pinRef = useRef<HTMLDivElement>(null);
+
+  // The pin wrapper is ~220vh tall: 100vh of sticky + ~120vh of scroll to
+  // drive the wipe. When the wipe finishes the sticky releases and the cards
+  // (rendered in normal flow below) flow straight into the next section
+  // without a pinned "dead zone".
+  const { scrollYProgress } = useScroll({
+    target: pinRef,
+    offset: ['start start', 'end end'],
+  });
+
+  // Smooth the raw scroll progress with a spring so the mask motion is less
+  // tied to scroll-wheel granularity (trackpad/wheel events can be jittery).
+  const smoothProgress = useSpring(scrollYProgress, {
+    stiffness: 140,
+    damping: 28,
+    mass: 0.35,
+  });
+
+  // Timeline (0 → 1 over the pin):
+  //   0.00 – 0.08  hold: image fully visible
+  //   0.08 – 0.50  image erases top→bottom
+  //   0.42 – 0.92  cards reveal bottom→top (slight overlap for smoother hand-off)
+  //   0.92 – 1.00  cards fully visible, sticky releases shortly after
+  const imageLine = useTransform(smoothProgress, [0.08, 0.5], [-10, 110]);
+  const imageMask = useMotionTemplate`linear-gradient(to bottom, transparent calc(${imageLine}% - 6%), #000 calc(${imageLine}% + 6%))`;
+  const imageOpacity = useTransform(smoothProgress, [0.46, 0.52], [1, 0]);
+
+  // End at -25% so the 6% feather fully exits the top of the layer, leaving
+  // the top row of cards fully opaque (no soft cutoff at settle).
+  const cardsLine = useTransform(smoothProgress, [0.42, 0.92], [115, -25]);
+  const cardsMask = useMotionTemplate`linear-gradient(to bottom, transparent calc(${cardsLine}% - 6%), #000 calc(${cardsLine}% + 6%))`;
 
   return (
-    <section
-      id="team"
-      className="relative scroll-mt-24 overflow-hidden pt-12 md:pt-14 lg:pt-16 pb-20 md:pb-24 lg:pb-28"
-    >
-      <TeamBackdrop />
+    <section id="team" className="relative bg-white">
+      {/* Pin wrapper — taller than viewport so the sticky child has scroll
+          distance to drive the wipe. Height = 100vh sticky + ~120vh of drive. */}
+      <div ref={pinRef} className="relative h-[220vh]">
+        <div className="sticky top-0 h-screen overflow-clip flex flex-col">
+          <TeamBackdrop />
+          {/* Title row */}
+          <div className="relative z-30 shrink-0 px-4 pt-20 pb-5 text-center sm:px-6 sm:pt-24 md:pt-28 md:pb-6 lg:pt-32">
+            <div className="mx-auto max-w-[47.6rem]">
+              <h2 className="text-balance font-heading text-[clamp(2.55rem,5.1vw,5.525rem)] font-normal leading-[0.92] tracking-[-0.0595em] text-[#182015]">
+                {t.team.title}
+              </h2>
+              <p className="mx-auto mt-[1.275rem] max-w-[40.8rem] text-balance text-[0.8925rem] leading-[1.7rem] text-[#3b4434] md:text-[0.9775rem]">
+                {t.team.subtitle}
+              </p>
+            </div>
+          </div>
 
-      <motion.div
-        initial={prefersReducedMotion ? false : 'hidden'}
-        whileInView={prefersReducedMotion ? undefined : 'visible'}
-        viewport={{ once: true, amount: 0.18 }}
-        variants={prefersReducedMotion ? undefined : sectionMotion}
-        className="container relative z-10 mx-auto px-4 sm:px-6"
-      >
-        <div className="mx-auto max-w-[823.65px]">
-          <motion.div
-            variants={prefersReducedMotion ? undefined : itemMotion}
-            className="mx-auto max-w-[47.6rem] text-center"
-          >
-            <h2 className="text-balance font-heading text-[clamp(2.55rem,5.1vw,5.525rem)] font-normal leading-[0.92] tracking-[-0.0595em] text-[#182015]">
-              {t.team.title}
-            </h2>
-            <p className="mx-auto mt-[1.275rem] max-w-[40.8rem] text-balance text-[0.8925rem] leading-[1.7rem] text-[#3b4434] md:text-[0.9775rem]">
-              {t.team.subtitle}
-            </p>
-          </motion.div>
-        </div>
+          {/* Hero image + dentist cards share the remaining space during the
+              wipe. Once the wipe finishes the same cards are re-rendered in
+              normal flow below so the section extends naturally. */}
+          <div className="relative z-10 flex-1 overflow-clip">
+            <motion.div
+              style={
+                prefersReducedMotion
+                  ? undefined
+                  : {
+                      WebkitMaskImage: imageMask,
+                      maskImage: imageMask,
+                      WebkitMaskSize: '100% 100%',
+                      maskSize: '100% 100%',
+                      WebkitMaskRepeat: 'no-repeat',
+                      maskRepeat: 'no-repeat',
+                      opacity: imageOpacity,
+                      willChange: 'mask-image, -webkit-mask-image, opacity',
+                      transform: 'translateZ(0)',
+                    }
+              }
+              className="pointer-events-none absolute inset-0 flex items-center justify-center px-4 pb-8"
+            >
+              <img
+                src="/assets/team-hero.png"
+                alt=""
+                aria-hidden="true"
+                className="block h-auto max-h-full w-auto max-w-[min(70vw,432px)] rounded-2xl object-contain shadow-2xl"
+              />
+            </motion.div>
 
-        <div className="mx-auto mt-[2.55rem] grid gap-[0.85rem] lg:mt-[2.975rem] lg:grid-cols-2 xl:max-w-[1054px] xl:grid-cols-3 xl:gap-[0.6375rem]">
-          {featuredDentists.map((dentist, index) => (
-            <TeamCard
-              key={dentist.name}
-              dentist={dentist}
-              palette={cardPalette[index % cardPalette.length]}
-              t={t}
-              reduceMotion={prefersReducedMotion}
-            />
-          ))}
+            {/* Featured dentist cards — revealed during the wipe */}
+            <motion.div
+              style={
+                prefersReducedMotion
+                  ? undefined
+                  : {
+                      WebkitMaskImage: cardsMask,
+                      maskImage: cardsMask,
+                      WebkitMaskSize: '100% 100%',
+                      maskSize: '100% 100%',
+                      WebkitMaskRepeat: 'no-repeat',
+                      maskRepeat: 'no-repeat',
+                      willChange: 'mask-image, -webkit-mask-image',
+                      transform: 'translateZ(0)',
+                    }
+              }
+              className="absolute inset-0 flex items-center justify-center px-4 pt-6 pb-10 sm:px-6"
+            >
+              <div className="mx-auto w-full max-w-[1054px]">
+                <div className="grid w-full gap-[0.85rem] lg:grid-cols-2 xl:grid-cols-3 xl:gap-[0.6375rem]">
+                  {featuredDentists.map((dentist, index) => (
+                    <TeamCard
+                      key={dentist.name}
+                      dentist={dentist}
+                      palette={cardPalette[index % cardPalette.length]}
+                      t={t}
+                    />
+                  ))}
+                </div>
+              </div>
+            </motion.div>
+          </div>
         </div>
-      </motion.div>
+      </div>
+
+      {/* Staff rosters extend the section in natural flow. Background matches
+          the sticky panel exactly so both areas read as one continuous block. */}
+      <div className="relative px-4 pt-10 pb-24 sm:px-6 md:pt-16 md:pb-32 bg-white">
+        <div className="mx-auto w-full max-w-[1054px]">
+          <div className="grid w-full gap-[1.7rem] lg:grid-cols-2">
+            <TeamRoster teamId="team1" palette={cardPalette[0]} t={t} />
+            <TeamRoster teamId="team2" palette={cardPalette[1]} t={t} />
+          </div>
+        </div>
+      </div>
     </section>
   );
 };

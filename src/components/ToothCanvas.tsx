@@ -4,6 +4,8 @@ import { Environment, useGLTF } from '@react-three/drei';
 import * as THREE from 'three';
 import { useLanguage } from '../context/LanguageContext';
 
+const TOOTH_MODEL_SCALE = 1.940625;
+
 function MolarModel({ url }: { url: string }) {
   const { scene } = useGLTF(url);
   const groupRef = useRef<THREE.Group>(null);
@@ -50,7 +52,7 @@ function MolarModel({ url }: { url: string }) {
 
   return (
     <group ref={groupRef}>
-      <primitive object={scene} scale={1.35} position={[0, -0.38, 0]} />
+      <primitive object={scene} scale={TOOTH_MODEL_SCALE} position={[0, -0.38, 0]} />
     </group>
   );
 }
