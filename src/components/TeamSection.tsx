@@ -210,27 +210,35 @@ const TeamSpotlight = ({
   heading,
   image,
   alt,
+  palette,
 }: {
   heading: string;
   image: string;
   alt: string;
+  palette: (typeof cardPalette)[number];
 }) => (
   <div className="flex flex-col gap-[0.85rem]">
     <h4 className="text-center font-heading text-[clamp(1.02rem,1.53vw,1.3175rem)] leading-[1.1] tracking-[-0.04em] text-[#20251d]">
       {heading}
     </h4>
-    <div className="group relative overflow-hidden rounded-[1.2rem] border border-[#dbe1ce] bg-[linear-gradient(180deg,rgba(249,250,246,0.98),rgba(235,238,229,0.96))] p-[0.35rem] shadow-[0_12px_32px_rgba(77,95,36,0.08)] ring-1 ring-black/5 transition-[background-color,border-color,box-shadow] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:border-[#5f7f1f]/90 hover:shadow-[0_14px_36px_rgba(53,79,16,0.16)]">
-      <div className="absolute -inset-px rounded-[1.2rem] bg-gradient-to-br from-[#eef5db] via-white to-[#dde7c3] opacity-80 transition-opacity duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:opacity-0" />
-      <div className="relative overflow-hidden rounded-[1rem] bg-[linear-gradient(180deg,#f4f6ef_0%,#d7ddca_100%)]">
-        <img
-          src={image}
-          alt={alt}
-          className="aspect-[4/3] h-auto w-full object-cover object-center transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] motion-safe:will-change-transform motion-safe:group-hover:scale-[1.03]"
-          loading="lazy"
-          decoding="async"
-        />
+    <article
+      className={`group relative overflow-hidden rounded-[1.02rem] border p-[0.34rem] shadow-[0_12px_32px_rgba(77,95,36,0.08)] ring-1 ring-black/5 transition-[background-color,border-color,box-shadow] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:border-[#5f7f1f]/90 hover:shadow-[0_14px_36px_rgba(53,79,16,0.16)] ${palette.shell}`}
+    >
+      <div className={`absolute -inset-px rounded-[1.02rem] bg-gradient-to-br ${palette.glow} opacity-80 transition-opacity duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:opacity-0`} />
+      <div className="relative flex flex-col rounded-[0.76rem] bg-[#fcfcf8]/90 p-[0.425rem] transition-colors duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:bg-[#e8f2d7]">
+        <div className={`relative overflow-hidden rounded-[0.595rem] ${palette.portrait} aspect-[4/3] ring-1 ring-black/5`}>
+          <div className={`absolute inset-x-0 bottom-0 h-[2.55rem] bg-gradient-to-t ${palette.accent} opacity-90 transition-opacity duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:opacity-100 group-hover:saturate-150`} />
+          <img
+            src={image}
+            alt={alt}
+            className="absolute inset-0 h-full w-full object-cover object-center"
+            loading="lazy"
+            decoding="async"
+          />
+          <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.12),transparent_24%,transparent_65%,rgba(19,26,17,0.16))]" />
+        </div>
       </div>
-    </div>
+    </article>
   </div>
 );
 
@@ -383,6 +391,7 @@ export const TeamSection: React.FC = () => {
               heading={t.team.sectionHeading}
               image={clinicData.teams.team2.supportingImage}
               alt={t.team.supportingImageCaption}
+              palette={cardPalette[1]}
             />
           </div>
         </div>
