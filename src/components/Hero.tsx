@@ -33,7 +33,7 @@ const TITLE_FADE_EDGE_PCT = 12;
  * White|dark boundary on the hero title (`90deg` gradient), as % of the heading box width.
  * **50** = centered on the viewport midline (matches photo|video seam at rest).
  */
-const HERO_TITLE_SPLIT_AT_PCT = 50;
+const HERO_TITLE_SPLIT_AT_PCT = 50.29;
 /**
  * scrollYProgress value where the slogan becomes visible.
  * Kept a touch earlier so it starts moving before the hero reveal feels too far along.

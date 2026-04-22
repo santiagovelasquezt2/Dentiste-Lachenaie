@@ -199,6 +199,61 @@
     letter-spacing: 0.16em;
   }
 
+  @keyframes contact-icon-shake {
+    0%,
+    100% {
+      transform: translate3d(0, 0, 0) rotate(0deg);
+    }
+    20% {
+      transform: translate3d(-1px, -1px, 0) rotate(-9deg);
+    }
+    40% {
+      transform: translate3d(1px, 0, 0) rotate(8deg);
+    }
+    60% {
+      transform: translate3d(-1px, 1px, 0) rotate(-6deg);
+    }
+    80% {
+      transform: translate3d(1px, -1px, 0) rotate(5deg);
+    }
+  }
+
+  @keyframes contact-icon-launch {
+    0% {
+      transform: translate3d(-10px, 0, 0) scale(0.92) rotate(-12deg);
+    }
+    30% {
+      transform: translate3d(-3px, -0.5px, 0) scale(0.98) rotate(-5deg);
+    }
+    60% {
+      transform: translate3d(3px, 0, 0) scale(1.03) rotate(3deg);
+    }
+    82% {
+      transform: translate3d(1px, 0, 0) scale(1.01) rotate(1deg);
+    }
+    100% {
+      transform: translate3d(0, 0, 0) scale(1) rotate(0deg);
+    }
+  }
+
+  .contact-nav-panel-item:hover .contact-nav-icon-shake,
+  .contact-nav-panel-item:focus-visible .contact-nav-icon-shake {
+    animation: contact-icon-shake 420ms ease-in-out both;
+  }
+
+  .contact-nav-panel-item:hover .contact-nav-icon-launch,
+  .contact-nav-panel-item:focus-visible .contact-nav-icon-launch {
+    animation: contact-icon-launch 320ms cubic-bezier(0.22, 1, 0.36, 1) both;
+    transform-origin: center left;
+  }
+
+  .contact-nav-panel-item:hover .contact-nav-panel-label,
+  .contact-nav-panel-item:focus-visible .contact-nav-panel-label,
+  .contact-nav-panel-item:hover .contact-nav-panel-value,
+  .contact-nav-panel-item:focus-visible .contact-nav-panel-value {
+    color: #111827;
+  }
+
   /* Scroll-driven animations */
   @keyframes fade-in-up {
     from {
@@ -309,16 +364,23 @@
 }
 
 .hours-pattern-slow {
-  animation: hours-pattern-drift-slow 24s ease-in-out infinite;
+  animation: hours-pattern-drift-slow 16s ease-in-out infinite;
 }
 
 .hours-pattern-fast {
-  animation: hours-pattern-drift-fast 18s ease-in-out infinite alternate;
+  animation: hours-pattern-drift-fast 12s ease-in-out infinite alternate;
 }
 
 @media (prefers-reduced-motion: reduce) {
   .hours-pattern-slow,
   .hours-pattern-fast {
+    animation: none;
+  }
+
+  .contact-nav-panel-item:hover .contact-nav-icon-launch,
+  .contact-nav-panel-item:focus-visible .contact-nav-icon-launch,
+  .contact-nav-panel-item:hover .contact-nav-icon-shake,
+  .contact-nav-panel-item:focus-visible .contact-nav-icon-shake {
     animation: none;
   }
 }

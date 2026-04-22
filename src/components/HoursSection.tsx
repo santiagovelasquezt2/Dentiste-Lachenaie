@@ -9,7 +9,6 @@ import { cn } from '../lib/utils';
 import { SECTION_HEADING_CLASS } from '../lib/sectionHeading';
 
 const lerp = (start: number, end: number, progress: number) => start + (end - start) * progress;
-
 export const HoursSection: React.FC = () => {
   const { t } = useLanguage();
   const isMobile = useMediaQuery('(max-width: 1023px)');
@@ -88,7 +87,6 @@ const HoursSectionDesktop = ({ t }: { t: ReturnType<typeof useLanguage>['t'] }) 
   const overlayTitleRef = useRef<HTMLHeadingElement>(null);
   const [viewportSize, setViewportSize] = useState({ width: 1, height: 1, rootFontSize: 16 });
   const [overlayCenter, setOverlayCenter] = useState({ left: 0, top: 0 });
-
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ['start start', 'end end'],
@@ -183,7 +181,6 @@ const HoursSectionDesktop = ({ t }: { t: ReturnType<typeof useLanguage>['t'] }) 
   );
 
   const hoursOverlayOpacity = useTransform(scrollYProgress, [0, 0.38, 0.46, 1], [1, 1, 0, 0], { clamp: false });
-
   const contentOpacity = useTransform(scrollYProgress, (v) => {
     if (v < 0.54) return 0;
     if (v >= 0.68) return 1;

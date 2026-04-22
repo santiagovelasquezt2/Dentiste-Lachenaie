@@ -93,13 +93,13 @@ export const ContactSection: React.FC = () => {
   // Build the icon once — logo URL is stable across renders
   const clinicMarkerIcon = useMemo(() => makeIcon(mapMarkerClinicLogo as string), []);
   const hoursRows = [
-    { key: 'monday', label: t.hours.monday },
-    { key: 'tuesday', label: t.hours.tuesday },
-    { key: 'wednesday', label: t.hours.wednesday },
-    { key: 'thursday', label: t.hours.thursday },
-    { key: 'friday', label: t.hours.friday },
-    { key: 'saturday', label: t.hours.saturday },
-    { key: 'sunday', label: t.hours.sunday },
+    { key: 'monday', label: t.hours.mondayShort },
+    { key: 'tuesday', label: t.hours.tuesdayShort },
+    { key: 'wednesday', label: t.hours.wednesdayShort },
+    { key: 'thursday', label: t.hours.thursdayShort },
+    { key: 'friday', label: t.hours.fridayShort },
+    { key: 'saturday', label: t.hours.saturdayShort },
+    { key: 'sunday', label: t.hours.sundayShort },
   ] as const;
   const infoBlockClass =
     'rounded-[1.5rem] border border-white/8 bg-white/[0.03] px-5 py-5 shadow-[0_1px_0_rgba(255,255,255,0.04)_inset]';
@@ -238,19 +238,14 @@ export const ContactSection: React.FC = () => {
                 </MapContainer>
               </div>
 
-              <div className="rounded-[24px] border border-white/8 bg-[linear-gradient(180deg,rgba(255,255,255,0.045),rgba(255,255,255,0.03))] px-4 py-4 text-white shadow-[0_10px_28px_rgba(0,0,0,0.16)] backdrop-blur-sm sm:px-5 sm:py-5">
-                <div className="mb-5 flex items-end justify-between gap-4">
-                  <div>
-                    <p className="text-[0.62rem] uppercase tracking-[0.26em] text-white/40">
-                      {t.hours.scheduleLabel}
-                    </p>
-                    <h3 className="mt-1 text-lg font-medium tracking-[-0.02em] text-white/92">
-                      {t.hours.cardTitle}
-                    </h3>
-                  </div>
+              <div className="rounded-[20px] border border-white/8 bg-[linear-gradient(180deg,rgba(255,255,255,0.04),rgba(255,255,255,0.024))] px-3.5 py-3.5 text-white shadow-[0_10px_28px_rgba(0,0,0,0.14)] backdrop-blur-sm sm:px-4 sm:py-4">
+                <div className="mb-3.5 flex items-end justify-between gap-3">
+                  <p className="text-[0.58rem] uppercase tracking-[0.28em] text-white/40">
+                    {t.hours.scheduleLabel}
+                  </p>
                 </div>
 
-                <dl className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-7">
+                <dl className="grid gap-2.5 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-7">
                   {hoursRows.map((day) => {
                     const value = clinicData.hours[day.key];
                     const displayValue = value === 'Fermé' || value === 'Closed' ? t.hours.closed : value;
@@ -259,13 +254,17 @@ export const ContactSection: React.FC = () => {
                     return (
                       <div
                         key={day.key}
-                        className="flex min-h-[96px] flex-col justify-between rounded-[18px] border border-white/8 bg-white/[0.035] px-4 py-3.5 text-left shadow-[0_1px_0_rgba(255,255,255,0.05)_inset]"
+                        className="flex min-h-[84px] flex-col justify-between rounded-[16px] border border-white/8 bg-white/[0.03] px-3 py-2.5 text-left shadow-[0_1px_0_rgba(255,255,255,0.05)_inset] xl:min-h-[96px]"
                       >
-                        <dt className="text-[0.7rem] uppercase tracking-[0.18em] text-white/48">
-                          {day.label}
+                        <dt className="flex items-center justify-between gap-2 text-[0.62rem] uppercase tracking-[0.2em] text-white/48">
+                          <span>{day.label}</span>
+                          <span
+                            className={`h-2 w-2 shrink-0 rounded-full ${isClosed ? 'bg-white/20' : 'bg-brand-lime'}`}
+                            aria-hidden="true"
+                          />
                         </dt>
                         <dd
-                          className={`mt-4 text-[1.02rem] font-medium leading-[1.35] tabular-nums ${
+                          className={`mt-2.5 text-[0.82rem] font-medium leading-[1.3] tabular-nums xl:text-[0.86rem] ${
                             isClosed ? 'text-white/66' : 'text-white/92'
                           }`}
                         >

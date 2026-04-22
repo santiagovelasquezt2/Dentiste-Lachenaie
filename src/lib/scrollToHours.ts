@@ -7,7 +7,7 @@
 
 const HOURS_DESKTOP_MIN = '(min-width: 1024px)';
 /** Progress where hours card content is fully visible / interactive (HoursSectionDesktop). */
-const HOURS_DESKTOP_TARGET_PROGRESS = 0.8;
+const HOURS_DESKTOP_TARGET_PROGRESS = 0.68;
 /** Match scroll-mt-24 (6rem) used on sections / anchors. */
 const SCROLL_MARGIN_PX = 96;
 

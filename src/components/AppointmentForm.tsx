@@ -15,7 +15,7 @@ export const AppointmentForm: React.FC = () => {
   });
 
   const fieldBaseClass =
-    'text-body bg-bg-alt border border-transparent outline-none transition-[background-color,border-color,box-shadow] duration-200 ease-out placeholder:text-text-light/60 focus:border-brand-lime focus:ring-2 focus:ring-brand-lime/35 hover:border-brand-lime';
+    'text-body bg-[#eef1f4] text-[#243142] border border-[#d4dbe2] shadow-[inset_0_1px_0_rgba(255,255,255,0.9),0_1px_2px_rgba(15,23,42,0.04)] outline-none transition-[background-color,border-color,box-shadow] duration-200 ease-out placeholder:text-[#718096] focus:border-brand-lime focus:ring-2 focus:ring-brand-lime/35 hover:border-brand-lime';
   const pillFieldClass = cn(fieldBaseClass, 'rounded-full px-6 py-4');
   const textareaFieldClass = cn(fieldBaseClass, 'resize-none rounded-3xl px-6 py-4');
 

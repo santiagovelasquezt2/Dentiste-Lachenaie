@@ -12,16 +12,16 @@ export const Footer: React.FC = () => {
           <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-accent/20 text-xs font-heading font-semibold text-accent">
             VS
           </div>
-          <p className="text-left text-sm text-bg-inverse/40">
+          <p className="text-body text-left text-bg-inverse/58">
             {t.footer.copy.replace('{year}', year.toString())}
           </p>
         </div>
 
-        <a 
-          href="https://calytek.com" 
-          target="_blank" 
+        <a
+          href="https://calytek.com"
+          target="_blank"
           rel="noopener noreferrer"
-          className="text-left text-xs text-bg-inverse/30 transition-colors hover:text-accent/80"
+          className="text-nav text-left text-bg-inverse/46 transition-colors hover:text-accent/80"
         >
           {t.footer.credit}
         </a>

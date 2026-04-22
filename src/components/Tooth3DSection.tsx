@@ -209,14 +209,14 @@ export const Tooth3DSection: React.FC = () => {
 
           <div className="grid gap-10 lg:grid-cols-[minmax(0,0.92fr)_minmax(0,1.08fr)] lg:items-center lg:gap-x-12 xl:gap-x-16">
             <div className="flex flex-col items-center lg:items-start">
-              <div ref={carouselRef} className="w-full max-w-[24rem]">
+              <div ref={carouselRef} className="w-full max-w-[21.6rem]">
                 <div className="relative aspect-[4/5] w-full overflow-hidden rounded-[1rem] border border-white/6 bg-[#1f1e1d] shadow-[0_22px_60px_rgba(0,0,0,0.38)]">
                   {displayImages.map((image, index) => (
                     <img
                       key={image.src}
                       src={image.src}
                       alt={image.alt}
-                      className={`absolute inset-0 h-full w-full object-cover transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+                      className={`absolute inset-0 h-full w-full object-cover object-[50%_54%] transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] ${
                         indicatorStates[index]
                           ? 'scale-100 opacity-100'
                           : 'scale-[1.03] opacity-0'

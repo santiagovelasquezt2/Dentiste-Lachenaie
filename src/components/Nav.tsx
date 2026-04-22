@@ -257,12 +257,12 @@ export const Nav: React.FC = () => {
               aria-expanded={openPanel === 'contact'}
               aria-label={t.nav.contact}
               className={cn(
-                'group inline-flex items-center gap-3 rounded-full border border-transparent bg-white/0 px-3 py-2 text-left transition-colors hover:border-black/5 hover:bg-white/60 hover:text-[#7e9c2f]',
+                'group inline-flex items-center gap-2 py-1 text-base font-semibold tracking-wide transition-colors hover:text-[#7e9c2f]',
                 navEmphasisClass
               )}
               onClick={() => togglePanel('contact')}
             >
-              <span className="text-base font-semibold tracking-wide">{t.nav.contact}</span>
+              <span className="leading-none">{t.nav.contact}</span>
               <span className="flex flex-col items-center justify-center leading-none text-gray-800 transition-transform duration-200 ease-out group-hover:translate-x-1 group-hover:text-[#7e9c2f]">
                 <Phone className="size-4 transition-transform duration-200 ease-out group-hover:-translate-y-0.5 group-hover:rotate-[-8deg]" strokeWidth={2} aria-hidden />
                 <Mail className="size-4 transition-transform duration-200 ease-out group-hover:translate-y-0.5 group-hover:rotate-[8deg]" strokeWidth={2} aria-hidden />
@@ -289,16 +289,16 @@ export const Nav: React.FC = () => {
                     href={telHref}
                     role="menuitem"
                     onClick={() => setOpenPanel(null)}
-                    className="flex items-center gap-3 rounded-2xl px-4 py-3 text-left transition-colors hover:bg-[#f7faf2] hover:text-[#7e9c2f]"
+                    className="contact-nav-panel-item group flex items-center gap-3 rounded-2xl px-4 py-3 text-left transition-colors hover:text-gray-900"
                   >
-                    <span className="flex size-10 shrink-0 items-center justify-center rounded-2xl bg-[#f2f7e3] text-[#7e9c2f]">
-                      <Phone className="size-4" aria-hidden />
+                    <span className="contact-nav-icon-chip flex size-10 shrink-0 items-center justify-center rounded-2xl bg-[#b0d64e] text-[#0a1a14] shadow-[0_1px_2px_rgba(10,26,20,0.14)] transition-[background-color,box-shadow,color] duration-200 ease-out">
+                      <Phone className="contact-nav-icon-shake size-4" aria-hidden />
                     </span>
                     <span className="min-w-0">
-                      <span className="block text-[0.68rem] uppercase tracking-[0.22em] text-gray-500">
+                      <span className="contact-nav-panel-label block text-[0.68rem] uppercase tracking-[0.22em] text-gray-500 transition-colors duration-200 ease-out">
                         {t.contact.phoneLabel}
                       </span>
-                      <span className="block truncate text-base font-semibold text-gray-900">
+                      <span className="contact-nav-panel-value block truncate text-base font-semibold text-gray-900 transition-colors duration-200 ease-out">
                         {clinicData.phone}
                       </span>
                     </span>
@@ -307,16 +307,16 @@ export const Nav: React.FC = () => {
                     href={emailHref}
                     role="menuitem"
                     onClick={() => setOpenPanel(null)}
-                    className="flex items-center gap-3 rounded-2xl px-4 py-3 text-left transition-colors hover:bg-[#f7faf2] hover:text-[#7e9c2f]"
+                    className="contact-nav-panel-item group flex items-center gap-3 rounded-2xl px-4 py-3 text-left transition-colors hover:text-gray-900"
                   >
-                    <span className="flex size-10 shrink-0 items-center justify-center rounded-2xl bg-[#f2f7e3] text-[#7e9c2f]">
-                      <Mail className="size-4" aria-hidden />
+                    <span className="contact-nav-icon-chip flex size-10 shrink-0 items-center justify-center rounded-2xl bg-[#b0d64e] text-[#0a1a14] shadow-[0_1px_2px_rgba(10,26,20,0.14)] transition-[background-color,box-shadow,color] duration-200 ease-out">
+                      <Mail className="contact-nav-icon-launch size-4 motion-safe:transform-gpu motion-safe:will-change-transform" aria-hidden />
                     </span>
                     <span className="min-w-0">
-                      <span className="block text-[0.68rem] uppercase tracking-[0.22em] text-gray-500">
+                      <span className="contact-nav-panel-label block text-[0.68rem] uppercase tracking-[0.22em] text-gray-500 transition-colors duration-200 ease-out">
                         {t.contact.emailLabel}
                       </span>
-                      <span className="block truncate text-base font-semibold text-gray-900">
+                      <span className="contact-nav-panel-value block truncate text-base font-semibold text-gray-900 transition-colors duration-200 ease-out">
                         {clinicData.email}
                       </span>
                     </span>
