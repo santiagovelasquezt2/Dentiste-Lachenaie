@@ -32,28 +32,28 @@ const HoursSectionMobile = ({ t }: { t: ReturnType<typeof useLanguage>['t'] }) =
   ];
 
   return (
-    <section id="hours" className="relative scroll-mt-24 overflow-hidden bg-[#E7F1E3] py-20">
+    <section id="hours" className="relative scroll-mt-24 overflow-hidden bg-mint-soft py-20">
       <div id="hours-card" className="pointer-events-none absolute top-0 h-px w-full scroll-mt-24" aria-hidden />
 
       <div className="pointer-events-none absolute inset-0" aria-hidden>
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.42),transparent_56%)]" />
-        <HoursContourPattern className="hours-pattern hours-pattern-slow absolute inset-[-12%] h-[124%] w-[124%] stroke-[#17352D]/10 stroke-[2] fill-none" />
+        <HoursContourPattern className="hours-pattern hours-pattern-slow absolute inset-[-12%] h-[124%] w-[124%] stroke-brand-ink/10 stroke-[2] fill-none" />
       </div>
 
       <div className="container relative z-10 mx-auto px-4 sm:px-6">
-        <div className="mx-auto max-w-3xl overflow-hidden rounded-[2rem] bg-white text-[#17352D] shadow-[0_24px_70px_rgba(2,33,24,0.14)] ring-1 ring-black/5">
-          <div className="bg-[linear-gradient(135deg,rgba(196,228,109,0.98),rgba(176,214,78,0.98)_42%,rgba(140,176,55,1))] px-6 py-10 text-[#17352D]">
-            <p className="text-nav text-[#17352D]/60">{t.hours.scheduleLabel}</p>
-            <h2 className={cn('mt-4 text-[#17352D]', SECTION_HEADING_CLASS)}>
+        <div className="mx-auto max-w-3xl overflow-hidden rounded-[2rem] bg-white text-brand-ink shadow-[0_24px_70px_rgba(2,33,24,0.14)] ring-1 ring-black/5">
+          <div className="bg-[linear-gradient(135deg,rgba(196,228,109,0.98),rgba(176,214,78,0.98)_42%,rgba(140,176,55,1))] px-6 py-10 text-brand-ink">
+            <p className="text-nav text-brand-ink/60">{t.hours.scheduleLabel}</p>
+            <h2 className={cn('mt-4 text-brand-ink', SECTION_HEADING_CLASS)}>
               {t.hours.cardTitle}
             </h2>
-            <p className="mt-4 text-base leading-relaxed text-[#17352D]/78">{t.hours.description}</p>
+            <p className="mt-4 text-base leading-relaxed text-brand-ink/78">{t.hours.description}</p>
           </div>
 
           <div className="space-y-8 p-6">
             <div className="flex items-start gap-3 rounded-[1.25rem] border border-black/5 bg-[#FAFAF7] px-5 py-4 text-left shadow-[0_1px_0_rgba(255,255,255,0.9)_inset]">
-              <MapPin className="mt-0.5 h-5 w-5 shrink-0 text-[#B0D64E]" />
-              <span className="text-base leading-relaxed text-[#17352D]">{clinicData.address}</span>
+              <MapPin className="mt-0.5 h-5 w-5 shrink-0 text-brand-lime" />
+              <span className="text-base leading-relaxed text-brand-ink">{clinicData.address}</span>
             </div>
 
             <div className="space-y-4">
@@ -64,10 +64,10 @@ const HoursSectionMobile = ({ t }: { t: ReturnType<typeof useLanguage>['t'] }) =
                 return (
                   <div
                     key={day.key}
-                    className="grid grid-cols-[minmax(0,1fr)_auto] items-start gap-4 border-b border-[#17352D]/10 pb-4"
+                    className="grid grid-cols-[minmax(0,1fr)_auto] items-start gap-4 border-b border-brand-ink/10 pb-4"
                   >
-                    <span className="min-w-0 text-base font-medium text-[#17352D]">{day.label}</span>
-                    <span className="max-w-[11rem] justify-self-end break-words text-right font-body text-sm leading-relaxed tabular-nums text-[#17352D]">
+                    <span className="min-w-0 text-base font-medium text-brand-ink">{day.label}</span>
+                    <span className="max-w-[11rem] justify-self-end break-words text-right font-body text-sm leading-relaxed tabular-nums text-brand-ink">
                       {displayValue}
                     </span>
                   </div>
@@ -224,10 +224,10 @@ const HoursSectionDesktop = ({ t }: { t: ReturnType<typeof useLanguage>['t'] }) 
     <section
       ref={containerRef}
       id="hours"
-      className="relative h-[320vh] scroll-mt-24 overflow-clip bg-[#E7F1E3]"
+      className="relative h-[320vh] scroll-mt-24 overflow-clip bg-mint-soft"
     >
       <div ref={viewportRef} className="sticky top-0 h-[100dvh] overflow-hidden">
-        <div className="absolute inset-0 bg-[#E7F1E3]" />
+        <div className="absolute inset-0 bg-mint-soft" />
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(255,255,255,0.42),_transparent_56%)]" />
 
         <motion.div
@@ -245,10 +245,10 @@ const HoursSectionDesktop = ({ t }: { t: ReturnType<typeof useLanguage>['t'] }) 
             translateY: '-50%',
             willChange: 'transform, opacity, border-radius, box-shadow',
           }}
-          className="absolute z-10 origin-center overflow-hidden bg-[#B0D64E]"
+          className="absolute z-10 origin-center overflow-hidden bg-brand-lime"
         >
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.38),transparent_44%),linear-gradient(135deg,rgba(196,228,109,0.98),rgba(176,214,78,0.98)_42%,rgba(140,176,55,1))]" />
-          <HoursContourPattern className="hours-pattern hours-pattern-slow absolute inset-[-12%] h-[124%] w-[124%] stroke-[#17352D]/10 stroke-[2] fill-none" />
+          <HoursContourPattern className="hours-pattern hours-pattern-slow absolute inset-[-12%] h-[124%] w-[124%] stroke-brand-ink/10 stroke-[2] fill-none" />
           <HoursContourPattern className="hours-pattern hours-pattern-fast absolute inset-[-18%] h-[136%] w-[136%] stroke-white/12 stroke-[1.5] fill-none" />
         </motion.div>
 
@@ -274,7 +274,7 @@ const HoursSectionDesktop = ({ t }: { t: ReturnType<typeof useLanguage>['t'] }) 
               filter: cardEnterBlur,
               willChange: 'transform, opacity, filter',
             }}
-            className="relative w-full max-w-5xl overflow-hidden rounded-[2rem] bg-white text-[#17352D] shadow-[0_24px_70px_rgba(2,33,24,0.14)] ring-1 ring-black/5 lg:rounded-[2.5rem]"
+            className="relative w-full max-w-5xl overflow-hidden rounded-[2rem] bg-white text-brand-ink shadow-[0_24px_70px_rgba(2,33,24,0.14)] ring-1 ring-black/5 lg:rounded-[2.5rem]"
           >
             <motion.div
               style={{ opacity: cardBorderOpacity }}
@@ -282,21 +282,21 @@ const HoursSectionDesktop = ({ t }: { t: ReturnType<typeof useLanguage>['t'] }) 
             />
 
             <div className="grid gap-0 lg:grid-cols-[1.02fr_0.98fr]">
-              <div className="relative overflow-hidden bg-white p-8 text-[#17352D] sm:p-10 md:p-12 lg:border-r lg:border-black/5">
+              <div className="relative overflow-hidden bg-white p-8 text-brand-ink sm:p-10 md:p-12 lg:border-r lg:border-black/5">
                 <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(176,214,78,0.08),transparent_52%)]" />
 
                 <div className="relative z-10 max-w-md">
-                  <p className="text-nav text-[#17352D]/55">{t.hours.scheduleLabel}</p>
-                  <h3 className={cn('mt-5 text-[#17352D]', SECTION_HEADING_CLASS)}>
+                  <p className="text-nav text-brand-ink/55">{t.hours.scheduleLabel}</p>
+                  <h3 className={cn('mt-5 text-brand-ink', SECTION_HEADING_CLASS)}>
                     {t.hours.cardTitle}
                   </h3>
-                  <p className="mt-6 text-base leading-relaxed text-[#17352D]/72 md:text-lg">
+                  <p className="mt-6 text-base leading-relaxed text-brand-ink/72 md:text-lg">
                     {t.hours.description}
                   </p>
 
                   <div className="mt-8 flex items-start gap-3 rounded-[1.25rem] border border-black/5 bg-[#FAFAF7] px-5 py-4 text-left shadow-[0_1px_0_rgba(255,255,255,0.9)_inset]">
-                    <MapPin className="mt-0.5 h-5 w-5 shrink-0 text-[#B0D64E]" />
-                    <span className="text-base leading-relaxed text-[#17352D]">{clinicData.address}</span>
+                    <MapPin className="mt-0.5 h-5 w-5 shrink-0 text-brand-lime" />
+                    <span className="text-base leading-relaxed text-brand-ink">{clinicData.address}</span>
                   </div>
                 </div>
               </div>
@@ -310,10 +310,10 @@ const HoursSectionDesktop = ({ t }: { t: ReturnType<typeof useLanguage>['t'] }) 
                     return (
                       <div
                         key={day.key}
-                        className="flex items-center justify-between gap-6 border-b border-[#17352D]/10 pb-4"
+                        className="flex items-center justify-between gap-6 border-b border-brand-ink/10 pb-4"
                       >
-                        <span className="text-lg font-medium text-[#17352D] md:text-xl">{day.label}</span>
-                        <span className="text-right font-body text-base tabular-nums text-[#17352D] md:text-lg">
+                        <span className="text-lg font-medium text-brand-ink md:text-xl">{day.label}</span>
+                        <span className="text-right font-body text-base tabular-nums text-brand-ink md:text-lg">
                           {displayValue}
                         </span>
                       </div>

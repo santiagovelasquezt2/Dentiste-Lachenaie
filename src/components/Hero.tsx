@@ -9,13 +9,14 @@ import {
   useTransform,
 } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
-import clinicExteriorHero from '@/DentalContent/Images/Ouside of the building/clinic-exterior-front-signage-hero.png';
+import { clinicData } from '../content/clinic';
 import { useLanguage } from '../context/LanguageContext';
 import { useMediaQuery } from '../hooks/useMediaQuery';
 import { cn } from '../lib/utils';
 import { Button } from './Button';
 
-const HERO_VIDEO_SRC = `${import.meta.env.BASE_URL}assets/hero-reveal.mp4`;
+const clinicExteriorHero = clinicData.assets.heroExterior;
+const HERO_VIDEO_SRC = clinicData.assets.heroVideo;
 const DESKTOP_QUERY = '(min-width: 768px)';
 /** Horizontal nudge of seam + title; keep 0 for a centered 50/50 split at rest. */
 const INITIAL_SPLIT_OFFSET_PX = 0;
@@ -297,7 +298,7 @@ export const Hero: React.FC = () => {
                 onClick={() => {
                   window.location.hash = '#appointment';
                 }}
-                className="bg-[#b0d64e] px-8 py-5 font-display text-lg font-normal tracking-[-0.02em] text-white normal-case shadow-lg shadow-[#b0d64e]/20 transition-all duration-300 hover:bg-[#9cbd42] sm:px-10 sm:text-xl"
+                className="bg-brand-lime px-8 py-5 font-display text-lg font-normal tracking-[-0.02em] text-white normal-case shadow-lg shadow-brand-lime/20 transition-all duration-300 hover:bg-brand-darker sm:px-10 sm:text-xl"
               >
                 {t.hero.cta}
               </Button>

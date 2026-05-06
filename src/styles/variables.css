@@ -1,19 +1,42 @@
 @theme {
-  /* Colors */
-  /**
-   * Brand lime — primary vibrant green (#B0D64E). Use for bold brand surfaces,
-   * hero/map accents, and high-energy CTAs. Softer `--color-accent` stays for
-   * large mint-tinted UI fills where full lime would overwhelm.
+  /* Brand
+   * Primary brand color (`--color-brand-lime`) is the *only* value the
+   * orchestrator must change per clinic; the rest are derived shade/tint
+   * stops used across components. When re-skinning, update the whole block
+   * together so hover/border/gradient relationships stay coherent.
+   *   - lime         primary CTA / hero accents / map pins
+   *   - press        active/pressed CTA
+   *   - darker       hover on solid lime surfaces
+   *   - deep         hover text color (paired with mint backgrounds)
+   *   - darkest      card border hover, deeper accent
+   *   - shade        deepest gradient stop in team-card accent gradient
+   *   - mid          mid stop in team-card accent gradient
+   *   - soft         lightest stop in team-card accent gradient
+   *   - tint         faintest hover background tint
+   *   - ink          deep teal text color paired with lime CTAs
    */
   --color-brand-lime: #B0D64E;
+  --color-brand-press: #a3c945;
+  --color-brand-darker: #9cbd42;
+  --color-brand-deep: #7e9c2f;
+  --color-brand-darkest: #5f7f1f;
+  --color-brand-shade: #5c6f26;
+  --color-brand-mid: #b8d95f;
+  --color-brand-soft: #dce8b7;
+  --color-brand-tint: #f7faf2;
+  --color-brand-ink: #17352D;
+  /** Soft mint-green family for large UI fills. Tracks brand only loosely;
+   * if the new clinic's brand isn't in the green family these may need a
+   * bespoke neutral instead of a tinted derivative. */
   --color-accent: #D1E8D1;
   --color-accent-dark: #B8D1B8;
-  /**
-   * Mint surface — soft sage for large sections (contact, etc.). Keeps the
-   * lime family without full saturation; pairs with brand-lime accents.
-   */
   --color-mint-surface: #E6EFE3;
   --color-mint-surface-deep: #DCE8DD;
+  --color-mint-soft: #E7F1E3;
+  --color-mint-pale: #eff4e5;
+  --color-mint-quiet: #E8EDE3;
+  /** Neutral surfaces */
+  --color-bubble: #e4e2e0;
   --color-bg: #FFFFFF;
   --color-bg-alt: #F4F4F4;
   --color-bg-dark: #0A1A14;

@@ -6,10 +6,12 @@ import {
   useTransform,
   type MotionValue,
 } from 'framer-motion';
-import dentist1 from '@/DentalContent/Images/Team/Dentists/dentist-dr-marie-christine-st-onge-new.png';
-import dentist2 from '@/DentalContent/Images/Team/Dentists/dentist-dr-nathalie-vaillancourt.jpg';
+import { clinicData } from '../content/clinic';
 import { useMediaQuery } from '../hooks/useMediaQuery';
 import { useLanguage } from '../context/LanguageContext';
+
+const dentist1 = clinicData.assets.teamBubbles.left;
+const dentist2 = clinicData.assets.teamBubbles.right;
 
 const REVEAL_MUTED_COLOR = '#BEC7C2';
 const REVEAL_ACTIVE_COLOR = '#0A1A14';
@@ -104,7 +106,7 @@ export const TeamBubbles: React.FC = () => {
           <div className="flex shrink-0 items-start gap-4 sm:gap-6">
             <span className="text-section-title font-normal! text-text">{t.team.bubblesPrefix}</span>
             <div className="flex items-center">
-              <div className="relative z-10 h-[4.5rem] w-[4.5rem] overflow-hidden rounded-full border-[2px] border-white bg-[#e4e2e0] shadow-sm sm:h-[5.5rem] sm:w-[5.5rem] md:h-[6.5rem] md:w-[6.5rem] lg:h-[7.5rem] lg:w-[7.5rem]">
+              <div className="relative z-10 h-[4.5rem] w-[4.5rem] overflow-hidden rounded-full border-[2px] border-white bg-bubble shadow-sm sm:h-[5.5rem] sm:w-[5.5rem] md:h-[6.5rem] md:w-[6.5rem] lg:h-[7.5rem] lg:w-[7.5rem]">
                 <img
                   src={dentist1}
                   alt="Dr. Marie-Christine St-Onge"
@@ -112,7 +114,7 @@ export const TeamBubbles: React.FC = () => {
                 />
               </div>
 
-              <div className="relative z-20 -ml-4 h-[4.5rem] w-[4.5rem] overflow-hidden rounded-full border-[2px] border-white bg-[#e4e2e0] shadow-sm sm:-ml-5 sm:h-[5.5rem] sm:w-[5.5rem] md:-ml-6 md:h-[6.5rem] md:w-[6.5rem] lg:-ml-8 lg:h-[7.5rem] lg:w-[7.5rem]">
+              <div className="relative z-20 -ml-4 h-[4.5rem] w-[4.5rem] overflow-hidden rounded-full border-[2px] border-white bg-bubble shadow-sm sm:-ml-5 sm:h-[5.5rem] sm:w-[5.5rem] md:-ml-6 md:h-[6.5rem] md:w-[6.5rem] lg:-ml-8 lg:h-[7.5rem] lg:w-[7.5rem]">
                 <img
                   src={dentist2}
                   alt="Dr. Nathalie Vaillancourt"
@@ -120,9 +122,9 @@ export const TeamBubbles: React.FC = () => {
                 />
               </div>
 
-              <div className="relative z-30 -ml-4 flex h-[4.5rem] w-[4.5rem] items-center justify-center rounded-full border-[2px] border-white bg-[#e4e2e0] shadow-sm sm:-ml-5 sm:h-[5.5rem] sm:w-[5.5rem] md:-ml-6 md:h-[6.5rem] md:w-[6.5rem] lg:-ml-8 lg:h-[7.5rem] lg:w-[7.5rem]">
+              <div className="relative z-30 -ml-4 flex h-[4.5rem] w-[4.5rem] items-center justify-center rounded-full border-[2px] border-white bg-bubble shadow-sm sm:-ml-5 sm:h-[5.5rem] sm:w-[5.5rem] md:-ml-6 md:h-[6.5rem] md:w-[6.5rem] lg:-ml-8 lg:h-[7.5rem] lg:w-[7.5rem]">
                 <span className="inline-block origin-center scale-y-[1.08] font-heading text-[clamp(1.2rem,2.65vw,1.95rem)] font-semibold leading-none tracking-[-0.055em] text-text">
-                  +10
+                  +{clinicData.stats.employeeCount}
                 </span>
               </div>
             </div>

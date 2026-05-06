@@ -82,7 +82,81 @@ export const fr = {
       emergency: "Urgences dentaires",
       surgery: "Chirurgie dentaire",
       cosmetic: "Dentisterie esthétique",
-    }
+    },
+    details: {
+      orthodontics: {
+        eyebrow: 'Sourire aligné',
+        description: "Les traitements orthodontiques améliorent l'alignement, la fonction et la stabilité de votre sourire avec une approche adaptée à votre rythme de vie.",
+        highlights: [
+          'Évaluation complète de la position des dents et de la mâchoire',
+          'Plans de traitement adaptés aux enfants, ados et adultes',
+          'Suivi régulier pour des résultats précis et durables',
+        ],
+      },
+      prevention: {
+        eyebrow: 'Base de santé',
+        description: "Les soins préventifs réduisent les risques de caries et de maladies des gencives tout en gardant votre bouche en santé sur le long terme.",
+        highlights: [
+          'Nettoyage professionnel et dépistage',
+          "Conseils personnalisés d'hygiène",
+          'Interventions simples, rapides et régulières',
+        ],
+      },
+      pediatric: {
+        eyebrow: 'Petits patients',
+        description: "Nous créons une expérience rassurante pour les enfants afin de développer de bonnes habitudes dès la première visite.",
+        highlights: [
+          'Approche douce et rassurante',
+          'Prévention adaptée aux jeunes sourires',
+          'Explications simples pour les parents et les enfants',
+        ],
+      },
+      restoration: {
+        eyebrow: 'Réparer et protéger',
+        description: "Les restaurations dentaires permettent de rebâtir la structure et l'apparence des dents abîmées ou fragilisées.",
+        highlights: [
+          'Obturations et réparations durables',
+          "Matériaux choisis pour l'esthétique et la résistance",
+          'Plans ciblés selon vos besoins',
+        ],
+      },
+      implants: {
+        eyebrow: 'Remplacement stable',
+        description: 'Les implants et ponts aident à remplacer des dents manquantes avec une solution solide, fonctionnelle et naturelle.',
+        highlights: [
+          'Analyse personnalisée de votre situation',
+          'Options de remplacement adaptées',
+          'Priorité au confort, à la fonction et au résultat',
+        ],
+      },
+      emergency: {
+        eyebrow: 'Soulagement rapide',
+        description: "En cas de douleur ou d'urgence dentaire, nous visons un accueil rapide pour limiter l'inconfort et stabiliser la situation.",
+        highlights: [
+          "Prise en charge prioritaire selon l'urgence",
+          'Soulagement de la douleur et diagnostic ciblé',
+          'Suivi pour éviter les complications',
+        ],
+      },
+      surgery: {
+        eyebrow: 'Procédures ciblées',
+        description: "La chirurgie dentaire est planifiée avec précision pour traiter des situations plus complexes de façon sécuritaire.",
+        highlights: [
+          "Préparation claire avant l'intervention",
+          'Procédure réalisée avec rigueur',
+          'Consignes précises pour la récupération',
+        ],
+      },
+      cosmetic: {
+        eyebrow: 'Sourire harmonieux',
+        description: "La dentisterie esthétique vise à améliorer l'apparence du sourire tout en respectant l'équilibre naturel de vos dents.",
+        highlights: [
+          'Solutions adaptées à votre objectif',
+          "Accent sur l'harmonie et la naturalité",
+          'Plan clair et progressif',
+        ],
+      },
+    },
   },
   team: {
     sectionHeading: "L'Équipe",

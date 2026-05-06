@@ -1,4 +1,4 @@
-# GEMINI HANDOFF PROMPT
+# PROJECT HANDOFF PROMPT
 
 You are building a dental clinic website for Centre Dentaire Vaillancourt St-Onge in Lachenaie/Terrebonne, Quebec.
 

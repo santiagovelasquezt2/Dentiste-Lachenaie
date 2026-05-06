@@ -7,7 +7,7 @@ import { cn } from '../lib/utils';
 import { clinicData } from '../content/clinic';
 import { Menu, X, ExternalLink, Phone, Mail, Plus, ChevronDown } from 'lucide-react';
 
-const logoSrc = `${import.meta.env.BASE_URL}assets/clinic-logo-primary.png`;
+const logoSrc = clinicData.assets.logoPrimary;
 
 const langPillTransition = {
   type: 'spring' as const,
@@ -178,7 +178,7 @@ export const Nav: React.FC = () => {
                 type="button"
                 aria-expanded={openPanel === 'menu'}
                 className={cn(
-                  'group inline-flex items-center gap-2 text-base font-semibold tracking-wide transition-colors hover:text-[#7e9c2f]',
+                  'group inline-flex items-center gap-2 text-base font-semibold tracking-wide transition-colors hover:text-brand-deep',
                   navEmphasisClass
                 )}
                 onClick={() => togglePanel('menu')}
@@ -209,7 +209,7 @@ export const Nav: React.FC = () => {
                           handleNavLinkClick(link.href)(e);
                           setOpenPanel(null);
                         }}
-                        className="block px-4 py-2.5 text-base font-bold text-gray-900 transition-colors hover:bg-[#f7faf2] hover:text-[#7e9c2f]"
+                        className="block px-4 py-2.5 text-base font-bold text-gray-900 transition-colors hover:bg-brand-tint hover:text-brand-deep"
                       >
                         {link.label}
                       </a>
@@ -223,7 +223,7 @@ export const Nav: React.FC = () => {
               href="#services"
               onClick={() => setOpenPanel(null)}
               className={cn(
-                'text-base font-semibold tracking-wide transition-colors hover:text-[#7e9c2f]',
+                'text-base font-semibold tracking-wide transition-colors hover:text-brand-deep',
                 navEmphasisClass
               )}
             >
@@ -239,7 +239,7 @@ export const Nav: React.FC = () => {
             rel="noopener noreferrer"
             onClick={() => setOpenPanel(null)}
             className={cn(
-              'group inline-flex items-center gap-2 text-base font-semibold tracking-wide transition-colors hover:text-[#b0d64e]',
+              'group inline-flex items-center gap-2 text-base font-semibold tracking-wide transition-colors hover:text-brand-lime',
               navEmphasisClass
             )}
           >
@@ -257,13 +257,13 @@ export const Nav: React.FC = () => {
               aria-expanded={openPanel === 'contact'}
               aria-label={t.nav.contact}
               className={cn(
-                'group inline-flex items-center gap-2 py-1 text-base font-semibold tracking-wide transition-colors hover:text-[#7e9c2f]',
+                'group inline-flex items-center gap-2 py-1 text-base font-semibold tracking-wide transition-colors hover:text-brand-deep',
                 navEmphasisClass
               )}
               onClick={() => togglePanel('contact')}
             >
               <span className="leading-none">{t.nav.contact}</span>
-              <span className="flex flex-col items-center justify-center leading-none text-gray-800 transition-transform duration-200 ease-out group-hover:translate-x-1 group-hover:text-[#7e9c2f]">
+              <span className="flex flex-col items-center justify-center leading-none text-gray-800 transition-transform duration-200 ease-out group-hover:translate-x-1 group-hover:text-brand-deep">
                 <Phone className="size-4 transition-transform duration-200 ease-out group-hover:-translate-y-0.5 group-hover:rotate-[-8deg]" strokeWidth={2} aria-hidden />
                 <Mail className="size-4 transition-transform duration-200 ease-out group-hover:translate-y-0.5 group-hover:rotate-[8deg]" strokeWidth={2} aria-hidden />
               </span>
@@ -291,7 +291,7 @@ export const Nav: React.FC = () => {
                     onClick={() => setOpenPanel(null)}
                     className="contact-nav-panel-item group flex items-center gap-3 rounded-2xl px-4 py-3 text-left transition-colors hover:text-gray-900"
                   >
-                    <span className="contact-nav-icon-chip flex size-10 shrink-0 items-center justify-center rounded-2xl bg-[#b0d64e] text-[#0a1a14] shadow-[0_1px_2px_rgba(10,26,20,0.14)] transition-[background-color,box-shadow,color] duration-200 ease-out">
+                    <span className="contact-nav-icon-chip flex size-10 shrink-0 items-center justify-center rounded-2xl bg-brand-lime text-text shadow-[0_1px_2px_rgba(10,26,20,0.14)] transition-[background-color,box-shadow,color] duration-200 ease-out">
                       <Phone className="contact-nav-icon-shake size-4" aria-hidden />
                     </span>
                     <span className="min-w-0">
@@ -309,7 +309,7 @@ export const Nav: React.FC = () => {
                     onClick={() => setOpenPanel(null)}
                     className="contact-nav-panel-item group flex items-center gap-3 rounded-2xl px-4 py-3 text-left transition-colors hover:text-gray-900"
                   >
-                    <span className="contact-nav-icon-chip flex size-10 shrink-0 items-center justify-center rounded-2xl bg-[#b0d64e] text-[#0a1a14] shadow-[0_1px_2px_rgba(10,26,20,0.14)] transition-[background-color,box-shadow,color] duration-200 ease-out">
+                    <span className="contact-nav-icon-chip flex size-10 shrink-0 items-center justify-center rounded-2xl bg-brand-lime text-text shadow-[0_1px_2px_rgba(10,26,20,0.14)] transition-[background-color,box-shadow,color] duration-200 ease-out">
                       <Mail className="contact-nav-icon-launch size-4 motion-safe:transform-gpu motion-safe:will-change-transform" aria-hidden />
                     </span>
                     <span className="min-w-0">
@@ -351,7 +351,7 @@ export const Nav: React.FC = () => {
           >
             <motion.div
               aria-hidden
-              className="pointer-events-none absolute top-0.5 bottom-0.5 z-0 w-[calc(50%-0.125rem)] rounded-full bg-[#b0d64e] shadow-sm"
+              className="pointer-events-none absolute top-0.5 bottom-0.5 z-0 w-[calc(50%-0.125rem)] rounded-full bg-brand-lime shadow-sm"
               initial={false}
               animate={{
                 left: language === 'fr' ? '0.125rem' : '50%',
@@ -403,7 +403,7 @@ export const Nav: React.FC = () => {
           >
             <motion.div
               aria-hidden
-              className="pointer-events-none absolute top-0.5 bottom-0.5 z-0 w-[calc(50%-0.125rem)] rounded-full bg-[#b0d64e] shadow-sm"
+              className="pointer-events-none absolute top-0.5 bottom-0.5 z-0 w-[calc(50%-0.125rem)] rounded-full bg-brand-lime shadow-sm"
               initial={false}
               animate={{ left: language === 'fr' ? '0.125rem' : '50%' }}
               transition={langPillTransition}
@@ -478,7 +478,7 @@ export const Nav: React.FC = () => {
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={() => setIsMenuOpen(false)}
-                className="group flex items-center justify-between rounded-2xl border border-transparent px-4 py-3 text-base font-bold text-gray-900 transition-colors hover:border-[#b0d64e]/20 hover:bg-[#f7faf2] hover:text-[#7e9c2f]"
+                className="group flex items-center justify-between rounded-2xl border border-transparent px-4 py-3 text-base font-bold text-gray-900 transition-colors hover:border-brand-lime/20 hover:bg-brand-tint hover:text-brand-deep"
               >
                 {t.nav.patientForm}
                 <ExternalLink
@@ -489,7 +489,7 @@ export const Nav: React.FC = () => {
               <a
                 href={telHref}
                 onClick={() => setIsMenuOpen(false)}
-                className="rounded-2xl border border-transparent px-4 py-3 text-base font-bold text-gray-900 transition-colors hover:border-[#b0d64e]/20 hover:bg-[#f7faf2]"
+                className="rounded-2xl border border-transparent px-4 py-3 text-base font-bold text-gray-900 transition-colors hover:border-brand-lime/20 hover:bg-brand-tint"
               >
                 <span className="block">{clinicData.phone}</span>
                 <span className="text-base font-semibold text-gray-500">{t.hero.location}</span>
@@ -509,7 +509,7 @@ export const Nav: React.FC = () => {
               <a
                 href="#services"
                 onClick={() => setIsMenuOpen(false)}
-                className="rounded-2xl border border-transparent px-4 py-3 text-base font-bold text-gray-900 transition-colors hover:border-[#b0d64e]/20 hover:bg-[#f7faf2] hover:text-[#7e9c2f]"
+                className="rounded-2xl border border-transparent px-4 py-3 text-base font-bold text-gray-900 transition-colors hover:border-brand-lime/20 hover:bg-brand-tint hover:text-brand-deep"
               >
                 {t.nav.services}
               </a>
@@ -523,7 +523,7 @@ export const Nav: React.FC = () => {
                       handleNavLinkClick(link.href)(e);
                       setIsMenuOpen(false);
                     }}
-                    className="rounded-2xl border border-transparent px-4 py-3 text-base font-bold text-gray-900 transition-colors hover:border-[#b0d64e]/20 hover:bg-[#f7faf2] hover:text-[#7e9c2f]"
+                    className="rounded-2xl border border-transparent px-4 py-3 text-base font-bold text-gray-900 transition-colors hover:border-brand-lime/20 hover:bg-brand-tint hover:text-brand-deep"
                   >
                     {link.label}
                   </a>

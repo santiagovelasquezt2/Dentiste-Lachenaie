@@ -13,7 +13,7 @@ const cardPalette = [
     shell:
       'border-white/70 bg-[linear-gradient(180deg,rgba(252,252,249,0.98),rgba(241,242,235,0.94))]',
     glow: 'from-[#f6f8ef] via-white to-[#e9efda]',
-    accent: 'from-[#dce8b7] via-[#b8d95f] to-[#5c6f26]',
+    accent: 'from-brand-soft via-brand-mid to-brand-shade',
     portrait: 'bg-[radial-gradient(circle_at_50%_10%,rgba(255,255,255,0.9),transparent_36%),linear-gradient(180deg,#eef1e5_0%,#d9e0ca_100%)]',
   },
   {
@@ -50,7 +50,7 @@ const TeamCard = ({
   t: TFunction;
 }) => (
   <article
-    className={`group relative overflow-hidden rounded-[1.445rem] border p-[0.53125rem] shadow-[0_20.4px_57.8px_rgba(77,95,36,0.1)] ring-1 ring-black/5 transition-[background-color,border-color,box-shadow] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] hover:border-[#5f7f1f]/90 hover:shadow-[0_23.8px_61.2px_rgba(53,79,16,0.18)] md:p-[0.6375rem] ${palette.shell}`}
+    className={`group relative overflow-hidden rounded-[1.445rem] border p-[0.53125rem] shadow-[0_20.4px_57.8px_rgba(77,95,36,0.1)] ring-1 ring-black/5 transition-[background-color,border-color,box-shadow] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] hover:border-brand-darkest/90 hover:shadow-[0_23.8px_61.2px_rgba(53,79,16,0.18)] md:p-[0.6375rem] ${palette.shell}`}
   >
     <div className={`absolute -inset-px rounded-[1.445rem] bg-gradient-to-br ${palette.glow} opacity-80 transition-opacity duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:opacity-0`} />
     <div className="pointer-events-none absolute inset-0 rounded-[1.7rem] bg-[linear-gradient(180deg,rgba(82,125,23,0.18),rgba(82,125,23,0.08))] opacity-0 transition-opacity duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:opacity-100" />
@@ -142,7 +142,7 @@ const StaffCard = ({
   t: TFunction;
 }) => (
   <article
-    className={`group relative overflow-hidden rounded-[1.02rem] border p-[0.34rem] shadow-[0_12px_32px_rgba(77,95,36,0.08)] ring-1 ring-black/5 transition-[background-color,border-color,box-shadow] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:border-[#5f7f1f]/90 hover:shadow-[0_14px_36px_rgba(53,79,16,0.16)] ${palette.shell}`}
+    className={`group relative overflow-hidden rounded-[1.02rem] border p-[0.34rem] shadow-[0_12px_32px_rgba(77,95,36,0.08)] ring-1 ring-black/5 transition-[background-color,border-color,box-shadow] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:border-brand-darkest/90 hover:shadow-[0_14px_36px_rgba(53,79,16,0.16)] ${palette.shell}`}
   >
     <div className={`absolute -inset-px rounded-[1.02rem] bg-gradient-to-br ${palette.glow} opacity-80 transition-opacity duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:opacity-0`} />
     <div className="absolute inset-x-[0.85rem] top-0 h-px bg-gradient-to-r from-transparent via-white to-transparent opacity-90" />
@@ -222,7 +222,7 @@ const TeamSpotlight = ({
       {heading}
     </h4>
     <article
-      className={`group relative overflow-hidden rounded-[1.02rem] border p-[0.34rem] shadow-[0_12px_32px_rgba(77,95,36,0.08)] ring-1 ring-black/5 transition-[background-color,border-color,box-shadow] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:border-[#5f7f1f]/90 hover:shadow-[0_14px_36px_rgba(53,79,16,0.16)] ${palette.shell}`}
+      className={`group relative overflow-hidden rounded-[1.02rem] border p-[0.34rem] shadow-[0_12px_32px_rgba(77,95,36,0.08)] ring-1 ring-black/5 transition-[background-color,border-color,box-shadow] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:border-brand-darkest/90 hover:shadow-[0_14px_36px_rgba(53,79,16,0.16)] ${palette.shell}`}
     >
       <div className={`absolute -inset-px rounded-[1.02rem] bg-gradient-to-br ${palette.glow} opacity-80 transition-opacity duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:opacity-0`} />
       <div className="relative flex flex-col rounded-[0.76rem] bg-[#fcfcf8]/90 p-[0.425rem] transition-colors duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:bg-[#e8f2d7]">

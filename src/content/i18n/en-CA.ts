@@ -82,7 +82,81 @@ export const en = {
       emergency: "Dental Emergencies",
       surgery: "Dental Surgery",
       cosmetic: "Cosmetic Dentistry",
-    }
+    },
+    details: {
+      orthodontics: {
+        eyebrow: 'Aligned smile',
+        description: 'Orthodontic care improves alignment, function, and long-term stability with treatment that fits your lifestyle.',
+        highlights: [
+          'Full evaluation of teeth and jaw position',
+          'Plans for children, teens, and adults',
+          'Regular follow-up for accurate, lasting results',
+        ],
+      },
+      prevention: {
+        eyebrow: 'Health foundation',
+        description: 'Preventive care reduces the risk of decay and gum disease while keeping your mouth healthy over time.',
+        highlights: [
+          'Professional cleaning and screening',
+          'Personalized hygiene guidance',
+          'Simple, regular interventions',
+        ],
+      },
+      pediatric: {
+        eyebrow: 'Little patients',
+        description: 'We create a reassuring experience for children so they can build strong dental habits from the first visit.',
+        highlights: [
+          'Gentle, reassuring approach',
+          'Prevention tailored to young smiles',
+          'Clear explanations for parents and kids',
+        ],
+      },
+      restoration: {
+        eyebrow: 'Repair and protect',
+        description: 'Restorative dentistry rebuilds the structure and appearance of damaged or weakened teeth.',
+        highlights: [
+          'Durable fillings and repairs',
+          'Materials chosen for aesthetics and strength',
+          'Targeted plans based on your needs',
+        ],
+      },
+      implants: {
+        eyebrow: 'Stable replacement',
+        description: 'Implants and bridges replace missing teeth with a solution that feels solid, functional, and natural.',
+        highlights: [
+          'Personalized assessment of your situation',
+          'Replacement options matched to your goals',
+          'Focus on comfort, function, and outcome',
+        ],
+      },
+      emergency: {
+        eyebrow: 'Fast relief',
+        description: 'For pain or urgent dental issues, we aim to help quickly so we can reduce discomfort and stabilize the situation.',
+        highlights: [
+          'Priority care based on urgency',
+          'Pain relief and focused diagnosis',
+          'Follow-up to prevent complications',
+        ],
+      },
+      surgery: {
+        eyebrow: 'Focused procedures',
+        description: 'Dental surgery is planned carefully to treat more complex situations safely and efficiently.',
+        highlights: [
+          'Clear preparation before treatment',
+          'Procedure delivered with precision',
+          'Recovery instructions that are easy to follow',
+        ],
+      },
+      cosmetic: {
+        eyebrow: 'Harmonious smile',
+        description: 'Cosmetic dentistry improves the look of your smile while keeping the result natural and balanced.',
+        highlights: [
+          'Solutions tailored to your goals',
+          'Emphasis on harmony and natural results',
+          'A clear, progressive treatment plan',
+        ],
+      },
+    },
   },
   team: {
     sectionHeading: "The Team",

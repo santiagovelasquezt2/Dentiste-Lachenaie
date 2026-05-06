@@ -22,7 +22,7 @@ const SectionTitle = ({
 }) => (
   <div className="max-w-3xl">
     <h2
-      className={`${SECTION_HEADING_CLASS} mt-4 max-w-[10ch] text-[clamp(3rem,6vw,5rem)] text-[#17352D] ${
+      className={`${SECTION_HEADING_CLASS} mt-4 max-w-[10ch] text-[clamp(3rem,6vw,5rem)] text-brand-ink ${
         language === 'fr' ? 'mx-auto text-center leading-[1.06]' : 'text-left'
       }`}
     >
@@ -32,13 +32,13 @@ const SectionTitle = ({
 );
 
 const IntroCopy = ({ t }: { t: ReturnType<typeof useLanguage>['t'] }) => (
-  <div className="max-w-[38rem] space-y-5 border-t border-[#17352D]/10 pt-6 sm:space-y-6 sm:pt-8">
-    <p className="text-[1rem] leading-8 tracking-[-0.015em] text-[#17352D]/78 sm:text-[1.08rem]">
+  <div className="max-w-[38rem] space-y-5 border-t border-brand-ink/10 pt-6 sm:space-y-6 sm:pt-8">
+    <p className="text-[1rem] leading-8 tracking-[-0.015em] text-brand-ink/78 sm:text-[1.08rem]">
       {t.firstVisit.followup}
     </p>
-    <p className="text-[1rem] leading-8 tracking-[-0.015em] text-[#17352D]/78 sm:text-[1.08rem]">
+    <p className="text-[1rem] leading-8 tracking-[-0.015em] text-brand-ink/78 sm:text-[1.08rem]">
       {t.firstVisit.intro.prefix}
-      <span className="font-semibold text-[#17352D] underline decoration-1 underline-offset-2 decoration-[#17352D]/22">
+      <span className="font-semibold text-brand-ink underline decoration-1 underline-offset-2 decoration-brand-ink/22">
         {t.firstVisit.intro.emphasis}
       </span>
       {t.firstVisit.intro.suffix}
@@ -59,7 +59,7 @@ const StepRowBody = ({
         {String(index + 1).padStart(2, '0')}
       </span>
       <div className="min-w-0 space-y-3">
-        <p className="text-[0.98rem] leading-7 tracking-[-0.012em] text-[#17352D]/84 sm:text-[1.04rem]">
+        <p className="text-[0.98rem] leading-7 tracking-[-0.012em] text-brand-ink/84 sm:text-[1.04rem]">
           {step.text}
         </p>
       </div>
@@ -75,7 +75,7 @@ const InViewStepRow = ({
   index: number;
 }) => (
   <motion.li
-    className="list-none border-b border-[#17352D]/10"
+    className="list-none border-b border-brand-ink/10"
     initial="hidden"
     whileInView="visible"
     viewport={{ once: true, amount: 0.42, margin: '0px 0px -8% 0px' }}
@@ -99,16 +99,16 @@ const StaticStepRow = ({
   step: FirstVisitStep;
   index: number;
 }) => (
-  <li className="list-none border-b border-[#17352D]/10">
+  <li className="list-none border-b border-brand-ink/10">
     <StepRowBody step={step} index={index} />
   </li>
 );
 
 const ProcedureTitle = ({ t }: { t: ReturnType<typeof useLanguage>['t'] }) => (
   <div className="max-w-[24rem]">
-    <h3 className="font-display text-[2.3rem] font-normal leading-[1.02] tracking-[-0.06em] text-[#17352D] sm:text-[2.75rem] lg:text-[3.05rem]">
-      <span className="text-[#17352D]/48">{t.firstVisit.procedure.prefix}</span>{' '}
-      <span className="text-[#17352D]">{t.firstVisit.procedure.suffix}</span>
+    <h3 className="font-display text-[2.3rem] font-normal leading-[1.02] tracking-[-0.06em] text-brand-ink sm:text-[2.75rem] lg:text-[3.05rem]">
+      <span className="text-brand-ink/48">{t.firstVisit.procedure.prefix}</span>{' '}
+      <span className="text-brand-ink">{t.firstVisit.procedure.suffix}</span>
     </h3>
   </div>
 );
@@ -120,7 +120,7 @@ const ProcedureSteps = ({
   t: ReturnType<typeof useLanguage>['t'];
   mode: 'in-view' | 'static';
 }) => (
-  <ol id="first-visit-steps" className="scroll-mt-24 max-w-[36rem] border-t border-[#17352D]/10">
+  <ol id="first-visit-steps" className="scroll-mt-24 max-w-[36rem] border-t border-brand-ink/10">
     {t.firstVisit.steps.map((step, index) =>
       mode === 'in-view' ? (
         <InViewStepRow key={step.text} step={step} index={index} />
@@ -192,7 +192,7 @@ export const FirstVisitSection: React.FC = () => {
                 href={downloadHref}
                 download
                 aria-label={downloadStep.download.label}
-                className="inline-flex w-full max-w-xs items-center justify-center gap-3 rounded-full bg-brand-lime px-6 py-3.5 text-[0.95rem] font-semibold tracking-[-0.01em] text-[#17352D] shadow-[0_14px_28px_rgba(176,214,78,0.24)] transition-[transform,background-color,box-shadow,color] duration-200 hover:scale-[1.02] hover:bg-white hover:shadow-[0_18px_32px_rgba(23,53,45,0.16)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-lime/45 sm:w-auto"
+                className="inline-flex w-full max-w-xs items-center justify-center gap-3 rounded-full bg-brand-lime px-6 py-3.5 text-[0.95rem] font-semibold tracking-[-0.01em] text-brand-ink shadow-[0_14px_28px_rgba(176,214,78,0.24)] transition-[transform,background-color,box-shadow,color] duration-200 hover:scale-[1.02] hover:bg-white hover:shadow-[0_18px_32px_rgba(23,53,45,0.16)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-lime/45 sm:w-auto"
               >
                 <img src={pdfIconSrc} alt="" className="h-5 w-5 select-none" />
                 <span>{t.firstVisit.downloadCta}</span>

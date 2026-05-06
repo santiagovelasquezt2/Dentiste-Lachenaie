@@ -70,163 +70,6 @@ function ServiceIcon({ id, className }: { id: ServiceId; className?: string }) {
     />
   );
 }
-type Language = 'fr' | 'en';
-
-const serviceDetails: Record<Language, Record<ServiceId, {
-  eyebrow: string;
-  description: string;
-  highlights: string[];
-}>> = {
-  fr: {
-    orthodontics: {
-      eyebrow: 'Sourire aligné',
-      description: "Les traitements orthodontiques améliorent l'alignement, la fonction et la stabilité de votre sourire avec une approche adaptée à votre rythme de vie.",
-      highlights: [
-        'Évaluation complète de la position des dents et de la mâchoire',
-        'Plans de traitement adaptés aux enfants, ados et adultes',
-        'Suivi régulier pour des résultats précis et durables',
-      ],
-    },
-    prevention: {
-      eyebrow: 'Base de santé',
-      description: "Les soins préventifs réduisent les risques de caries et de maladies des gencives tout en gardant votre bouche en santé sur le long terme.",
-      highlights: [
-        'Nettoyage professionnel et dépistage',
-        "Conseils personnalisés d'hygiène",
-        'Interventions simples, rapides et régulières',
-      ],
-    },
-    pediatric: {
-      eyebrow: 'Petits patients',
-      description: "Nous créons une expérience rassurante pour les enfants afin de développer de bonnes habitudes dès la première visite.",
-      highlights: [
-        'Approche douce et rassurante',
-        'Prévention adaptée aux jeunes sourires',
-        'Explications simples pour les parents et les enfants',
-      ],
-    },
-    restoration: {
-      eyebrow: 'Réparer et protéger',
-      description: "Les restaurations dentaires permettent de rebâtir la structure et l'apparence des dents abîmées ou fragilisées.",
-      highlights: [
-        'Obturations et réparations durables',
-        "Matériaux choisis pour l'esthétique et la résistance",
-        'Plans ciblés selon vos besoins',
-      ],
-    },
-    implants: {
-      eyebrow: 'Remplacement stable',
-      description: 'Les implants et ponts aident à remplacer des dents manquantes avec une solution solide, fonctionnelle et naturelle.',
-      highlights: [
-        'Analyse personnalisée de votre situation',
-        'Options de remplacement adaptées',
-        'Priorité au confort, à la fonction et au résultat',
-      ],
-    },
-    emergency: {
-      eyebrow: 'Soulagement rapide',
-      description: "En cas de douleur ou d'urgence dentaire, nous visons un accueil rapide pour limiter l'inconfort et stabiliser la situation.",
-      highlights: [
-        "Prise en charge prioritaire selon l'urgence",
-        'Soulagement de la douleur et diagnostic ciblé',
-        'Suivi pour éviter les complications',
-      ],
-    },
-    surgery: {
-      eyebrow: 'Procédures ciblées',
-      description: "La chirurgie dentaire est planifiée avec précision pour traiter des situations plus complexes de façon sécuritaire.",
-      highlights: [
-        "Préparation claire avant l'intervention",
-        'Procédure réalisée avec rigueur',
-        'Consignes précises pour la récupération',
-      ],
-    },
-    cosmetic: {
-      eyebrow: 'Sourire harmonieux',
-      description: "La dentisterie esthétique vise à améliorer l'apparence du sourire tout en respectant l'équilibre naturel de vos dents.",
-      highlights: [
-        'Solutions adaptées à votre objectif',
-        "Accent sur l'harmonie et la naturalité",
-        'Plan clair et progressif',
-      ],
-    },
-  },
-  en: {
-    orthodontics: {
-      eyebrow: 'Aligned smile',
-      description: 'Orthodontic care improves alignment, function, and long-term stability with treatment that fits your lifestyle.',
-      highlights: [
-        'Full evaluation of teeth and jaw position',
-        'Plans for children, teens, and adults',
-        'Regular follow-up for accurate, lasting results',
-      ],
-    },
-    prevention: {
-      eyebrow: 'Health foundation',
-      description: 'Preventive care reduces the risk of decay and gum disease while keeping your mouth healthy over time.',
-      highlights: [
-        'Professional cleaning and screening',
-        'Personalized hygiene guidance',
-        'Simple, regular interventions',
-      ],
-    },
-    pediatric: {
-      eyebrow: 'Little patients',
-      description: 'We create a reassuring experience for children so they can build strong dental habits from the first visit.',
-      highlights: [
-        'Gentle, reassuring approach',
-        'Prevention tailored to young smiles',
-        'Clear explanations for parents and kids',
-      ],
-    },
-    restoration: {
-      eyebrow: 'Repair and protect',
-      description: 'Restorative dentistry rebuilds the structure and appearance of damaged or weakened teeth.',
-      highlights: [
-        'Durable fillings and repairs',
-        'Materials chosen for aesthetics and strength',
-        'Targeted plans based on your needs',
-      ],
-    },
-    implants: {
-      eyebrow: 'Stable replacement',
-      description: 'Implants and bridges replace missing teeth with a solution that feels solid, functional, and natural.',
-      highlights: [
-        'Personalized assessment of your situation',
-        'Replacement options matched to your goals',
-        'Focus on comfort, function, and outcome',
-      ],
-    },
-    emergency: {
-      eyebrow: 'Fast relief',
-      description: 'For pain or urgent dental issues, we aim to help quickly so we can reduce discomfort and stabilize the situation.',
-      highlights: [
-        'Priority care based on urgency',
-        'Pain relief and focused diagnosis',
-        'Follow-up to prevent complications',
-      ],
-    },
-    surgery: {
-      eyebrow: 'Focused procedures',
-      description: 'Dental surgery is planned carefully to treat more complex situations safely and efficiently.',
-      highlights: [
-        'Clear preparation before treatment',
-        'Procedure delivered with precision',
-        'Recovery instructions that are easy to follow',
-      ],
-    },
-    cosmetic: {
-      eyebrow: 'Harmonious smile',
-      description: 'Cosmetic dentistry improves the look of your smile while keeping the result natural and balanced.',
-      highlights: [
-        'Solutions tailored to your goals',
-        'Emphasis on harmony and natural results',
-        'A clear, progressive treatment plan',
-      ],
-    },
-  },
-};
-
 /**
  * Vertical placements for each quote (centered in viewport for visibility).
  * Quote 0 (Mathis) and Quote 3 (Marie-José) are aligned horizontally at 48%.
@@ -244,7 +87,7 @@ const QUOTE_WINDOWS: [number, number][] = [
 const QUOTE_CARD_W = 340;
 
 export const ServicesSection: React.FC = () => {
-  const { t, language } = useLanguage();
+  const { t } = useLanguage();
   const isMobile = useMediaQuery('(max-width: 1023px)');
   const containerRef = useRef<HTMLDivElement>(null);
   const horizontalRef = useRef<HTMLDivElement>(null);
@@ -288,9 +131,9 @@ export const ServicesSection: React.FC = () => {
       title: t.services.items[activeService],
       icon: <ServiceIcon id={activeService} className="h-7 w-7 md:h-8 md:w-8" />,
       image,
-      ...serviceDetails[language as Language][activeService],
+      ...t.services.details[activeService],
     };
-  }, [activeService, language, t.services.items]);
+  }, [activeService, t.services.items, t.services.details]);
 
   useEffect(() => {
     const horizontal = horizontalRef.current;
@@ -557,7 +400,7 @@ export const ServicesSection: React.FC = () => {
                       <a
                         href="#appointment"
                         onClick={closeActiveService}
-                        className="inline-flex w-full items-center justify-center rounded-full bg-[#b0d64e] px-6 py-3 text-sm font-nav uppercase tracking-[0.15em] text-bg-dark shadow-[0_12px_32px_rgba(0,0,0,0.2)] transition-transform hover:scale-[1.01] hover:bg-[#a3c945]"
+                        className="inline-flex w-full items-center justify-center rounded-full bg-brand-lime px-6 py-3 text-sm font-nav uppercase tracking-[0.15em] text-bg-dark shadow-[0_12px_32px_rgba(0,0,0,0.2)] transition-transform hover:scale-[1.01] hover:bg-brand-press"
                       >
                         {t.services.bookAppointment}
                       </a>

@@ -1,10 +1,12 @@
 import drMarieChristineStOnge from '@/DentalContent/Images/Team/Dentists/dentist-dr-marie-christine-st-onge.jpg';
+import drMarieChristineStOngeBubble from '@/DentalContent/Images/Team/Dentists/dentist-dr-marie-christine-st-onge-new.png';
 import drNathalieVaillancourt from '@/DentalContent/Images/Team/Dentists/dentist-dr-nathalie-vaillancourt.jpg';
 import teamDrStOngeGroupPhoto from '@/DentalContent/Images/Team/Dr. Marie-Christine St-Onge\'s Team/team-dr-st-onge-group-photo.jpg';
 import staffAudreyRoy from '@/DentalContent/Images/Team/Team/staff-audrey-roy.jpg';
 import staffElizabethCiricillo from '@/DentalContent/Images/Team/Team/staff-elizabeth-ciricillo.jpg';
 import staffVirginieCuradeau from '@/DentalContent/Images/Team/Team/staff-virginie-curadeau.jpg';
 import staffYaminaBounessis from '@/DentalContent/Images/Team/Team/staff-yamina-bounessis.jpg';
+import clinicExteriorHero from '@/DentalContent/Images/Ouside of the building/clinic-exterior-front-signage-hero.png';
 
 type TeamMember = {
   name: string;
@@ -128,5 +130,31 @@ export const clinicData = {
     { id: "emergency", icon: "dot" },
     { id: "surgery", icon: "dot" },
     { id: "cosmetic", icon: "dot" },
-  ]
+  ],
+  /** Numeric facts surfaced in marketing copy (e.g. "+10 employees", "Since 2000"). */
+  stats: {
+    foundingYear: 2000,
+    employeeCount: 10,
+  },
+  /**
+   * Catalog of clinic-specific asset paths. New clinics swap the imported source files
+   * (or replace these import paths) — components consume from here, not from direct imports.
+   */
+  assets: {
+    /** Primary logo, served from `public/assets/`. Used in Nav. */
+    logoPrimary: `${import.meta.env.BASE_URL}assets/clinic-logo-primary.png`,
+    /** Hero reveal video — short clip of the logo on a white background. */
+    heroVideo: `${import.meta.env.BASE_URL}assets/hero-reveal.mp4`,
+    /** Wide exterior shot of the clinic, used as the left side of the hero. */
+    heroExterior: clinicExteriorHero,
+    /** Bubble-pair images used by the "Our Goal" section. */
+    teamBubbles: {
+      left: drMarieChristineStOngeBubble,
+      right: drNathalieVaillancourt,
+    },
+    /** First-visit patient intake PDF, served from `public/assets/`. */
+    firstVisitPdf: `${import.meta.env.BASE_URL}assets/formulaire-premiere-visite.pdf`,
+    /** Gloved-fingers reveal image (TeamSection scroll reveal). Glove color must match brand. */
+    teamHandsReveal: `${import.meta.env.BASE_URL}team-hands-reveal.png`,
+  },
 };

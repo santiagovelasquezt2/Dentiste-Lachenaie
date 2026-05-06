@@ -153,7 +153,7 @@ const MobileTextBlock = ({
 
   return (
     <article className="overflow-hidden rounded-[2rem] border border-black/5 bg-white/92 p-6 shadow-[0_20px_60px_rgba(21,33,24,0.08)] ring-0 backdrop-blur-md">
-      <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-2xl bg-[#eff4e5] text-text">
+      <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-2xl bg-mint-pale text-text">
         <CheckSquare className="h-6 w-6 stroke-[1.75]" />
       </div>
       <h3 className="mb-4 font-display text-3xl font-normal leading-[1.12] tracking-[-0.055em] text-text">
@@ -177,7 +177,7 @@ export const AboutSection: React.FC = () => {
 
 const AboutSectionMobile = ({ t }: { t: ReturnType<typeof useLanguage>['t'] }) => {
   return (
-    <section id="about" className="relative scroll-mt-24 overflow-hidden bg-[#E8EDE3] py-20">
+    <section id="about" className="relative scroll-mt-24 overflow-hidden bg-mint-quiet py-20">
       <div className="absolute inset-x-0 top-12 flex justify-center px-4" aria-hidden>
         <span className="select-none whitespace-nowrap font-display text-[3.6rem] font-normal leading-[1.12] tracking-[-0.055em] [word-spacing:0.35em] text-black/8">
           {t.about.since}
@@ -261,7 +261,7 @@ const AboutSectionDesktop = ({ t }: { t: ReturnType<typeof useLanguage>['t'] }) 
   const y = useTransform(scrollYProgress, [0, 1], [0, -travelDistance]);
   const desktopScale = 0.75;
   return (
-    <section ref={containerRef} id="about" className="relative h-[400vh] scroll-mt-24 bg-[#E8EDE3]">
+    <section ref={containerRef} id="about" className="relative h-[400vh] scroll-mt-24 bg-mint-quiet">
       <div className="sticky top-0 flex h-screen w-full justify-center overflow-clip">
         {/* Top edge: blends from TeamBubbles (white) into the sage bg */}
         <div className="pointer-events-none absolute inset-x-0 top-0 z-20 h-28 bg-gradient-to-b from-white to-transparent" />
